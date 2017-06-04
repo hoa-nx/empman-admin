@@ -9,6 +9,7 @@ import { appRoutes } from './app.routes';
 // hack - make sure that jQuery plugins can find
 //        jquery reference
 //import * as $ from 'jquery';
+import { AuthGuard } from './core/guards/auth.guard';
 //declare var $:any;
 //window["$"] = $;
 //window["jQuery"] = $;
@@ -23,7 +24,7 @@ import { appRoutes } from './app.routes';
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
