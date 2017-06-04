@@ -19,7 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../src/assets/css/bootstrap.min.css",
         "../src/assets/css/core.css",
         "../src/assets/css/components.css",
         "../src/assets/css/icons.css",
@@ -28,8 +28,6 @@
         "styles.css"
       ],
       "scripts": [
-        "../src/assets/js/modernizr.min.js"
-
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

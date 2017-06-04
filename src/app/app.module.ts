@@ -6,6 +6,13 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 
+// hack - make sure that jQuery plugins can find
+//        jquery reference
+//import * as $ from 'jquery';
+//declare var $:any;
+//window["$"] = $;
+//window["jQuery"] = $;
+
 @NgModule({
   declarations: [
     AppComponent
