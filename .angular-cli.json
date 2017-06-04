@@ -25,9 +25,12 @@
         "../src/assets/css/icons.css",
         "../src/assets/css/pages.css",
         "../src/assets/css/responsive.css",
+        "../node_modules/alertifyjs/build/css/alertify.css",
+        "../node_modules/alertifyjs/build/css/themes/default.css",
         "styles.css"
       ],
       "scripts": [
+        "../node_modules/alertifyjs/build/alertify.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
