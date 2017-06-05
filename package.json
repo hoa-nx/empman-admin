@@ -31,6 +31,7 @@
     "ng2-daterangepicker": "^2.0.7",
     "ngx-bootstrap": "^1.7.1",
     "rxjs": "^5.1.0",
+    "tinymce": "^4.6.3",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {

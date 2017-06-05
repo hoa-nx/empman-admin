@@ -40,14 +40,14 @@ export class UserComponent implements OnInit {
   };
 
   constructor(private _dataService: DataService,
-    private _notificationService: NotificationService,
+    private _notificationService: NotificationService, 
     private _utilityService: UtilityService,
-    private _uploadService: UploadService, public _authenService: AuthenService) {
+    private _uploadService: UploadService,public _authenService: AuthenService) { 
 
-    if (_authenService.checkAccess('USER') == false) {
-      _utilityService.navigateToLogin();
+      if(_authenService.checkAccess('USER')==false){
+          _utilityService.navigateToLogin();
+      }
     }
-  }
 
   ngOnInit() {
     this.loadRoles();
@@ -101,7 +101,7 @@ export class UserComponent implements OnInit {
       this.entity.Roles = this.myRoles;
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
-        this._uploadService.postWithFile('/api/upload/saveImage', null, fi.files)
+        this._uploadService.postWithFile('/api/upload/saveImage?type=avatar', null, fi.files)
           .then((imageUrl: string) => {
             this.entity.Avatar = imageUrl;
           }).then(() => {
@@ -145,6 +145,6 @@ export class UserComponent implements OnInit {
   }
 
   public selectedDate(value: any) {
-    this.entity.BirthDay = moment(value.end._d).format('DD/MM/YYYY');
+    this.entity.BirthDay =  moment(value.end._d).format('DD/MM/YYYY');
   }
 }
