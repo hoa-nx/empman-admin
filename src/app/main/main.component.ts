@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { SystemConstants } from '../core/common/system.constants';
 import { UrlConstants } from '../core/common/url.constants';
 import { UtilityService } from '../core/services/utility.service';
 import { LoggedInUser } from '../core/domain/loggedin.user';
 import { AuthenService } from '../core/services/authen.service';
+
+declare var $ : any; //khai bao jquery
 
 @Component({
   selector: 'app-main',
@@ -11,10 +13,12 @@ import { AuthenService } from '../core/services/authen.service';
   styleUrls: ['./main.component.css']
 })
 
-export class MainComponent implements OnInit {
-public user: LoggedInUser;
+//co add them ham so so voi ban dau
 
-  constructor(private utilityService: UtilityService,private authenService : AuthenService) { }
+export class MainComponent implements OnInit, AfterViewInit {
+  public user: LoggedInUser;
+
+  constructor(private utilityService: UtilityService, private authenService: AuthenService) { }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
@@ -28,6 +32,15 @@ public user: LoggedInUser;
 
   gotoHome() {
     this.utilityService.navigate(UrlConstants.HOME);
+  }
+  //fix loi khong the toogle menu
+  ngAfterViewInit() {
+    setTimeout(_ => {
+      $.getScript("assets/js/jquery.app.js", function () {
+        //do some things  
+      });
+    });
+
   }
 
 }

@@ -4,25 +4,24 @@
       <div class="row">
         <div class="col-lg-12">
           <h4 class="m-t-0 header-title"><b>Danh sách người dùng</b></h4>
+
+          <!-- Header -->
           <div class="row">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter" placeholder="Gõ tên người dùng...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" (click)="loadData()" type="button">Tìm!</button>
-                </span>
+            <div class="col-sm-8">
+              <div class="form-group contact-search m-b-30">
+                <input type="text" id="search" class="form-control" placeholder="Gõ tên người dùng..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
+                <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
               </div>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-left">
-              <button class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
+            <div class="col-sm-4">
+              <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
+                data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
             </div>
           </div>
-          <div class="row">
-
-            <table class="table table-bordered">
+          <!-- Header end-->
+          <!-- List -->
+          <div class="table-responsive">
+            <table class="table table-hover mails m-0 table table-actions-bar">
               <thead>
                 <tr>
                   <th>Tài khoản</th>
@@ -31,7 +30,7 @@
                   <th>Ngày sinh</th>
                   <th>Số điện thoại</th>
                   <th>Avatar</th>
-                  <th></th>
+                  <th style="min-width: 90px;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -41,23 +40,23 @@
                   <td>{{user.Email}}</td>
                   <td>{{user.BirthDay | date:'dd/MM/yyyy'}}</td>
                   <td>{{user.PhoneNumber}}</td>
-                  <td><img [src]="baseFolder + user.Avatar" class="img-responsive" width="128" /></td>
+                  <td><img [src]="baseFolder + user.Avatar" class="img-circle" width="80" /></td>
                   <td>
-                    <button class="btn btn-primary" (click)="showEditModal(user.Id)"><i class="fa fa-pencil-square-o"></i></button>
-                    <button class="btn btn-danger" (click)="deleteItem(user.Id)"><i class="fa fa-trash"></i></button>
-
+                    <a class="table-action-btn" (click)="showEditModal(user.Id)"><i class="md md-edit"></i></a>
+                    <a class="table-action-btn" (click)="deleteItem(user.Id)"><i class="md md-close"></i></a>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <!-- paging -->
             <div class="col-md-12">
               <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow"
                 [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
                 lastText="&raquo;"></pagination>
             </div>
-
+            <!-- paging end-->
           </div>
-
+          <!-- List end-->
         </div>
 
       </div>
@@ -158,17 +157,19 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày sinh</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #birthday="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.BirthDay" name="birthday"
-                class="form-control">
+              <input type="text" #birthday="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.BirthDay"
+                name="birthday" class="form-control">
             </div>
           </div>
-           <div class="form-group">
+          <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Giới tính</label>
             <div class="col-md-6 col-sm-6 col-xs-12">
 
-              <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='True'" name="gender" [ngModel]="entity.Gender" value="True" required />              Nam
+              <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='True'" name="gender" [ngModel]="entity.Gender"
+                value="True" required /> Nam
 
-              <input type="radio" (change)="selectGender($event)"  #gender="ngModel" [checked]="entity.Gender=='False'" name="gender" [ngModel]="entity.Gender" value="False" />              Nữ
+              <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='False'" name="gender" [ngModel]="entity.Gender"
+                value="False" /> Nữ
 
             </div>
           </div>

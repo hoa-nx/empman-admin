@@ -32,7 +32,7 @@ export class AppComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         //stuff that doesn't do view changes
-        setTimeout(_ => this.addScript());
+        //setTimeout(_ => this.addScript());
 
     }
 
