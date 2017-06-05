@@ -15,6 +15,10 @@ export const mainRoutes: Routes = [
             { path: 'user', loadChildren: './user/user.module#UserModule' },
             //localhost:4200/main/user
             { path: 'function', loadChildren: './function/function.module#FunctionModule' },
+            //localhost:4200/main/user
+            { path: 'product', loadChildren: './product/product.module#ProductModule' },
+            //localhost:4200/main/user
+            { path: 'product-category', loadChildren: './product-category/product-category.module#ProductCategoryModule' },
             //localhost:4200/main/emp
             { path: 'emp', loadChildren: './emp/emp.module#EmpModule' },
             //localhost:4200/main/company
