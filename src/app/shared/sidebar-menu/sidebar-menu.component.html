@@ -1,0 +1,27 @@
+<!-- ========== Left Sidebar Start ========== -->
+
+<div class="left side-menu">
+  <div class="sidebar-inner slimscrollleft">
+    <!--- Divider -->
+    <div id="sidebar-menu">
+      <ul>
+
+        <li class="text-muted menu-title">Trang chủ</li>
+        <li class="has_sub" *ngFor="let item of functions">
+
+          <a href="javascript:void(0);" class="waves-effect"><i class="fa {{item.IconCss}}"></i> <span > {{item.Name}}  </span> <span  *ngIf="item.ChildFunctions.length>0" class="menu-arrow"></span> </a>
+                <ul class="list-unstyled">
+              <li *ngFor="let subItem of item.ChildFunctions"><a routerLink="{{subItem.URL}}" routerLinkActive="active">{{subItem.Name}}</a></li>
+            </ul>
+        </li>
+
+    
+   
+
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+<!-- Left Sidebar End -->

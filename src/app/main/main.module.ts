@@ -8,6 +8,10 @@ import { HomeModule } from './home/home.module';
 import { UtilityService } from '../core/services/utility.service';
 import { AuthenService } from '../core/services/authen.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { SidebarMenuComponent } from '../shared/sidebar-menu/sidebar-menu.component';
+import { TopMenuComponent } from '../shared/top-menu/top-menu.component';
+import { RightbarMenuComponent } from '../shared/rightbar-menu/rightbar-menu.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,6 +21,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     RouterModule.forChild(mainRoutes)
   ],
   providers:[UtilityService,AuthenService],
-  declarations: [MainComponent]
+  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, RightbarMenuComponent]
 })
 export class MainModule { }
