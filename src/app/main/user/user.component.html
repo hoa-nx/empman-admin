@@ -14,7 +14,7 @@
               </div>
             </div>
             <div class="col-sm-4">
-              <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
+              <a *ngIf="_authenService.hasPermission('USER','create')" (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
                 data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
             </div>
           </div>
@@ -42,8 +42,8 @@
                   <td>{{user.PhoneNumber}}</td>
                   <td><img [src]="baseFolder + user.Avatar" class="img-circle" width="80" /></td>
                   <td>
-                    <a class="table-action-btn" (click)="showEditModal(user.Id)"><i class="md md-edit"></i></a>
-                    <a class="table-action-btn" (click)="deleteItem(user.Id)"><i class="md md-close"></i></a>
+                    <a class="table-action-btn" *ngIf="_authenService.hasPermission('USER','update')"  (click)="showEditModal(user.Id)"><i class="md md-edit"></i></a>
+                    <a class="table-action-btn" *ngIf="_authenService.hasPermission('USER','delete')" (click)="deleteItem(user.Id)"><i class="md md-close"></i></a>
                   </td>
                 </tr>
               </tbody>
@@ -157,19 +157,17 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày sinh</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #birthday="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.BirthDay"
-                name="birthday" class="form-control">
+              <input type="text" #birthday="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.BirthDay" name="birthday"
+                class="form-control">
             </div>
           </div>
-          <div class="form-group">
+           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Giới tính</label>
             <div class="col-md-6 col-sm-6 col-xs-12">
 
-              <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='True'" name="gender" [ngModel]="entity.Gender"
-                value="True" required /> Nam
+              <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='True'" name="gender" [ngModel]="entity.Gender" value="True" required />              Nam
 
-              <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='False'" name="gender" [ngModel]="entity.Gender"
-                value="False" /> Nữ
+              <input type="radio" (change)="selectGender($event)"  #gender="ngModel" [checked]="entity.Gender=='False'" name="gender" [ngModel]="entity.Gender" value="False" />              Nữ
 
             </div>
           </div>
