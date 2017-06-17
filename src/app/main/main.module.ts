@@ -22,5 +22,6 @@ import { RightbarMenuComponent } from '../shared/rightbar-menu/rightbar-menu.com
   ],
   providers:[UtilityService,AuthenService],
   declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, RightbarMenuComponent]
+  
 })
 export class MainModule { }

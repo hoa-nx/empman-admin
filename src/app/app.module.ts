@@ -10,6 +10,8 @@ import { appRoutes } from './app.routes';
 //        jquery reference
 //import * as $ from 'jquery';
 import { AuthGuard } from './core/guards/auth.guard';
+import { CompComponent, MasterSearchModalComponent } from './shared/master-search-modal/master-search-modal.component';
+import { SharedService } from './core/services/SharedService';
 //declare var $:any;
 //window["$"] = $;
 //window["jQuery"] = $;
@@ -24,7 +26,7 @@ import { AuthGuard } from './core/guards/auth.guard';
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard,SharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

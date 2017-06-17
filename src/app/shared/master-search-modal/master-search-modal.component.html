@@ -1,0 +1,16 @@
+<div data-backdrop="static" data-keyboard="false" class="modal fade" id="theModal" tabindex="-1" role="dialog" aria-labelledby="theModalLabel">
+  <div class="modal-dialog largeWidth" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="theModalLabel">The Label</h4>
+      </div>
+      <div class="modal-body" #theBody>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="data.isSave" class="btn btn-primary" (click)="submit()">save</button>
+        <button *ngIf="!data.isSave" class="btn btn-primary" (click)="edit()">edit</button>
+        <button type="button" class="btn btn-default" (click)="close()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

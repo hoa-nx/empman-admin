@@ -1,3 +1,191 @@
-<p>
-  company works!
-</p>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card-box">
+      <div class="row">
+        <div class="col-lg-12">
+          <h4 class="m-t-0 header-title"><b>Danh sách công ty</b></h4>
+
+          <!-- Header -->
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="form-group contact-search m-b-30">
+                <input type="text" id="search" class="form-control" placeholder="Gõ tên ..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
+                <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
+                data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
+            </div>
+          </div>
+          <!-- Header end-->
+          <!-- List -->
+          <div class="table-responsive">
+            <table class="table table-hover mails m-0 table table-actions-bar">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Mã </th>
+                  <th>Tên công ty</th>
+                  <th>Tên tắt</th>
+                  <th>Địa chỉ</th>
+                  <th>Điện thoại</th>
+                  <th>Trang chủ</th>
+                  <th>Mã số thuế</th>
+                  <th>Ngày thành lập</th>
+                  <th>Vốn</th>
+                  <th>Domain</th>
+                  <th>Danh sách IP</th>
+                  <th style="min-width: 90px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of companys">
+                  <td>{{item.ID}}</td>
+                  <td>{{item.Code}}</td>
+                  <td>{{item.Name}}</td>
+                  <td>{{item.ShortName}}</td>
+                  <td>{{item.Address1}}</td>
+                  <td>{{item.Phone1}}</td>
+                  <td>{{item.WebSiteUrl}}</td>
+                  <td>{{item.TaxCode}}</td>
+                  <td>{{item.CreateDate | date:'yyyy/MM/dd'}}</td>
+                  <td>{{item.Captital}}</td>
+                  <td>{{item.DomainEmail}}</td>
+                  <td>{{item.GlobalIpList}}</td>
+                  <td>
+                    <a  href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
+                    <a  href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- paging -->
+            <div class="col-md-12">
+               
+              <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow"
+                [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+                lastText="&raquo;"></pagination>
+            </div>
+           
+            <!-- paging end-->
+          </div>
+          <!-- List end-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Thêm/Sửa công ty</h4>
+        <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm.valid)"
+          *ngIf="entity">
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã công ty</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #code="ngModel" [(ngModel)]="entity.Code" required minlength="3" maxlength="10" name="code" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-th"></i></span>
+              <small [hidden]="code.valid || (code.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập mã ít nhất 3 ký tự
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên công ty</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required minlength="3" name="name" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-th"></i></span>
+              <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập tên ít nhất 3 ký tự
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tắt</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #shortname="ngModel" [(ngModel)]="entity.ShortName" required name="shortname" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-th"></i></span>
+              <small [hidden]="shortname.valid || (shortname.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập tài khoản
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Địa chỉ</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #address="ngModel" [(ngModel)]="entity.Address1" name="address1" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Điện thoại</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #phone1="ngModel" [(ngModel)]="entity.Phone1" required name="phone1" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+              <small [hidden]="phone1.valid || (phone1.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập số điện thoại
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày thành lập</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #createdate="ngModel"  daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.CreateDate"
+                name="createdate" class="form-control">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Vốn</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #captital="ngModel" [(ngModel)]="entity.Captital" required name="captital" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-scribd"></i></span>
+              <small [hidden]="captital.valid || (captital.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập số vốn
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Xóa</label>
+            <div class="input-group col-md-6 col-sm-6 col-xs-12">
+
+              <input type="radio" (change)="selectDeleteFlag($event)" #deleteflag="ngModel" [checked]="entity.DeleteFlag=='True'" name="deleteflag" [ngModel]="entity.DeleteFlag"
+                value="True" required /> Chưa delete
+
+              <input type="radio" (change)="selectDeleteFlag($event)" #gender="ngModel" [checked]="entity.DeleteFlag=='False'" name="deleteflag" [ngModel]="entity.DeleteFlag"
+                value="False" /> Đã delete
+
+            </div>
+          </div>
+
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy bỏ</button>
+              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -52,11 +52,14 @@
   <script src="assets/js/jquery.core.js"></script>
   <script src="assets/js/jquery.app.js"></script>
 
+  <script src="assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" type="text/javascript"></script>
+  <script src="assets/plugins/autoNumeric/autoNumeric.js" type="text/javascript"></script>
   <script>
     $(window).bind("load", function () {
       /*$.getScript("assets/js/jquery.app.js", function () {
         //do some things  
       });*/
+      $('.autonumber').autoNumeric('init');    
     });
   </script>
 </body>
