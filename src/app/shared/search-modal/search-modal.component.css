@@ -1,0 +1,4 @@
+tr:hover, tr.selected {
+    background-color: skyblue
+}
+td {padding: 5px;}

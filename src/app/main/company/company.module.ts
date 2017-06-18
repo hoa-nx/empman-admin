@@ -10,8 +10,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UploadService } from '../../core/services/upload.service';
-import { MasterSearchModalComponent, CompComponent } from '../../shared/master-search-modal/master-search-modal.component';
-import { SharedService } from '../../core/services/SharedService';
+import { SearchModalComponent } from '../../shared/search-modal/search-modal.component';
 
 const companyRoutes: Routes = [
    //localhost:4200/main/company
@@ -30,9 +29,9 @@ const companyRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(companyRoutes)
   ],
-  declarations: [CompanyComponent,CompComponent,MasterSearchModalComponent],
-  providers: [DataService, NotificationService,UploadService, SharedService],
-  entryComponents: [CompComponent],
-  bootstrap: [ CompanyComponent, MasterSearchModalComponent ]
+  declarations: [CompanyComponent, SearchModalComponent],
+  providers: [DataService, NotificationService,UploadService],
+  entryComponents: [],
+  bootstrap: [  ]
 })
 export class CompanyModule { }

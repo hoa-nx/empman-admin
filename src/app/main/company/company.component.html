@@ -18,6 +18,7 @@
                 data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
             </div>
           </div>
+
           <!-- Header end-->
           <!-- List -->
           <div class="table-responsive">
@@ -54,20 +55,20 @@
                   <td>{{item.DomainEmail}}</td>
                   <td>{{item.GlobalIpList}}</td>
                   <td>
-                    <a  href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
-                    <a  href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
+                    <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
+                    <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                   </td>
                 </tr>
               </tbody>
             </table>
             <!-- paging -->
             <div class="col-md-12">
-               
+
               <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow"
                 [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
                 lastText="&raquo;"></pagination>
             </div>
-           
+
             <!-- paging end-->
           </div>
           <!-- List end-->
@@ -127,6 +128,15 @@
           </div>
 
           <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">CEO</label>
+            <div class="input-group col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #ceoid="ngModel" [(ngModel)]="entity.CeoID" name="ceoid" class="form-control">
+              <span class="input-group-addon"><i class="fa fa-th" (click)="childModal.show()"></i></span>
+
+            </div>
+          </div>
+
+          <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Địa chỉ</label>
             <div class="input-group col-md-9 col-sm-9 col-xs-12">
               <input type="text" #address="ngModel" [(ngModel)]="entity.Address1" name="address1" class="form-control">
@@ -147,9 +157,9 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày thành lập</label>
             <div class="input-group col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #createdate="ngModel"  daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.CreateDate"
+              <input type="text" #createdate="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.CreateDate"
                 name="createdate" class="form-control">
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
 
@@ -168,11 +178,11 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Xóa</label>
             <div class="input-group col-md-6 col-sm-6 col-xs-12">
 
-              <input type="radio" (change)="selectDeleteFlag($event)" #deleteflag="ngModel" [checked]="entity.DeleteFlag=='True'" name="deleteflag" [ngModel]="entity.DeleteFlag"
-                value="True" required /> Chưa delete
+              <input type="radio" (change)="selectDeleteFlag($event)" #deleteflag="ngModel" [checked]="entity.DeleteFlag=='True'" name="deleteflag"
+                [ngModel]="entity.DeleteFlag" value="True" required /> Chưa delete
 
-              <input type="radio" (change)="selectDeleteFlag($event)" #gender="ngModel" [checked]="entity.DeleteFlag=='False'" name="deleteflag" [ngModel]="entity.DeleteFlag"
-                value="False" /> Đã delete
+              <input type="radio" (change)="selectDeleteFlag($event)" #gender="ngModel" [checked]="entity.DeleteFlag=='False'" name="deleteflag"
+                [ngModel]="entity.DeleteFlag" value="False" /> Đã delete
 
             </div>
           </div>
@@ -189,3 +199,6 @@
     </div>
   </div>
 </div>
+
+<app-search-modal #childModal [searchTableName]="'emp'" [title]="'Danh sách nhân viên'"> </app-search-modal>
+<span> {{selected}}</span>

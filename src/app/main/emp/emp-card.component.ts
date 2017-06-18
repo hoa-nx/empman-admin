@@ -107,20 +107,22 @@ export class EmpCardComponent implements OnInit {
     }
 
     editUser() {
+        
         this.onEdit = !this.onEdit;
-        if(this.onEdit && this.user.StartWorkingDate!=null){
+        //https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
+        if(this.onEdit && this.user.StartWorkingDate){
             this.user.StartWorkingDate = moment(this.user.StartWorkingDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.StartTrialDate!=null){
+        if(this.onEdit && this.user.StartTrialDate){
             this.user.StartTrialDate = moment(this.user.StartTrialDate).format('YYYY/MM/DD');
         }
         if(this.onEdit && this.user.EndTrialDate){
             this.user.EndTrialDate = moment(this.user.EndTrialDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.ContractDate!=null){
+        if(this.onEdit && this.user.ContractDate){
             this.user.ContractDate = moment(this.user.ContractDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.JobLeaveDate!=null){
+        if(this.onEdit && this.user.JobLeaveDate){
             this.user.JobLeaveDate = moment(this.user.JobLeaveDate).format('YYYY/MM/DD');
         }
 

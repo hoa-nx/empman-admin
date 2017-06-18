@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MasterSearchModalComponent } from './master-search-modal.component';
+import { SearchModalComponent } from './search-modal.component';
 
-describe('MasterSearchModalComponent', () => {
-  let component: MasterSearchModalComponent;
-  let fixture: ComponentFixture<MasterSearchModalComponent>;
+describe('SearchModalComponent', () => {
+  let component: SearchModalComponent;
+  let fixture: ComponentFixture<SearchModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MasterSearchModalComponent ]
+      declarations: [ SearchModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MasterSearchModalComponent);
+    fixture = TestBed.createComponent(SearchModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

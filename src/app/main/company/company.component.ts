@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
@@ -10,8 +10,7 @@ import { MessageContstants } from '../../core/common/message.constants';
 import { SystemConstants } from '../../core/common/system.constants';
 
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
-import { SharedService } from '../../core/services/SharedService';
-import { CompComponent, MasterSearchModalComponent } from '../../shared/master-search-modal/master-search-modal.component';
+import { SearchModalComponent } from '../../shared/search-modal/search-modal.component';
 
 declare var moment: any;
 
@@ -26,8 +25,11 @@ export class CompanyComponent implements OnInit {
 
   @ViewChild('avatar') avatar;
 
+  //common modal
+  @ViewChild('childModal') childModal :SearchModalComponent;
+
   public pageIndex: number = 1;
-  public pageSize: number = 20;
+  public pageSize: number = 10;
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = '';
@@ -48,8 +50,9 @@ export class CompanyComponent implements OnInit {
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,
     private _utilityService: UtilityService,
-    private _uploadService: UploadService, public _authenService: AuthenService,
-    private sharedService: SharedService) {
+    private _uploadService: UploadService, 
+    public _authenService: AuthenService,
+    private viewContainerRef : ViewContainerRef) {
 
     /*if(_authenService.checkAccess('USER')==false){
         _utilityService.navigateToLogin();
@@ -138,14 +141,6 @@ export class CompanyComponent implements OnInit {
 
   public selectedDate(value: any) {
     this.entity.CreateDate = moment(value.end._d).format('YYYY/MM/DD');
-  }
-
-  editDialog() {
-    this.sharedService.showModal(CompComponent, { "isSave": false }, (res) => {
-      this.output = ("data is edited");
-    }, () => {
-      this.output = ("edit is cancelled")
-    });
   }
 
 }

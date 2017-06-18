@@ -1,0 +1,71 @@
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="m-t-0 header-title"><b>{{title}}</b></h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+              <span aria-hidden="true">&times;</span>
+        </button>
+        <!-- Header -->
+        <!-- Header end-->
+        <!-- List -->
+        <div class="table-responsive">
+          <table class="table table-hover mails m-0 table table-actions-bar">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of datas" (click)="selectedRow($event)">
+                <td class="col-md-2 col-sm-4 col-xs-8"><a href="#" (click)="$event.preventDefault(); selected = item">{{ item.ID}}</a></td>
+                <td class="col-md-10 col-sm-8 col-xs-12"><a href="#" (click)="$event.preventDefault(); selected = item">{{searchTableName === 'emp' ? item.FullName : item.Name}}</a></td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- paging -->
+          <div class="col-md-12">
+            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSizeModal" (pageChanged)="pageChangedModal($event)" [totalItems]="totalRowModal"
+              [(ngModel)]="pageIndexModal" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+              lastText="&raquo;"></pagination>
+          </div>
+          <!-- paging end-->
+        </div>
+
+        <div class="modal-footer">
+          <div class="pull-left">
+            <button class="btn btn-success" (click)="ok()"> Chọn </button>
+            <button class="btn btn-danger" (click)="cancel()"> Trở về </button>
+          </div>
+          <!-- List end-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OLD-->
+<!--<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">{{title}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ng-content select=".modal-body"> </ng-content>
+      </div>
+
+      <div class="modal-footer">
+        <div class="pull-left">
+          <button class="btn btn-success" (click)="ok()"> Chọn </button>
+          <button class="btn btn-danger" (click)="cancel()"> Hủy </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>-->
