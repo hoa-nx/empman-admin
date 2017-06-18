@@ -11,6 +11,7 @@ import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UploadService } from '../../core/services/upload.service';
 import { MasterSearchModalComponent, CompComponent } from '../../shared/master-search-modal/master-search-modal.component';
+import { SharedService } from '../../core/services/SharedService';
 
 const companyRoutes: Routes = [
    //localhost:4200/main/company
@@ -30,7 +31,7 @@ const companyRoutes: Routes = [
     RouterModule.forChild(companyRoutes)
   ],
   declarations: [CompanyComponent,CompComponent,MasterSearchModalComponent],
-  providers: [DataService, NotificationService,UploadService],
+  providers: [DataService, NotificationService,UploadService, SharedService],
   entryComponents: [CompComponent],
   bootstrap: [ CompanyComponent, MasterSearchModalComponent ]
 })

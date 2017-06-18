@@ -7,7 +7,7 @@ declare var $: any;
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.css']
 })
-export class SidebarMenuComponent implements OnInit, AfterViewInit {
+export class SidebarMenuComponent implements OnInit {
   public functions: any[];
   constructor(private dataService: DataService) { }
 
@@ -24,12 +24,12 @@ export class SidebarMenuComponent implements OnInit, AfterViewInit {
   }
   //fix loi khong the toogle menu
   ngAfterViewInit() {
-    setTimeout(_ => {
+    /*setTimeout(_ => {
       $.getScript("../../assets/js/jquery.app.js", function () {
         //do some things  
-        console.log("YYYYDHD");
+        console.log("SidebarMenuComponent");
       });
-    });
+    });*/
 
   }
 

@@ -15,14 +15,13 @@ declare var $ : any; //khai bao jquery
 
 //co add them ham so so voi ban dau
 
-export class MainComponent implements OnInit, AfterViewInit {
+export class MainComponent implements OnInit ,AfterViewInit  {
   public user: LoggedInUser;
 
   constructor(private utilityService: UtilityService, private authenService: AuthenService) { }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    console.log(this.user);
   }
 
   logout() {

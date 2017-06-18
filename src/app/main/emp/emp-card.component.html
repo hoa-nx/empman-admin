@@ -1,0 +1,153 @@
+<div class="panel panel-primary" [ngClass]="{shadowCard: onEdit}" [@flyInOut]="'in'">
+    <div class="panel-heading">
+        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="{true : 'fa fa-male fa-1x', false:'fa fa-female'}[edittedUser.Gender]" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>
+        <input [(ngModel)]="edittedUser.FullName" [class.hidden]="!onEdit" [style.color]="'brown'" required class="form-control"
+        />
+        <div class="clearfix"></div>
+    </div>
+
+    <div highlight="whitesmoke" class="panel-body">
+        <div class="row">
+            <div class="clearfix"></div>
+            <!--<img src="{{apiHost}}images/{{edittedUser.Avatar}}" class="img-avatar" alt="">-->
+            <!-- Image drag and drop -->
+            <div class="profile-picture-section">
+                <div ng2FileDrop [ng2FileDropSupportedFileTypes]="supportedFileTypes" (ng2FileDropFileAccepted)="dragFileAccepted($event)"
+                    class="profile-picture-section-drop-zone">
+                    <div *ngIf="!edittedUser.ShowAvatar" class=profile-picture-section-request-image-group>
+                        <p class="profile-picture-section-request-image-instructions">Kéo hình nhân viên vào đây</p>
+                    </div>
+                    <div *ngIf="edittedUser.ShowAvatar" class="profile-picture-section-request-image-container">
+                        <img class="profile-picture-section-request-image" src="{{(edittedUser.ShowAvatar &&(!isFileChanged)) === false ? currentProfileImage : uriAvatarPath + edittedUser.Avatar}}"
+                        />
+
+                        <button class="btn btn-primary" (click)="viewSchedules(edittedUser)" [disabled]="edittedUser.ID < 0">
+                        <i class="fa fa-alt" aria-hidden="true"></i> Chi tiết
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image drag and drop END-->
+            <!-- Thông tin phòng ban - team - chức vụ -->
+            <div class="caption pull-left profile-item">
+                <p>
+                    <span class="fa fa-sitemap" title="Thông tin phòng ban- nhóm - chức vụ" [class.hidden]="onEdit">&nbsp;Ban 1 - Team 1.x - Leader</span>
+                </p>
+            </div>
+            <!-- Giới tính -->
+            <div class="caption pull-left profile-item">
+                <div [hidden]="!onEdit" class="emp-card-gender">
+                    <div class="input-group">
+                        <md-radio-group name="gender" [(ngModel)]="edittedUser.Gender">
+                            <md-radio-button (change)="selectGender($event)" [value]="1" [checked]="edittedUser.Gender==true">Nam</md-radio-button>
+                            <md-radio-button (change)="selectGender($event)" [value]="0" [checked]="edittedUser.Gender==false">Nữ</md-radio-button>
+                        </md-radio-group>
+                    </div>
+                </div>
+            </div>
+            <!-- Ngày vào công ty -->
+            <div class="caption pull-left profile-item">
+                <p>
+                    <span class="fa fa-calendar" title="Ngày vào công ty(thử việc)" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartTrialDate|  date:'yyyy/MM/dd'}}</span>
+                </p>
+                <div [hidden]="!onEdit">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar" ></i></span>
+                        <input type="text" title="Ngày ký bắt đầu thử việc" #starttrialdate="ngModel" daterangepicker (selected)="selectedStartTrialDate($event)" [options]="dateOptions"
+                            [(ngModel)]="edittedUser.StartTrialDate" name="starttrialdate" class="form-control" placeholder="Ngày thử việc"
+                            />
+                            <span class="input-group-addon"><i class="fa fa-calendar-plus-o" ></i></span>
+                        <input type="text" title="Ngày kết thúc thử việc"  #endtrialdate="ngModel" daterangepicker (selected)="selectedEndTrialDate($event)" [options]="dateOptions"
+                            [(ngModel)]="edittedUser.EndTrialDate" name="endtrialdate" class="form-control" placeholder="Ngày kết thúc thử việc"
+                            />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar-check-o" ></i></span>
+                        <input type="text" title="Ngày ký hợp đồng chính thức" #contractdate="ngModel" daterangepicker (selected)="selectedContractDate($event)" [options]="dateOptions"
+                            [(ngModel)]="edittedUser.ContractDate" name="contractdate" class="form-control" placeholder="Ngày ký hợp đồng"
+                            />
+                            <span class="input-group-addon"><i class="fa fa-calendar-times-o" ></i></span>
+                        <input type="text" title="Ngày nghỉ việc" #jobleavedate="ngModel" daterangepicker (selected)="selectedJobLeaveDate($event)" [options]="dateOptions"
+                            [(ngModel)]="edittedUser.JobLeaveDate" name="jobleavedate" class="form-control" placeholder="Ngày làm việc cuối cùng"
+                            />
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o" ></i></span>
+                        <input type="text" title="Tài khoản" #accountname="ngModel" 
+                            [(ngModel)]="edittedUser.AccountName" name="accountname" class="form-control" placeholder="Tên tài khoản"
+                            />
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Ngày ký hợp đồng -->
+            <div class="caption pull-left profile-item">
+                <p>
+                    <span class="fa fa-calendar-check-o" title="Ngày ký hợp đồng chính thức" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartWorkingDate|  date:'yyyy/MM/dd'}}</span>
+                    <span class="md md-settings-power" title="Ngày làm việc cuối cùng" [class.hidden]="onEdit">&nbsp;2017/01/01 </span>
+                </p>
+            </div>
+            <!-- Thông tin thâm niên - tiếng nhật - -->
+            <div class="caption pull-left profile-item">
+                <p>
+                    <span class="fa fa-id-card" title="Thâm niên - tiếng nhật" [class.hidden]="onEdit">&nbsp;10 tháng - N3 </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div [class.hidden]="edittedUser.ID < 0">
+            <button class="{{onEdit === false ? 'btn btn-default btn-xs' : 'btn btn-inverse btn-xs'}}" (click)="editUser()">
+                <i [ngClass]="{false:'fa fa-pencil',true:'fa fa-ban'}[onEdit]" aria-hidden="true"></i>
+                    {{onEdit === false ? "Chỉnh sửa" : "Hủy"}}
+                </button>
+            <button class="btn btn-default btn-xs" [class.hidden]="!onEdit" (click)="updateUser()" [disabled]="!isUserValid()">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Lưu</button>
+            <button class="btn btn-danger btn-xs" (click)="openRemoveModal()">
+                <i class="fa fa-times" aria-hidden="true"></i>Xóa</button>
+        </div>
+        <div [class.hidden]="!(edittedUser.ID < 0)">
+            <button class="btn btn-default btn-xs" [class.hidden]="!onEdit" (click)="createUser()" [disabled]="!isUserValid()">
+                <i class="fa fa-plus" aria-hidden="true"></i>Tạo mới</button>
+        </div>
+    </div>
+</div>
+
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" *ngIf="userSchedulesLoaded">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                <h4 class="modal-title">{{edittedUser.name}} schedules created</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Place</th>
+                            <th>Time Start</th>
+                            <th>Time End</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let schedule of userSchedules">
+                            <td> {{schedule.title}}</td>
+                            <td>{{schedule.description}}</td>
+                            <td>{{schedule.location}}</td>
+                            <td>{{schedule.timeStart | dateFormat | date:'medium'}}</td>
+                            <td>{{schedule.timeEnd | dateFormat | date:'medium'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

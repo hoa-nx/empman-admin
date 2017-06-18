@@ -6,17 +6,41 @@
     <div id="sidebar-menu">
       <ul>
 
-        <li class="text-muted menu-title">Trang chủ</li>
+      <!-- Menu from DB -->
+        <!--<li class="text-muted menu-title">Trang chủ</li>
         <li class="has_sub" *ngFor="let item of functions">
 
           <a href="javascript:void(0);" class="waves-effect"><i class="fa {{item.IconCss}}"></i> <span > {{item.Name}}  </span> <span  *ngIf="item.ChildFunctions.length>0" class="menu-arrow"></span> </a>
                 <ul class="list-unstyled">
               <li *ngFor="let subItem of item.ChildFunctions"><a routerLink="{{subItem.URL}}" routerLinkActive="active">{{subItem.Name}}</a></li>
             </ul>
+        </li>-->
+        <!-- Menu from DB end-->
+
+        <li class="has_sub">
+          <a href="javascript:void(0);" class="waves-effect"><i class="ti-paint-bucket"></i> <span>Hệ thống </span> <span class="menu-arrow"></span> </a>
+          <ul class="list-unstyled">
+            <li><a routerLink="/main/role/index" routerLinkActive="active">Nhóm</a></li>
+            <li><a routerLink="/main/function/index" routerLinkActive="active">Chức năng</a></li>
+            <li><a routerLink="/main/user/index" routerLinkActive="active">Người dùng</a></li>
+            <li><a routerLink="/main/product-category/index" routerLinkActive="active">Danh mục</a></li>
+            <li><a routerLink="/main/product/index" routerLinkActive="active">Sản phẩm</a></li>
+          </ul>
         </li>
 
-    
-   
+        <li class="has_sub">
+          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Thông tin chung </span> <span class="menu-arrow"></span></a>
+          <ul class="list-unstyled">
+            <li><a routerLink="/main/company/index">Công ty</a></li>
+            <li><a routerLink="/main/customer/index">Khách hàng</a></li>
+            <li><a routerLink="/main/dept/index">Bộ phận</a></li>
+            <li><a routerLink="/main/team/index">Nhóm/tổ</a></li>
+            <li><a routerLink="/main/position/index">Chức vụ</a></li>
+            <li><a routerLink="/main/commondata/index">Dữ liệu chung</a></li>
+            <li><a routerLink="/main/emp/card-list">Nhân viên</a></li>
+
+          </ul>
+        </li>
 
       </ul>
       <div class="clearfix"></div>

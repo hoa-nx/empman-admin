@@ -38,8 +38,10 @@ export class CompanyComponent implements OnInit {
   public roles: any[];
 
   public dateOptions: any = {
-    locale: { format: 'DD/MM/YYYY' },
+    locale: { format: 'YYYY/MM/DD' },
+    showDropdowns: true,
     alwaysShowCalendars: false,
+    autoUpdateInput: false,
     singleDatePicker: true
   };
   output = "";

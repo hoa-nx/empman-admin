@@ -1,4 +1,4 @@
-import { Component, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, OnInit,ViewContainerRef } from '@angular/core';
 //declare var $ : any;
 
 @Component({
@@ -9,7 +9,7 @@ import { Component, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 export class AppComponent implements AfterViewInit {
     private runCount: number = 0;
 
-    constructor(private elementRef: ElementRef) {
+    constructor(private elementRef: ElementRef ) {
         this.runCount = 0;
     }
 

@@ -10,6 +10,8 @@ export class EmpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log("EmpComponent");
+
   }
 
 }

@@ -1,0 +1,226 @@
+export interface IEmp {
+    /*
+    id: number;
+    fullname: string;
+    name: string;
+    furigana: string;
+    gender: boolean;
+    identno: string;
+    identdate: string;
+    identplace: string;
+    fjsid: string;
+    trainingprofileid: string;
+    bornplace: string;
+    avatar: string;
+    workingemail: string;
+    personalemail: string;
+    birthday: string;
+    accountname: string;
+    phonenumber1: string;
+    phonenumber2: string;
+    phonenumber3: string;
+    address1: string;
+    address2: string;
+    currentdeptid: number;
+    currentteamid: number;
+    currentpositionid: number;
+    startworkingdate: string;
+    startlearingdate: string;
+    endlearingdate: string;
+    starttrialdate: string;
+    endtrialdate: string;
+    contractdate: string;
+    contracttypemasterid: number;
+    contracttypemasterdetailid: number;
+    jobleavedate: string;
+    isjobleave: boolean;
+    jobleavereason: string;
+    googleid: string;
+    marrieddate: string;
+    experiencebeforecontent: string;
+    experiencebeforeconvert: number;
+    experienceconvert: number;
+    emptypemasterid: number;
+    emptypemasterdetailid: number;
+    isbse: boolean;
+    collectmasterid: number;
+    collectmasterdetailid: number;
+    educationlevelmasterid: number;
+    educationlevelmasterdetailid: number;
+    temperament: string;
+    introductor: string;
+    bloodgroup: string;
+    hobby: string;
+    objective: string;
+    fileid: number;
+    profileattachmentid: number;
+    displayorder: number;
+    accountdata: string;
+    note: string;
+    deleteflag: number;
+    status: number;
+    yobi_text1: string;
+    yobi_text2: string;
+    yobi_text3: string;
+    yobi_text4: string;
+    yobi_text5: string;
+    yobi_number1: number;
+    yobi_number2: number;
+    yobi_number3: number;
+    yobi_number4: number;
+    yobi_number5: number;
+    yobi_decimal1: number;
+    yobi_decimal2: number;
+    yobi_decimal3: number;
+    yobi_decimal4: number;
+    yobi_decimal5: number;
+    yobi_date1: string;
+    yobi_date2: string;
+    yobi_date3: string;
+    yobi_date4: string;
+    yobi_date5: string;
+    createddate: string;
+    createdby: string;
+    updateddate: string;
+    updatedby: string;
+    metakeyword: string;
+    metadescription: string;
+    */
+    ID: number;
+    FullName: string;
+    Name?: string;
+    Furigana?: string;
+    Gender?: boolean;
+    IdentNo?: string;
+    IdentDate?: Date;
+    IdentPlace?: string;
+    FJSID?: string;
+    TrainingProfileID?: string;
+    BornPlace?: string;
+    Avatar?: string;
+    ShowAvatar?: boolean;
+    WorkingEmail?: string;
+    PersonalEmail?: string;
+    BirthDay?: Date;
+    AccountName?: string;
+    PhoneNumber1?: string;
+    PhoneNumber2?: string;
+    PhoneNumber3?: string;
+    Address1?: string;
+    Address2?: string;
+    CurrentDeptID?: number;
+    CurrentTeamID?: number;
+    CurrentPositionID?: number;
+    StartWorkingDate?: any;
+    StartLearingDate?: Date;
+    EndLearingDate?: Date;
+    StartTrialDate?: Date;
+    EndTrialDate?: Date;
+    ContractDate?: Date;
+    ContractTypeMasterID?: number;
+    ContractTypeMasterDetailID?: number;
+    JobLeaveDate?: Date;
+    IsJobLeave?: boolean;
+    JobLeaveReason?: string;
+    GoogleId?: string;
+    MarriedDate?: Date;
+    ExperienceBeforeContent?: string;
+    ExperienceBeforeConvert?: string;
+    ExperienceConvert?: string;
+    EmpTypeMasterID?: number;
+    EmpTypeMasterDetailID?: number;
+    IsBSE?: boolean;
+    CollectMasterID?: number;
+    CollectMasterDetailID?: number;
+    EducationLevelMasterID?: number;
+    EducationLevelMasterDetailID?: number;
+    Temperament?: string;
+    Introductor?: string;
+    BloodGroup?: string;
+    Hobby?: string;
+    Objective?: string;
+    FileID?: number;
+    ProfileAttachmentID?: number;
+    DisplayOrder?: number;
+    AccountData?: string;
+    Note?: string;
+    DeleteFlag?: number;
+    Status?: number;
+    Yobi_Text1?: string;
+    Yobi_Text2?: string;
+    Yobi_Text3?: string;
+    Yobi_Text4?: string;
+    Yobi_Text5?: string;
+    Yobi_Number1?: number;
+    Yobi_Number2?: number;
+    Yobi_Number3?: number;
+    Yobi_Number4?: number;
+    Yobi_Number5?: number;
+    Yobi_Decimal1?: string;
+    Yobi_Decimal2?: string;
+    Yobi_Decimal3?: string;
+    Yobi_Decimal4?: string;
+    Yobi_Decimal5?: string;
+    Yobi_Date1?: Date;
+    Yobi_Date2?: Date;
+    Yobi_Date3?: Date;
+    Yobi_Date4?: Date;
+    Yobi_Date5?: Date;
+    CreatedDate?: Date;
+    CreatedBy?: string;
+    UpdatedDate?: Date;
+    UpdatedBy?: string;
+    MetaKeyword?: string;
+    MetaDescription?: string;
+
+}
+
+export interface ISchedule {
+    id: number;
+    title: string;
+    description: string;
+    timeStart: Date;
+    timeEnd: Date;
+    location: string;
+    type: string;
+    status: string;
+    dateCreated: Date;
+    dateUpdated: Date;
+    creator: string;
+    creatorId: number;
+    attendees: number[];
+}
+
+export interface IScheduleDetails {
+    id: number;
+    title: string;
+    description: string;
+    timeStart: Date;
+    timeEnd: Date;
+    location: string;
+    type: string;
+    status: string;
+    dateCreated: Date;
+    dateUpdated: Date;
+    creator: string;
+    creatorId: number;
+    attendees: IEmp[];
+    statuses: string[];
+    types: string[];
+}
+
+export interface Pagination {
+    CurrentPage: number;
+    ItemsPerPage: number;
+    TotalItems: number;
+    TotalPages: number;
+}
+
+export class PaginatedResult<T> {
+    result: T;
+    pagination: Pagination;
+}
+
+export interface Predicate<T> {
+    (item: T): boolean
+}

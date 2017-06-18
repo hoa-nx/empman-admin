@@ -34,20 +34,22 @@ export class UserComponent implements OnInit {
   public roles: any[];
 
   public dateOptions: any = {
-    locale: { format: 'DD/MM/YYYY' },
+    locale: { format: 'YYYY/MM/DD' },
+    showDropdowns: true,
     alwaysShowCalendars: false,
+    autoUpdateInput: false,
     singleDatePicker: true
   };
 
   constructor(private _dataService: DataService,
-    private _notificationService: NotificationService, 
+    private _notificationService: NotificationService,
     private _utilityService: UtilityService,
-    private _uploadService: UploadService,public _authenService: AuthenService) { 
+    private _uploadService: UploadService, public _authenService: AuthenService) {
 
-      if(_authenService.checkAccess('USER')==false){
-          _utilityService.navigateToLogin();
-      }
+    if (_authenService.checkAccess('USER') == false) {
+      _utilityService.navigateToLogin();
     }
+  }
 
   ngOnInit() {
     this.loadRoles();
@@ -79,7 +81,7 @@ export class UserComponent implements OnInit {
         for (let role of this.entity.Roles) {
           this.myRoles.push(role);
         }
-        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format('DD/MM/YYYY');
+        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format('YYYY/MM/DD');
 
         console.log(this.entity.BirthDay);
       });
@@ -145,6 +147,6 @@ export class UserComponent implements OnInit {
   }
 
   public selectedDate(value: any) {
-    this.entity.BirthDay =  moment(value.end._d).format('DD/MM/YYYY');
+    this.entity.BirthDay = moment(value.end._d).format('YYYY/MM/DD');
   }
 }

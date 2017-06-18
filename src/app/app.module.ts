@@ -5,13 +5,12 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // hack - make sure that jQuery plugins can find
 //        jquery reference
 //import * as $ from 'jquery';
 import { AuthGuard } from './core/guards/auth.guard';
-import { CompComponent, MasterSearchModalComponent } from './shared/master-search-modal/master-search-modal.component';
-import { SharedService } from './core/services/SharedService';
 //declare var $:any;
 //window["$"] = $;
 //window["jQuery"] = $;
@@ -24,9 +23,10 @@ import { SharedService } from './core/services/SharedService';
     BrowserModule,
     FormsModule,
     HttpModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [AuthGuard,SharedService],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -12,6 +12,17 @@ import { SidebarMenuComponent } from '../shared/sidebar-menu/sidebar-menu.compon
 import { TopMenuComponent } from '../shared/top-menu/top-menu.component';
 import { RightbarMenuComponent } from '../shared/rightbar-menu/rightbar-menu.component';
 
+// Statics
+import 'rxjs/add/observable/throw';
+
+// Operators
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/toPromise';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -22,6 +33,5 @@ import { RightbarMenuComponent } from '../shared/rightbar-menu/rightbar-menu.com
   ],
   providers:[UtilityService,AuthenService],
   declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, RightbarMenuComponent]
-  
 })
 export class MainModule { }
