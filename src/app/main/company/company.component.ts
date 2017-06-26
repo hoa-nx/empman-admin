@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, NgZone, Input } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
@@ -7,7 +7,7 @@ import { AuthenService } from '../../core/services/authen.service';
 import { UtilityService } from '../../core/services/utility.service';
 
 import { MessageContstants } from '../../core/common/message.constants';
-import { SystemConstants } from '../../core/common/system.constants';
+import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
 
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import { SearchModalComponent } from '../../shared/search-modal/search-modal.component';
@@ -16,6 +16,7 @@ declare var moment: any;
 
 @Component({
   selector: 'app-company',
+  host: { '(input-blur)': 'onInputBlur($event)' },
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css']
 })
@@ -26,8 +27,7 @@ export class CompanyComponent implements OnInit {
   @ViewChild('avatar') avatar;
 
   //common modal
-  @ViewChild('childModal') childModal :SearchModalComponent;
-
+  @ViewChild('childModal') childModal: SearchModalComponent;
   public pageIndex: number = 1;
   public pageSize: number = 10;
   public pageDisplay: number = 10;
@@ -36,23 +36,19 @@ export class CompanyComponent implements OnInit {
   public companys: any[];
   public entity: any;
   public baseFolder: string = SystemConstants.BASE_API;
-  public allRoles: IMultiSelectOption[] = [];
   public roles: any[];
+  public ceoFullName: string = '';
+  private emp: any;
 
-  public dateOptions: any = {
-    locale: { format: 'YYYY/MM/DD' },
-    showDropdowns: true,
-    alwaysShowCalendars: false,
-    autoUpdateInput: false,
-    singleDatePicker: true
-  };
-  output = "";
+  public dateOptions: any = DateRangePickerConfig.dateOptions;
+
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,
     private _utilityService: UtilityService,
-    private _uploadService: UploadService, 
+    private _uploadService: UploadService,
     public _authenService: AuthenService,
-    private viewContainerRef : ViewContainerRef) {
+    private viewContainerRef: ViewContainerRef,
+    private zone: NgZone) {
 
     /*if(_authenService.checkAccess('USER')==false){
         _utilityService.navigateToLogin();
@@ -60,7 +56,7 @@ export class CompanyComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.loadRoles();
+    this.ceoFullName = '';
     this.loadData();
   }
 
@@ -72,15 +68,6 @@ export class CompanyComponent implements OnInit {
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
       });
-  }
-
-  loadRoles() {
-    this._dataService.get('/api/company/getlistall').subscribe((response: any[]) => {
-      this.allRoles = [];
-      for (let role of response) {
-        this.allRoles.push({ id: role.Name, name: role.Description });
-      }
-    }, error => this._dataService.handleError(error));
   }
 
   loadDetail(id: any) {
@@ -97,6 +84,7 @@ export class CompanyComponent implements OnInit {
   }
   showAddModal() {
     this.entity = {};
+    this.ceoFullName = '';
     this.modalAddEdit.show();
   }
   showEditModal(id: any) {
@@ -109,7 +97,7 @@ export class CompanyComponent implements OnInit {
     }
   }
   private saveData() {
-    if (this.entity.ID == undefined) {
+    if (this.entity.No == undefined) {
       this._dataService.post('/api/company/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
@@ -141,6 +129,46 @@ export class CompanyComponent implements OnInit {
 
   public selectedDate(value: any) {
     this.entity.CreateDate = moment(value.end._d).format('YYYY/MM/DD');
+  }
+
+  selectedData(value: any): void {
+    this.ceoFullName = value.value.FullName;
+    this.entity.CeoID = value.value.ID;
+
+  }
+
+  onInputBlur(event) {
+    switch (event.target.name) {
+      case 'ceoid':
+
+        //get name from code
+        let id: any = 0;
+        id = event.target.value | 0;
+        //kiem tra xem co thay doi tri hay khong?
+        if (id === this.entity.CeoID) {
+          return;
+        }
+        //khởi tạo lại trị
+        this.ceoFullName = '';
+        //seach & display
+        this.loadDetailEmp(id);
+        break;
+
+      default:
+
+        break;
+    }
+  }
+
+  loadDetailEmp(id: any) {
+    this._dataService.get('/api/emp/detail/' + id)
+      .subscribe((response: any) => {
+        this.emp = response;
+        this.ceoFullName = '';
+        if (this.emp) {
+          this.ceoFullName = this.emp.FullName;
+        }
+      });
   }
 
 }

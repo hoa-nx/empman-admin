@@ -19,7 +19,7 @@ import { MessageContstants } from '../../core/common/message.constants';
 //import { FileUploader } from 'ng2-file-upload';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop';
 import { UploadService } from '../../core/services/upload.service';
-import { SystemConstants } from '../../core/common/system.constants';
+import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
 import { MdRadioButton, MdRadioGroup, MdRadioModule } from '@angular/material';
 
 declare var moment: any;
@@ -51,11 +51,11 @@ declare var moment: any;
 
 export class EmpCardComponent implements OnInit {
     @ViewChild('childModal') public childModal: ModalDirective;
-    @Input() user: IEmp;
+    @Input() user: IEmp| undefined;  /* add | undefined to fix warning khen build */
     @Output() removeUser = new EventEmitter();
     @Output() userCreated = new EventEmitter();
 
-    edittedUser: IEmp;
+    edittedUser: IEmp| undefined; /* add | undefined to fix warning khen build */
     onEdit: boolean = false;
     apiHost: string;
     // Modal properties
@@ -80,14 +80,8 @@ export class EmpCardComponent implements OnInit {
 
     private currentProfileImage: string = 'http://localhost:4200/assets/images/profile-default.png';
 
-    public dateOptions: any = {
-        locale: { format: 'YYYY/MM/DD' },
-        showDropdowns: true,
-        alwaysShowCalendars: false,
-        autoUpdateInput: false,
-        singleDatePicker: true
-    };
-
+    public dateOptions: any = DateRangePickerConfig.dateOptions;
+    
     public uriAvatarPath: string = SystemConstants.BASE_API;
 
     constructor(private itemsService: ItemsService,
@@ -226,7 +220,7 @@ export class EmpCardComponent implements OnInit {
     }
 
     public calendarEventsHandler(e:any) {
-        console.log(e);
+        
     }
     public selectGender(event) {
         this.edittedUser.Gender = event.source._checked;

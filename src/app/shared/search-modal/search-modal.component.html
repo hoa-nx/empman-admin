@@ -1,4 +1,4 @@
-<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" [config]="{backdrop: 'static', keyboard : true}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -7,6 +7,14 @@
               <span aria-hidden="true">&times;</span>
         </button>
         <!-- Header -->
+        <div class="row">
+            <div class="col-sm-8">
+              <div class="form-group contact-search m-b-30">
+                <input type="text" id="search" class="form-control" placeholder="Nhập nội dung..." name="filterModal" (keyup.enter)="loadDataModal(searchTableName)" [(ngModel)]="filterModal">
+                <button class="btn btn-white" (click)="loadDataModal(searchTableName)"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
         <!-- Header end-->
         <!-- List -->
         <div class="table-responsive">
@@ -35,8 +43,8 @@
 
         <div class="modal-footer">
           <div class="pull-left">
-            <button class="btn btn-success" (click)="ok()"> Chọn </button>
             <button class="btn btn-danger" (click)="cancel()"> Trở về </button>
+            <button class="btn btn-success" (click)="ok()"> Chọn </button>
           </div>
           <!-- List end-->
         </div>

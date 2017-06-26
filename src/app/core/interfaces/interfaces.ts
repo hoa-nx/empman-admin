@@ -1,92 +1,6 @@
 export interface IEmp {
-    /*
-    id: number;
-    fullname: string;
-    name: string;
-    furigana: string;
-    gender: boolean;
-    identno: string;
-    identdate: string;
-    identplace: string;
-    fjsid: string;
-    trainingprofileid: string;
-    bornplace: string;
-    avatar: string;
-    workingemail: string;
-    personalemail: string;
-    birthday: string;
-    accountname: string;
-    phonenumber1: string;
-    phonenumber2: string;
-    phonenumber3: string;
-    address1: string;
-    address2: string;
-    currentdeptid: number;
-    currentteamid: number;
-    currentpositionid: number;
-    startworkingdate: string;
-    startlearingdate: string;
-    endlearingdate: string;
-    starttrialdate: string;
-    endtrialdate: string;
-    contractdate: string;
-    contracttypemasterid: number;
-    contracttypemasterdetailid: number;
-    jobleavedate: string;
-    isjobleave: boolean;
-    jobleavereason: string;
-    googleid: string;
-    marrieddate: string;
-    experiencebeforecontent: string;
-    experiencebeforeconvert: number;
-    experienceconvert: number;
-    emptypemasterid: number;
-    emptypemasterdetailid: number;
-    isbse: boolean;
-    collectmasterid: number;
-    collectmasterdetailid: number;
-    educationlevelmasterid: number;
-    educationlevelmasterdetailid: number;
-    temperament: string;
-    introductor: string;
-    bloodgroup: string;
-    hobby: string;
-    objective: string;
-    fileid: number;
-    profileattachmentid: number;
-    displayorder: number;
-    accountdata: string;
-    note: string;
-    deleteflag: number;
-    status: number;
-    yobi_text1: string;
-    yobi_text2: string;
-    yobi_text3: string;
-    yobi_text4: string;
-    yobi_text5: string;
-    yobi_number1: number;
-    yobi_number2: number;
-    yobi_number3: number;
-    yobi_number4: number;
-    yobi_number5: number;
-    yobi_decimal1: number;
-    yobi_decimal2: number;
-    yobi_decimal3: number;
-    yobi_decimal4: number;
-    yobi_decimal5: number;
-    yobi_date1: string;
-    yobi_date2: string;
-    yobi_date3: string;
-    yobi_date4: string;
-    yobi_date5: string;
-    createddate: string;
-    createdby: string;
-    updateddate: string;
-    updatedby: string;
-    metakeyword: string;
-    metadescription: string;
-    */
     ID: number;
+    No: number;
     FullName: string;
     Name?: string;
     Furigana?: string;
@@ -94,8 +8,8 @@ export interface IEmp {
     IdentNo?: string;
     IdentDate?: Date;
     IdentPlace?: string;
-    FJSID?: string;
-    TrainingProfileID?: string;
+    ExtLinkNo?: string;
+    TrainingProfileNo?: string;
     BornPlace?: string;
     Avatar?: string;
     ShowAvatar?: boolean;
@@ -112,13 +26,14 @@ export interface IEmp {
     CurrentTeamID?: number;
     CurrentPositionID?: number;
     StartWorkingDate?: any;
-    StartLearingDate?: Date;
-    EndLearingDate?: Date;
+    StartLearningDate?: Date;
+    EndLearningDate?: Date;
     StartTrialDate?: Date;
     EndTrialDate?: Date;
     ContractDate?: Date;
     ContractTypeMasterID?: number;
     ContractTypeMasterDetailID?: number;
+    JobLeaveRequestDate?: Date;
     JobLeaveDate?: Date;
     IsJobLeave?: boolean;
     JobLeaveReason?: string;
@@ -146,26 +61,6 @@ export interface IEmp {
     Note?: string;
     DeleteFlag?: number;
     Status?: number;
-    Yobi_Text1?: string;
-    Yobi_Text2?: string;
-    Yobi_Text3?: string;
-    Yobi_Text4?: string;
-    Yobi_Text5?: string;
-    Yobi_Number1?: number;
-    Yobi_Number2?: number;
-    Yobi_Number3?: number;
-    Yobi_Number4?: number;
-    Yobi_Number5?: number;
-    Yobi_Decimal1?: string;
-    Yobi_Decimal2?: string;
-    Yobi_Decimal3?: string;
-    Yobi_Decimal4?: string;
-    Yobi_Decimal5?: string;
-    Yobi_Date1?: Date;
-    Yobi_Date2?: Date;
-    Yobi_Date3?: Date;
-    Yobi_Date4?: Date;
-    Yobi_Date5?: Date;
     CreatedDate?: Date;
     CreatedBy?: string;
     UpdatedDate?: Date;
@@ -173,6 +68,113 @@ export interface IEmp {
     MetaKeyword?: string;
     MetaDescription?: string;
 
+}
+
+export interface IRevenue {
+    ID: number;
+    CompanyID: number;
+    DeptID: number;
+    TeamID: number;
+    ReporterID: number;
+    ReportDate: Date;
+    ReportYearMonth: Date;
+    OrderNo: string;
+    ProjectInMonthCount: number;
+    ReportTitle: string;
+    ProjectID: number;
+    ProjectDetailID: number;
+    ProjectName: string;
+    ProjectContent: string;
+    EstimateTypeMasterID: number;
+    EstimateTypeMasterDetailID: number;
+    CustomerID: number;
+    CustomerName: string;
+    OrderStartDate: Date;
+    OrderEndDate: Date;
+    OrderProjectSumMM: string;
+    OrderUnitMasterID: number;
+    OrderUnitMasterDetailID: number;
+    ExchangeRateID: number;
+    OrderPrice: string;
+    OrderPriceToUsd: string;
+    AccPreMonthSumMM: string;
+    AccPreMonthSumToUsd: string;
+    InMonthDevMM: string;
+    InMonthTransMM: string;
+    InMonthManagementMM: string;
+    InMonthSumMM: string;
+    InMonthToUsd: string;
+    InMonthToVnd: string;
+    NextMonth: string;
+    NextMonthMM: string;
+    NextMonthToUsd: string;
+    PMID: number;
+    PLID: number;
+    DisplayOrder: number;
+    AccountData: string;
+    Note: string;
+    DeleteFlag: number;
+    Status: number;
+    CreatedDate: Date;
+    CreatedBy: string;
+    UpdatedDate: Date;
+    UpdatedBy: string;
+
+
+}
+
+export interface IRevenueDetails {
+    ID: number;
+    CompanyID: number;
+    DeptID: number;
+    TeamID: number;
+    ReporterID: number;
+    ReportDate: Date;
+    ReportYearMonth: Date;
+    OrderNo: string;
+    ProjectInMonthCount: number;
+    ReportTitle: string;
+    ProjectID: number;
+    ProjectDetailID: number;
+    ProjectName: string;
+    ProjectContent: string;
+    EstimateTypeMasterID: number;
+    EstimateTypeMasterDetailID: number;
+    CustomerID: number;
+    CustomerName: string;
+    OrderStartDate: Date;
+    OrderEndDate: Date;
+    OrderProjectSumMM: string;
+    OrderUnitMasterID: number;
+    OrderUnitMasterDetailID: number;
+    ExchangeRateID: number;
+    OrderPrice: string;
+    OrderPriceToUsd: string;
+    AccPreMonthSumMM: string;
+    AccPreMonthSumToUsd: string;
+    InMonthDevMM: string;
+    InMonthTransMM: string;
+    InMonthManagementMM: string;
+    InMonthSumMM: string;
+    InMonthToUsd: string;
+    InMonthToVnd: string;
+    NextMonth: string;
+    NextMonthMM: string;
+    NextMonthToUsd: string;
+    PMID: number;
+    PLID: number;
+    DisplayOrder: number;
+    AccountData: string;
+    Note: string;
+    DeleteFlag: number;
+    Status: number;
+    CreatedDate: Date;
+    CreatedBy: string;
+    UpdatedDate: Date;
+    UpdatedBy: string;
+
+    emps: IEmp[];
+    EstimateTypes: string[];
 }
 
 export interface ISchedule {
@@ -223,4 +225,55 @@ export class PaginatedResult<T> {
 
 export interface Predicate<T> {
     (item: T): boolean
+}
+
+export interface TreeItem {
+    text: string;
+    value: any;
+    disabled?: boolean;
+    checked?: boolean;
+    collapsed?: boolean;
+    children?: TreeItem[];
+}
+
+/** kiểu dữ liệu để lưu trữ item search dạng master - detail code */
+export interface IMasterDetailItemViewModel {
+    MasterID?: number;
+    DetailID?: number;
+}
+
+/** Kiểu dữ liệu để chứa các hạng mục điều kiện dùng để tìm kiếm */
+export interface ISearchItemViewModel {
+
+    /** ID */
+    ID? : number;
+    /**Số trang hiện tại */
+    Page? : number;
+    /**Số trang trến 1 page */
+    PageSize? : number;
+
+    Keyword? : string;
+    /**
+     * Mảng các số dùng để tìm kiếm
+     */
+    NumberItems?: any[];
+    /**
+     * Mảng các chuỗi  dùng để tìm kiếm
+     */
+    StringItems?: string[];
+    /**
+     * Mảng các item kiểu ngày dùng để tìm kiếm
+     */
+    DateTimeItems?: any[];
+
+    MasterDetailItems? : IMasterDetailItemViewModel[];
+     
+    IsDev?: boolean;
+
+    IsTrans?: boolean;
+
+    IsLeaveJob?: boolean;
+
+    IsBSE?: boolean;
+
 }

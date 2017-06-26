@@ -1,0 +1,130 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card-box">
+      <div class="row">
+        <div class="col-lg-12">
+          <h4 class="m-t-0 header-title"><b>Doanh số</b></h4>
+
+          <!-- Header -->
+          <div class="row">
+            <div class="row">
+              <div class="col-md-3 col-sm-6 col-xs-12 form-group">
+                <!--<input type="text" title="Tháng năm đối tượng" daterangepicker (selected)="selectedReportYearMonth($event)" [options]="dateOptions"
+                  [(ngModel)]="reportYearMonth" name="ReportYearMonth" class="form-control" placeholder="Tháng năm đối tượng"
+                />-->
+                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [options]="revenueAllYearMonths" [(ngModel)]="revenueSelectedYearMonths" ></ss-multiselect-dropdown>
+              </div>
+
+              <div class="col-md-4 col-sm-6 col-xs-12 form-group">
+                <div class="form-group contact-search m-b-30">
+                  <input type="text" id="search" class="form-control" placeholder="Nhập tên khách hàng ..." name="filter" (keyup.enter)="search()"
+                    [(ngModel)]="filter" />
+                  <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-6 col-xs-12 form-group">
+                <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
+                <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
+
+                <a [routerLink]="['../../revenue',0,'edit']" class="btn btn-default waves-effect waves-light" data-animation="fadein"
+                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
+
+              </div>
+            </div>
+           
+          </div>
+
+          <!-- Header end-->
+          <!-- List -->
+          <div class="table-responsive">
+            <table class="table table-hover mails m-0 table table-actions-bar" style="border:2px">
+              <thead>
+                <tr>
+                  <th rowspan="2">Chọn</th>
+                  <th rowspan="2">Tháng năm</th>
+                  <th rowspan="2">Nội dung</th>
+                  <th rowspan="2">Loại dự án</th>
+                  <th rowspan="2">Khách hàng</th>
+                  <th colspan="4">Theo số liệu quotation/order</th>
+                  <th colspan="2">Lũy kế→tháng trước</th>
+                  <th colspan="6">Đã thực hiện trong tháng (tạm tính)</th>
+                  <th colspan="2">Số còn phải thực hiện các kỳ sau</th>
+                  <th rowspan="2">Leader</th>
+                </tr>
+                <tr>
+                  <!--<th>Bắt đầu</th>
+                  <th>Kết thúc</th>-->
+                  <th>Tổng MM</th>
+                  <th>ĐVT giá</th>
+                  <th>Đơn giá </th>
+                  <th>Số tiền ($)</th>
+                  <th>Tổng số MM</th>
+                  <th>Số tiền ($)</th>
+                  <th>Số MM LTV</th>
+                  <th>Số MM PD</th>
+                  <th>Số MM QL</th>
+                  <th>Tổng số MM</th>
+                  <th>Số tiền($)</th>
+                  <th>Số tiền(VND)</th>
+                  <th>Số MM</th>
+                  <th>Số tiền($)</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let item of revenues">
+                  <td><div class="checkbox">
+                      <input type="checkbox" [(ngModel)]="item.Checked" [name]="item.ID" [ngModelOptions]="{standalone: true}">
+                      <label>
+                    </label>
+                    </div></td>
+                  <td>{{item.ReportYearMonth| date:'yyyy/MM'}}</td>
+                  <td><a [routerLink]="['../../revenue',item.ID,'edit']">{{item.ProjectContent}}</a></td>
+                  <td>{{item.EstimateType.Name}}</td>
+                  <td>{{item.Customer.Name}}</td>
+
+                  <!--                  <td>{{item.OrderStartDate | date:'yyyy/MM/dd'}}</td>
+                  <td>{{item.OrderEndDate | date:'yyyy/MM/dd'}}</td>-->
+                  <td>{{item.OrderProjectSumMM}}</td>
+                  <td>{{item.OrderUnitPrice}}</td>
+                  <td>{{item.OrderPrice}}</td>
+                  <td>{{item.OrderPriceToUsd}}</td>
+
+                  <td>{{item.AccPreMonthSumMM}}</td>
+                  <td>{{item.AccPreMonthSumToUsd}}</td>
+
+                  <td>{{item.InMonthDevMM}}</td>
+                  <td>{{item.InMonthTransMM}}</td>
+                  <td>{{item.InMonthManagementMM}}</td>
+                  <td>{{item.InMonthSumMM}}</td>
+                  <td>{{item.InMonthToUsd}}</td>
+                  <td>{{item.InMonthToVnd}}</td>
+
+                  <td>{{item.NextMonthMM}}</td>
+                  <td>{{item.NextMonthToUsd}}</td>
+                  <td>{{item.PM.FullName}}</td>
+                  <!--                  <td>
+                    <a [routerLink]="['../../revenue',item.ID,'edit']" class="table-action-btn"><i class="md md-edit"></i></a>
+                    <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
+                  </td>-->
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <!-- List end-->
+          <!-- paging -->
+          <div class="col-md-12">
+
+            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow"
+              [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+              lastText="&raquo;"></pagination>
+          </div>
+
+          <!-- paging end-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

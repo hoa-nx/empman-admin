@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -16,11 +16,12 @@ declare var $ : any;
 
 export class SearchModalComponent implements OnInit {
   @ViewChild('childModal') public childModal: ModalDirective;
-  @Input() title: string;
+ // @Input() title: string;
   @Input() searchTableName: string;
   @Input() searchWhereClause: string;
   @Input() searchOrderClause: string;
-
+  @Output() selectedData = new EventEmitter();
+  @Input() entity: any; 
 
   public pageIndexModal: number = 1;
   public pageSizeModal: number = 10;
@@ -30,6 +31,7 @@ export class SearchModalComponent implements OnInit {
   public datas: any[];
   public selected: any;
   public baseFolder: string = SystemConstants.BASE_API;
+  private _title : string ='';
 
   public dateOptions: any = {
     locale: { format: 'YYYY/MM/DD' },
@@ -50,6 +52,16 @@ export class SearchModalComponent implements OnInit {
     this.loadDataModal(this.searchTableName.toLowerCase);
 
   }
+
+  //Intercept input property changes with a setter START
+  @Input()
+  set title(value:string){
+    this._title = value;
+  }
+  get title() : string {
+    return this._title;
+  }
+  //Intercept input property changes with a setter END
 
   loadDataModal(tableName) {
     switch (tableName) {
@@ -124,7 +136,11 @@ export class SearchModalComponent implements OnInit {
 
   ok() {
     //tra ve tri nguoi su dung da chon
-    console.log(this.selected);
+    //console.log(this.selected);
+    this.entity = this.selected;
+    this.selectedData.emit({
+                            value: this.selected
+                        });
     this.childModal.hide();
   }
 

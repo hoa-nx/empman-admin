@@ -12,11 +12,11 @@ import { SystemConstants, DateRangePickerConfig } from '../../core/common/system
 declare var moment: any;
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  selector: 'app-customer-unitprice',
+  templateUrl: './customer-unitprice.component.html',
+  styleUrls: ['./customer-unitprice.component.css']
 })
-export class CustomerComponent implements OnInit {
+export class CustomerUnitpriceComponent implements OnInit {
 
   @ViewChild('modalAddEdit') public modalAddEdit: ModalDirective;
 
@@ -28,11 +28,12 @@ export class CustomerComponent implements OnInit {
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = '';
-  public customers: any[];
+  public customerUnitPrices: any[];
   public entity: any;
   public baseFolder: string = SystemConstants.BASE_API;
   public orderUnits: any[];
-
+  public customers: any[];
+  public customerName : any;
   public dateOptions: any = DateRangePickerConfig.dateOptions;
 
   constructor(private _dataService: DataService,
@@ -52,9 +53,9 @@ export class CustomerComponent implements OnInit {
   }
 
   loadData() {
-    this._dataService.get('/api/customer/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
+    this._dataService.get('/api/customerunitprice/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
       .subscribe((response: any) => {
-        this.customers = response.Items;
+        this.customerUnitPrices = response.Items;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
@@ -67,10 +68,12 @@ export class CustomerComponent implements OnInit {
   loadMultiTable() {
     let uri = [];
     uri.push('/api/masterdetail/getbykbn/25');
+    uri.push('/api/customer/getall');
 
     this._dataService.getMulti(uri)
       .subscribe((response: any) => {
         this.orderUnits = response[0];   //đơn vị tính order
+        this.customers = response[1];   //KH
       },
       error => {
         error => this._dataService.handleError(error);
@@ -78,11 +81,11 @@ export class CustomerComponent implements OnInit {
   }
 
   loadDetail(id: any) {
-    this._dataService.get('/api/customer/detail/' + id)
+    this._dataService.get('/api/customerunitprice/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
-        this.entity.ContractDate = moment(new Date(this.entity.ContractDate)).format('YYYY/MM/DD');
-
+        this.entity.StartDate = moment(new Date(this.entity.StartDate)).format('YYYY/MM/DD');
+        this.entity.EndDate = moment(new Date(this.entity.EndDate)).format('YYYY/MM/DD');
       });
   }
   pageChanged(event: any): void {
@@ -103,9 +106,9 @@ export class CustomerComponent implements OnInit {
     }
   }
   private saveData() {
-    this.entity.DefaultOrderUnitMasterID = 25;
-    if (this.entity.No == undefined) {
-      this._dataService.post('/api/customer/add', JSON.stringify(this.entity))
+    this.entity.OrderUnitMasterID = 25;
+    if (this.entity.ID == undefined) {
+      this._dataService.post('/api/customerunitprice/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
@@ -113,7 +116,7 @@ export class CustomerComponent implements OnInit {
         }, error => this._dataService.handleError(error));
     }
     else {
-      this._dataService.put('/api/customer/update', JSON.stringify(this.entity))
+      this._dataService.put('/api/customerunitprice/update', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
@@ -125,14 +128,18 @@ export class CustomerComponent implements OnInit {
     this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
   deleteItemConfirm(id: any) {
-    this._dataService.delete('/api/customer/delete', 'id', id).subscribe((response: Response) => {
+    this._dataService.delete('/api/customerunitprice/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.loadData();
     });
   }
 
-  public selectedContractDate(value: any) {
-    this.entity.ContractDate = moment(value.end._d).format('YYYY/MM/DD');
+  public selectedStartDate(value: any) {
+    this.entity.StartDate = moment(value.end._d).format('YYYY/MM/DD');
+  }
+
+  public selectedEndDate(value: any) {
+    this.entity.EndDate = moment(value.end._d).format('YYYY/MM/DD');
   }
 
   selectedData(value: any): void {
@@ -141,6 +148,12 @@ export class CustomerComponent implements OnInit {
   }
 
   public onChangeOrderUnit(value: any) {
+    if (value) {
+
+    }
+  }
+
+  public onChangeCustomer(value: any) {
     if (value) {
 
     }
@@ -166,7 +179,6 @@ export class CustomerComponent implements OnInit {
         break;
     }
   }
-
 
 
 }

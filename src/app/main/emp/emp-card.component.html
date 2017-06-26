@@ -49,7 +49,7 @@
             <!-- Ngày vào công ty -->
             <div class="caption pull-left profile-item">
                 <p>
-                    <span class="fa fa-calendar" title="Ngày vào công ty(thử việc)" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartTrialDate|  date:'yyyy/MM/dd'}}</span>
+                    <span *ngIf="edittedUser.ContractDate" class="fa fa-calendar" title="Ngày vào công ty(thử việc)" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartTrialDate|  date:'yyyy/MM/dd'}}</span>
                 </p>
                 <div [hidden]="!onEdit">
                     <div class="input-group">
@@ -87,8 +87,8 @@
             <!-- Ngày ký hợp đồng -->
             <div class="caption pull-left profile-item">
                 <p>
-                    <span class="fa fa-calendar-check-o" title="Ngày ký hợp đồng chính thức" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartWorkingDate|  date:'yyyy/MM/dd'}}</span>
-                    <span class="md md-settings-power" title="Ngày làm việc cuối cùng" [class.hidden]="onEdit">&nbsp;2017/01/01 </span>
+                    <span *ngIf="edittedUser.ContractDate" class="fa fa-calendar-check-o" title="Ngày ký hợp đồng chính thức" [class.hidden]="onEdit">&nbsp;{{edittedUser.ContractDate|  date:'yyyy/MM/dd'}}</span>
+                    <span *ngIf="edittedUser.JobLeaveDate" class="md md-settings-power" title="Ngày làm việc cuối cùng" [class.hidden]="onEdit">&nbsp;{{edittedUser.JobLeaveDate|  date:'yyyy/MM/dd'}} </span>
                 </p>
             </div>
             <!-- Thông tin thâm niên - tiếng nhật - -->

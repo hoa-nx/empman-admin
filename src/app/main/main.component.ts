@@ -18,7 +18,10 @@ declare var $ : any; //khai bao jquery
 export class MainComponent implements OnInit ,AfterViewInit  {
   public user: LoggedInUser;
 
-  constructor(private utilityService: UtilityService, private authenService: AuthenService) { }
+  constructor(private utilityService: UtilityService, 
+      private authenService: AuthenService) { 
+
+      }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
@@ -39,7 +42,7 @@ export class MainComponent implements OnInit ,AfterViewInit  {
         //do some things  
       });
     });
-
   }
+
 
 }

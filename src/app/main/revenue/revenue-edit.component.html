@@ -1,0 +1,319 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #editRevenueForm="ngForm" *ngIf="entity" novalidate>
+                <!--<div class="alert alert-danger" [hidden]="editRevenueForm.form.valid">
+                    <ul *ngIf="ReportYearMonth.dirty && !ReportYearMonth.valid">
+                        <li>Tháng năm báo cáo là bắt buộc<i></i></li>
+                    </ul>
+                    <ul *ngIf="ProjectContent.dirty && !ProjectContent.valid">
+                        <li>Nội dung công việc là bắt buộc<i></i></li>
+                    </ul>
+                    <ul *ngIf="EstimateTypeMasterDetailID.dirty && !EstimateTypeMasterDetailID.valid">
+                        <li>Loại báo giá là bắt buộc<i></i></li>
+                    </ul>
+                    <ul *ngIf="CustomerID.dirty && !CustomerID.valid">
+                        <li>Khách hàng là bắt buộc<i></i></li>
+                    </ul>
+                </div>-->
+                <button type="button" class="btn btn-danger" (click)="back()">
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Trở về</button>
+                <button type="button" [disabled]="!editRevenueForm.form.valid" class="btn btn-default" (click)="updateRevenue(editRevenueForm)">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Cập nhật</button>
+
+                <hr/>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tháng năm</label>
+                            <input type="text" #ReportYearMonth="ngModel" daterangepicker (selected)="selectedReportYearMonthDate($event)" [options]="dateOptions"
+                                [(ngModel)]="entity.ReportYearMonth" name="ReportYearMonth" class="form-control focusedInput"
+                                placeholder="Tháng năm đối tượng" required/>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>No.đặt hàng</label>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.OrderNo" name="OrderNo" #OrderNo="ngModel"
+                             placeholder="Số đặt hàng"    required/>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Chọn tỉ giá</label>
+
+                            <select class="form-control focusedInput" name="ExchangeRateID" [(ngModel)]="entity.ExchangeRateID"  (ngModelChange) ="onChangeExchangeRate($event)" >
+                            <option *ngFor="let x of exchangeRates" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                            <input type="hidden" [(ngModel)]="entity.ExchangeRateID" name="ExchangeRateID" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Leader</label>
+
+                            <select class="form-control focusedInput" name="PMID" [(ngModel)]="entity.PMID">
+                            <option *ngFor="let x of emps" [value]="x.ID">{{x.FullName}}</option>
+                            </select>
+                            <input type="hidden" [(ngModel)]="entity.PMID" name="PMID" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Nội dung công việc</label>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.ProjectContent" name="ProjectContent" #ProjectContent="ngModel"
+                             placeholder="Nội dung công việc"    required/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Loại báo giá</label>
+
+                            <select class="form-control focusedInput" name="EstimateTypeMasterDetailID" [(ngModel)]="entity.EstimateTypeMasterDetailID"  required>
+                            <option *ngFor="let x of estimateTypes" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                            </select>
+                            <input type="hidden" [(ngModel)]="entity.EstimateTypeMasterID" name="EstimateTypeMasterID" class="form-control" />
+                            <input type="hidden" [(ngModel)]="entity.EstimateTypeMasterDetailID" name="EstimateTypeMasterDetailID" class="form-control"
+                            />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Khách hàng</label>
+
+                            <select class="form-control focusedInput" name="CustomerID" [(ngModel)]="entity.CustomerID" (ngModelChange) ="onChangeCustomer($event)" required>
+                            <option *ngFor="let customer of customers" [ngValue]="customer.ID" >{{customer.Name}}</option>
+                            </select>
+                            <input type="hidden" [(ngModel)]="entity.CustomerID" name="CustomerID" class="form-control" />
+                            <input type="hidden" [(ngModel)]="entity.CustomerName" name="CustomerName" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="portlet">
+                                <div class="portlet-heading bg-info">
+                                    <h3 class="portlet-title">
+                                        Theo số liệu quotation/order
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="nojavascript...;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#bg-info"><i class="ion-minus-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="bg-info" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Ngày bắt đầu</label>
+                                            <input type="text" #OrderStartDate="ngModel" daterangepicker (selected)="selectedOrderStartDate($event)" [options]="dateOptions"
+                                                [(ngModel)]="entity.OrderStartDate" name="OrderStartDate" class="form-control focusedInput"
+                                                placeholder="Ngày bắt đầu" required/>
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Ngày kết thúc</label>
+                                            <input type="text" #OrderEndDate="ngModel" daterangepicker (selected)="selectedOrderEndDate($event)" [options]="dateOptions"
+                                                [(ngModel)]="entity.OrderEndDate" name="OrderEndDate" class="form-control focusedInput"
+                                                placeholder="Ngày kết thúc" required/>
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Tổng MM(quản lý&phiên dịch)</label>
+                                            <input type="number" class="form-control focusedInput" [(ngModel)]="entity.OrderProjectSumMM" name="OrderProjectSumMM" #OrderProjectSumMM="ngModel"
+                                            />
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Đơn vị tiền tính đơn giá</label>
+
+                                            <select class="form-control focusedInput" name="OrderUnitMasterDetailID" [(ngModel)]="entity.OrderUnitMasterDetailID"  (ngModelChange) ="onChangeOrderUnit($event)" required>
+                                            <option *ngFor="let x of orderUnits" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                            </select>
+                                            <input type="hidden" [(ngModel)]="entity.OrderUnitMasterID" name="OrderUnitMasterID" class="form-control" />
+                                            <input type="hidden" [(ngModel)]="entity.OrderUnitMasterDetailID" name="OrderUnitMasterDetailID" class="form-control"
+                                            />
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Đơn giá </label>
+                                            <input type="number" class="form-control  focusedInput" [(ngModel)]="entity.OrderPrice" name="OrderPrice" #OrderPrice="ngModel" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Thành tiền($) </label>
+                                            <input type="text" disabled class="form-control disabled" value="{{entity.OrderPriceToUsd| currency:'USD':true:'1.2-2'}}" name="OrderPriceToUsd"                                             />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="portlet">
+                                <div class="portlet-heading bg-primary">
+                                    <h3 class="portlet-title">
+                                        Lũy kế số đã thực hiện các tháng trước
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="nojavascript...;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#bg-primary"><i class="ion-minus-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="bg-primary" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Tổng MM </label>
+                                            <input type="number" class="form-control" [(ngModel)]="entity.AccPreMonthSumMM" name="AccPreMonthSumMM" #AccPreMonthSumMM="ngModel"
+                                            />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Thành tiền($) </label>
+                                            <input type="text" disabled class="form-control disabled"   value="{{entity.AccPreMonthSumToUsd| currency:'USD':true:'1.2-2'}}"  name="AccPreMonthSumToUsd" 
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="portlet">
+                                <div class="portlet-heading bg-success">
+                                    <h3 class="portlet-title">
+                                        Đã thực hiện trong tháng (tạm tính)
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="nojavascript...;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#bg-success"><i class="ion-minus-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="bg-success" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số công LTV(MM) </label>
+                                            <input type="number" class="form-control focusedInput" [(ngModel)]="entity.InMonthDevMM" name="InMonthDevMM" #InMonthDevMM="ngModel" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số công phiên dịch(MM) </label>
+                                            <input type="number" class="form-control focusedInput" [(ngModel)]="entity.InMonthTransMM" name="InMonthTransMM" #InMonthTransMM="ngModel"
+                                            />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số công quản lý(MM)</label>
+                                            <input type="number" class="form-control focusedInput" [(ngModel)]="entity.InMonthManagementMM" name="InMonthManagementMM" #InMonthManagementMM="ngModel"
+                                            />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Tổng số MM</label>
+                                            <input type="number" [disabled]="entity.InMonthDevMM==0 && entity.InMonthTransMM==0 && entity.InMonthManagementMM==0" class="form-control focusedInput" [(ngModel)]="entity.InMonthSumMM" name="InMonthSumMM" #InMonthSumMM="ngModel" />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số tiền(Qui đổi USD)</label>
+                                            <input type="number" disabled class="form-control disabled"  value="{{entity.InMonthToUsd| currency:'USD':true:'1.2-2'}}"  name="InMonthToUsd" />
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số tiền(Qui đổi VND)</label>
+                                            <input type="number" disabled class="form-control disabled" [(ngModel)]="entity.InMonthToVnd" name="InMonthToVnd" #InMonthToVnd="ngModel" />
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="portlet">
+                                <div class="portlet-heading bg-danger">
+                                    <h3 class="portlet-title">
+                                        Số còn phải thực hiện các kỳ sau
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="nojavascript...;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#bg-danger"><i class="ion-minus-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="bg-danger" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số MM</label>
+                                            <input type="number" class="form-control" [(ngModel)]="entity.NextMonthMM" name="NextMonthMM" #NextMonthMM="ngModel" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Số tiền(Qui đổi $)</label>
+                                            <input type="number" class="form-control" [(ngModel)]="entity.NextMonthToUsd" name="NextMonthToUsd" #NextMonthToUsd="ngModel"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="portlet">
+                                <div class="portlet-heading bg-warning">
+                                    <h3 class="portlet-title">
+                                        Ghi chú
+                                    </h3>
+                                    <div class="portlet-widgets">
+                                        <a href="nojavascript...;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#bg-warning"><i class="ion-minus-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="bg-warning" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+                                        <div class="col-md-12">
+                                            <label class="control-label"><i class="fa fa-map-marker" aria-hidden="true"></i>Ghi chú</label>
+                                            <textarea class="form-control" #Note="ngModel" [(ngModel)]="entity.Note" name="Note" #Note="ngModel" cols="70" wrap="soft"></textarea>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -7,13 +7,12 @@ import { EmpCardComponent } from './emp-card.component';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap';
-import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
-import { HighlightDirective } from '../../shared/directives/highlight.directive';
 import { MobileHideDirective } from '../../shared/directives/mobile-hide.directive';
 import { ItemsService } from '../../shared/utils/items.service';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 import { MdRadioModule } from '@angular/material';
+import { SharedModule } from '../../shared/module/shared.module';
 
 const empRoutes: Routes = [
   //localhost:4200/main/emp
@@ -33,11 +32,10 @@ const empRoutes: Routes = [
     MdRadioModule,
     ModalModule.forRoot(),
     PaginationModule.forRoot(),
-    RouterModule.forChild(empRoutes)
+    RouterModule.forChild(empRoutes),
+    SharedModule
   ],
   declarations: [
-    DateFormatPipe,
-    HighlightDirective,
     MobileHideDirective,
     EmpComponent,
     EmpCardComponent,

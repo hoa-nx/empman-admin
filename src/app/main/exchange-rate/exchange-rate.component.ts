@@ -12,11 +12,11 @@ import { SystemConstants, DateRangePickerConfig } from '../../core/common/system
 declare var moment: any;
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  selector: 'app-exchange-rate',
+  templateUrl: './exchange-rate.component.html',
+  styleUrls: ['./exchange-rate.component.css']
 })
-export class CustomerComponent implements OnInit {
+export class ExchangeRateComponent implements OnInit {
 
   @ViewChild('modalAddEdit') public modalAddEdit: ModalDirective;
 
@@ -28,10 +28,10 @@ export class CustomerComponent implements OnInit {
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = '';
-  public customers: any[];
+  public exchangeRates: any[];
   public entity: any;
   public baseFolder: string = SystemConstants.BASE_API;
-  public orderUnits: any[];
+  private emp: any;
 
   public dateOptions: any = DateRangePickerConfig.dateOptions;
 
@@ -48,41 +48,24 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
-    this.loadMultiTable();
   }
 
   loadData() {
-    this._dataService.get('/api/customer/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
+    this._dataService.get('/api/exchangerate/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
       .subscribe((response: any) => {
-        this.customers = response.Items;
+        this.exchangeRates = response.Items;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
       });
   }
 
-  /**
- * Load các dữ liệu master
- */
-  loadMultiTable() {
-    let uri = [];
-    uri.push('/api/masterdetail/getbykbn/25');
-
-    this._dataService.getMulti(uri)
-      .subscribe((response: any) => {
-        this.orderUnits = response[0];   //đơn vị tính order
-      },
-      error => {
-        error => this._dataService.handleError(error);
-      });
-  }
-
   loadDetail(id: any) {
-    this._dataService.get('/api/customer/detail/' + id)
+    this._dataService.get('/api/exchangerate/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
-        this.entity.ContractDate = moment(new Date(this.entity.ContractDate)).format('YYYY/MM/DD');
-
+        this.entity.StartDate = moment(new Date(this.entity.StartDate)).format('YYYY/MM/DD');
+        this.entity.EndDate = moment(new Date(this.entity.EndDate)).format('YYYY/MM/DD');
       });
   }
   pageChanged(event: any): void {
@@ -103,9 +86,8 @@ export class CustomerComponent implements OnInit {
     }
   }
   private saveData() {
-    this.entity.DefaultOrderUnitMasterID = 25;
     if (this.entity.No == undefined) {
-      this._dataService.post('/api/customer/add', JSON.stringify(this.entity))
+      this._dataService.post('/api/exchangerate/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
@@ -113,7 +95,7 @@ export class CustomerComponent implements OnInit {
         }, error => this._dataService.handleError(error));
     }
     else {
-      this._dataService.put('/api/customer/update', JSON.stringify(this.entity))
+      this._dataService.put('/api/exchangerate/update', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
@@ -125,25 +107,23 @@ export class CustomerComponent implements OnInit {
     this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
   deleteItemConfirm(id: any) {
-    this._dataService.delete('/api/customer/delete', 'id', id).subscribe((response: Response) => {
+    this._dataService.delete('/api/exchangerate/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.loadData();
     });
   }
+  
+  public selectedStartDate(value: any) {
+    this.entity.StartDate = moment(value.end._d).format('YYYY/MM/DD');
+  }
 
-  public selectedContractDate(value: any) {
-    this.entity.ContractDate = moment(value.end._d).format('YYYY/MM/DD');
+  public selectedEndDate(value: any) {
+    this.entity.EndDate = moment(value.end._d).format('YYYY/MM/DD');
   }
 
   selectedData(value: any): void {
     this.entity.CeoID = value.value.ID;
 
-  }
-
-  public onChangeOrderUnit(value: any) {
-    if (value) {
-
-    }
   }
 
   onInputBlur(event) {
@@ -166,7 +146,6 @@ export class CustomerComponent implements OnInit {
         break;
     }
   }
-
 
 
 }

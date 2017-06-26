@@ -8,17 +8,18 @@ import { AuthenService } from './authen.service';
 import { NotificationService } from './notification.service';
 import { UtilityService } from './utility.service';
 
-import {Observable} from 'rxjs/Observable';
-import {MessageContstants} from './../common/message.constants';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import { MessageContstants } from './../common/message.constants';
 
 @Injectable()
 export class DataService {
   private headers: Headers;
   constructor(private _http: Http, private _router: Router, private _authenService: AuthenService,
-  private _notificationService: NotificationService,private _utilityService : UtilityService) {
-    this.headers  = new Headers();
-    this.headers.append('Content-Type','application/json');
-   }
+    private _notificationService: NotificationService, private _utilityService: UtilityService) {
+    this.headers = new Headers();
+    this.headers.append('Content-Type', 'application/json');
+  }
 
   get(uri: string) {
     this.headers.delete("Authorization");
@@ -47,23 +48,40 @@ export class DataService {
     return this._http.post(SystemConstants.BASE_API + uri, data, { headers: newHeader })
       .map(this.extractData);
   }
+
+  /**
+   * Thực hiện get nhiều data từ web api  
+   */
+  getMulti(uri: string[]) {
+
+    let observableBatch = [];
+    uri.forEach(element => {
+      this.headers.delete("Authorization");
+      this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+      observableBatch.push(this._http.get(SystemConstants.BASE_API + element, { headers: this.headers }).map(this.extractData));
+
+    });
+
+    return Observable.forkJoin(observableBatch);
+  }
+
   private extractData(res: Response) {
     let body = res.json();
     return body || {};
   }
-   public handleError(error: any) {
-        if (error.status == 401) {
-            localStorage.removeItem(SystemConstants.CURRENT_USER);
-            this._notificationService.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
-            this._utilityService.navigateToLogin();
-        }
-        else {
-            let errMsg = (error.message) ? error.message :
-                error.status ? `${error.status} - ${error.statusText}` : 'Lỗi hệ thống';
-            this._notificationService.printErrorMessage(errMsg);
-
-            return Observable.throw(errMsg);
-        }
-
+  public handleError(error: any) {
+    if (error.status == 401) {
+      localStorage.removeItem(SystemConstants.CURRENT_USER);
+      this._notificationService.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
+      this._utilityService.navigateToLogin();
     }
+    else {
+      let errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'Lỗi hệ thống';
+      this._notificationService.printErrorMessage(errMsg);
+
+      return Observable.throw(errMsg);
+    }
+
+  }
 }

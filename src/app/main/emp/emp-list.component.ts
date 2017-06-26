@@ -6,6 +6,7 @@ import { EmpCardComponent } from './emp-card.component';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { MdRadioModule, MdRadioButton, MdRadioGroup} from '@angular/material';
+
 import * as moment from 'moment';
 
 @Component({
@@ -30,7 +31,6 @@ export class EmpListComponent implements OnInit {
         private notificationService: NotificationService) { }
 
     ngOnInit() {
-        console.log("EmpListComponent");
         this._dataService.get('/api/emp/getall')
             .subscribe((response: any) => {
                 this.emps = response;

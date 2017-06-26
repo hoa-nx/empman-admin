@@ -34,7 +34,16 @@ export const mainRoutes: Routes = [
             //localhost:4200/main/project-detail
             { path: 'project-detail', loadChildren: './project-detail/project-detail.module#ProjectDetailModule' },
             //localhost:4200/main/commondata
-            { path: 'master-data', loadChildren: './master-data/master-data.module#MasterDataModule' }
+            { path: 'master-data', loadChildren: './master-data/master-data.module#MasterDataModule' },
+            //localhost:4200/main/revenue
+            { path: 'revenue', loadChildren: './revenue/revenue.module#RevenueModule' },
+            //localhost:4200/main/exchange-rate
+            { path: 'exchange-rate', loadChildren: './exchange-rate/exchange-rate.module#ExchangeRateModule' },
+            //localhost:4200/main/exchange-rate
+            { path: 'customer', loadChildren: './customer/customer.module#CustomerModule' },
+            //localhost:4200/main/exchange-rate
+            { path: 'customer-unitprice', loadChildren: './customer-unitprice/customer-unitprice.module#CustomerUnitpriceModule' }
+
         ]
     }
 

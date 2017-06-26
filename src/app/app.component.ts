@@ -9,8 +9,10 @@ import { Component, ElementRef, AfterViewInit, OnInit,ViewContainerRef } from '@
 export class AppComponent implements AfterViewInit {
     private runCount: number = 0;
 
-    constructor(private elementRef: ElementRef ) {
+    constructor(private elementRef: ElementRef,private viewContainerRef: ViewContainerRef ) {
         this.runCount = 0;
+        // You need this small hack in order to catch application root view container ref
+        this.viewContainerRef = viewContainerRef;
     }
 
     ngOnInit() {

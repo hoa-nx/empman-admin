@@ -7,7 +7,7 @@ import { AuthenService } from '../../core/services/authen.service';
 import { UtilityService } from '../../core/services/utility.service';
 
 import { MessageContstants } from '../../core/common/message.constants';
-import { SystemConstants } from '../../core/common/system.constants';
+import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
 
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 declare var moment: any;
@@ -33,13 +33,7 @@ export class UserComponent implements OnInit {
   public allRoles: IMultiSelectOption[] = [];
   public roles: any[];
 
-  public dateOptions: any = {
-    locale: { format: 'YYYY/MM/DD' },
-    showDropdowns: true,
-    alwaysShowCalendars: false,
-    autoUpdateInput: false,
-    singleDatePicker: true
-  };
+  public dateOptions: any = DateRangePickerConfig.dateOptions;
 
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,

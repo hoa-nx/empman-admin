@@ -31,7 +31,7 @@ import 'rxjs/add/operator/toPromise';
     PaginationModule.forRoot(),
     RouterModule.forChild(mainRoutes)
   ],
-  providers:[UtilityService,AuthenService],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, RightbarMenuComponent]
+  providers:[UtilityService,AuthenService ],
+  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, RightbarMenuComponent ]
 })
 export class MainModule { }
