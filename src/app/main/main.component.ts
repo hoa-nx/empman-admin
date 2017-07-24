@@ -4,6 +4,7 @@ import { UrlConstants } from '../core/common/url.constants';
 import { UtilityService } from '../core/services/utility.service';
 import { LoggedInUser } from '../core/domain/loggedin.user';
 import { AuthenService } from '../core/services/authen.service';
+import { LoaderService } from '../shared/utils/spinner.service';
 
 declare var $ : any; //khai bao jquery
 
@@ -17,14 +18,18 @@ declare var $ : any; //khai bao jquery
 
 export class MainComponent implements OnInit ,AfterViewInit  {
   public user: LoggedInUser;
+  showLoader: boolean;
 
   constructor(private utilityService: UtilityService, 
-      private authenService: AuthenService) { 
+      private authenService: AuthenService ,private loaderService: LoaderService) { 
 
       }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.loaderService.loaderStatus.subscribe((val: boolean) => {
+            this.showLoader = val;
+        });
   }
 
   logout() {

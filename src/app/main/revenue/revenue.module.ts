@@ -13,13 +13,22 @@ import { NotificationService } from '../../core/services/notification.service';
 import { ItemsService } from '../../shared/utils/items.service';
 import { MappingService } from '../../shared/utils/mapping.service';
 import { SharedModule } from '../../shared/module/shared.module';
+import { RevenueListComponent } from './revenue-list.component';
+import { RevenueGridComponent } from './revenue-grid.component';
+import { DataTableModule } from 'primeng/primeng';
+import { SessionService } from '../../core/services/session.service';
+import { MdCheckboxModule } from '@angular/material';
+
 const revenueRoutes: Routes = [
   //localhost:4200/main/revenue
   { path: '', redirectTo: 'index', pathMatch: 'full' },
   //localhost:4200/main/revenue/index
   { path: 'index', component: RevenueComponent },
+  { path: 'list', component: RevenueListComponent },
+  { path: 'grid', component: RevenueGridComponent },
   //localhost:4200/main/revenue/id/edit
-  { path: ':id/edit', component: RevenueEditComponent}
+  //{ path: ':id/edit', component: RevenueEditComponent}
+  { path: 'edit/:id/:action', component: RevenueEditComponent}
 ]
 
 @NgModule({
@@ -31,9 +40,11 @@ const revenueRoutes: Routes = [
     Daterangepicker,
     ModalModule.forRoot(),
     RouterModule.forChild(revenueRoutes),
-    SharedModule
+    SharedModule,
+    MdCheckboxModule,
+    DataTableModule
   ],
-  declarations: [RevenueComponent,RevenueEditComponent],
-  providers : [DataService, NotificationService, ItemsService, MappingService]
+  declarations: [RevenueComponent,RevenueEditComponent, RevenueListComponent,RevenueGridComponent],
+  providers : [DataService, NotificationService, ItemsService, MappingService, SessionService]
 })
 export class RevenueModule { }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UtilityService } from '../../core/services/utility.service';
@@ -7,14 +7,40 @@ import { SystemConstants, DateRangePickerConfig } from '../../core/common/system
 import { MessageContstants } from '../../core/common/message.constants';
 import * as moment from 'moment';
 import { ISearchItemViewModel, IMasterDetailItemViewModel, PaginatedResult } from '../../core/interfaces/interfaces';
-import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { MappingService } from '../../shared/utils/mapping.service';
+import { SessionService } from '../../core/services/session.service';
 
 @Component({
   selector: 'app-revenue',
   templateUrl: './revenue.component.html',
   styleUrls: ['./revenue.component.css']
 })
-export class RevenueComponent implements OnInit {
+export class RevenueComponent implements OnInit, AfterViewInit {
+
+  // Settings configuration
+  //https://github.com/softsimon/angular-2-dropdown-multiselect
+  mySettings: IMultiSelectSettings = {
+      enableSearch: true,
+      checkedStyle: 'fontawesome',
+      buttonClasses: 'btn btn-default btn-block',
+      dynamicTitleMaxItems: 3,
+      showCheckAll : true,
+      showUncheckAll : true,
+      displayAllSelectedText: true
+  };
+
+  // Text configuration
+  myTexts: IMultiSelectTexts = {
+      checkAll: 'Select all',
+      uncheckAll: 'Unselect all',
+      checked: 'item selected',
+      checkedPlural: 'items selected',
+      searchPlaceholder: 'Find',
+      defaultTitle: 'Select',
+      allSelected: 'All selected',
+  };
+
 
   public pageIndex: number = 1;
   public pageSize: number = 10;
@@ -23,6 +49,8 @@ export class RevenueComponent implements OnInit {
   public filter: string = '';
   public revenues: any[];
   public estimateType: any;
+  public customers: IMultiSelectOption[] = [];
+  public selectCustomers: any[] = [];
   public customer: any;
   public projectDetail: any;
 
@@ -32,17 +60,20 @@ export class RevenueComponent implements OnInit {
   public reportYearMonth: any;
   public searchModel: any;
   public revenueAllYearMonths: IMultiSelectOption[] = [];
-  public revenueSelectedYearMonths: string[] = [];
+  public revenueSelectedYearMonths: any[] = [];
   public checkedItems: any[];
+  public searchModelSession: any;
 
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,
     private _utilityService: UtilityService,
-    private _authenService: AuthenService) {
+    private _authenService: AuthenService,
+    private _sessionService: SessionService
+  ) {
 
     this.searchModel = {
-      Page : 1,
-      PageSize : 20
+      Page: 1,
+      PageSize: 20
     };
   }
 
@@ -52,11 +83,20 @@ export class RevenueComponent implements OnInit {
   ngOnInit() {
     moment.locale("jp");
     let currentDate: string = moment().format("YYYY/MM/01");
+    this.reportYearMonth = currentDate;
     
-    this.loadData();
-    this.reportYearMonth = currentDate ;
+    this.revenueSelectedYearMonths =[];
+    this.selectCustomers =[];
+
+    this.loadAllCustomer();
     this.loadAllRevenueByYearMonth();
 
+    //this.loadData();
+
+  }
+
+  ngAfterViewInit(): void {
+    
   }
 
   /**
@@ -64,12 +104,18 @@ export class RevenueComponent implements OnInit {
    */
   loadData() {
     this.searchModel.Keyword = this.filter;
-    this.searchModel.DateItems = this.revenueSelectedYearMonths;
-    this.searchModel.Page  = this.pageIndex;
-    this.searchModel.PageSize  = this.pageSize;
+    this.searchModel.DateTimeItems = this.revenueSelectedYearMonths;
+
+    this.searchModel.NumberItems = this.selectCustomers;
+    this.searchModel.Page = this.pageIndex;
+    this.searchModel.PageSize = this.pageSize;
+
+    //save dieu kien search vao session
+    this.saveSearchModelToLocalStorage();
+
     //this._dataService.get('/api/revenue/getallpagingmasterdata?&bodyData=' + JSON.stringify(this.searchModel) + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
-    this._dataService.post('/api/revenue/getallpagingmasterdata',JSON.stringify(this.searchModel))
-    //this._dataService.get('/api/revenue/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
+    this._dataService.post('/api/revenue/getallpagingmasterdata', JSON.stringify(this.searchModel))
+      //this._dataService.get('/api/revenue/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
       .subscribe((response: any) => {
         this.revenues = response.Items;
         this.estimateType = response.Items.EstimateType;
@@ -90,7 +136,9 @@ export class RevenueComponent implements OnInit {
     this.searchModel.Keyword = this.filter;
     this._dataService.get('/api/revenue/getalldatabyyearmonth')
       .subscribe((response: any) => {
-        this.revenueAllYearMonths = response;
+        //map 
+        this.revenueAllYearMonths = MappingService.mapYearMonhToDropdownModel(response);
+        this.loadSearchModelFromLocalStorage();
       },
       error => {
         this._notificationService.printErrorMessage('Không thể đọc được dữ liệu. ' + error);
@@ -112,7 +160,6 @@ export class RevenueComponent implements OnInit {
    * Tìm kiếm dữ liệu doanh số
    */
   search() {
-    //console.log(this.revenueSelectedYearMonths);
     this.loadData();
   }
   /**
@@ -141,6 +188,11 @@ export class RevenueComponent implements OnInit {
     }
 
   }
+
+  onChange(event) {
+      //console.log(event);
+  }
+
   /**
    * Format dữ liệu
    */
@@ -152,4 +204,31 @@ export class RevenueComponent implements OnInit {
 
 
   }
+
+  loadAllCustomer() {
+    this._dataService.get('/api/customer/getall')
+      .subscribe((response: any) => {
+        //map 
+        this.customers = MappingService.mapIdNameToDropdownModel(response);
+        this.loadSearchModelFromLocalStorage();
+      },
+      error => {
+        this._notificationService.printErrorMessage('Có lỗi xảy ra khi lấy danh sách khách hàng' + error);
+      });
+  }
+
+  saveSearchModelToLocalStorage() {
+    this._sessionService.setByKey(SystemConstants.SESSION_KEY_SEARCH_ITEM_MODEL, this.searchModel);
+  }
+
+  loadSearchModelFromLocalStorage(){
+    //setting init dieu kien search dua vao session da luu
+    this.searchModelSession = this._sessionService.getByKey(SystemConstants.SESSION_KEY_SEARCH_ITEM_MODEL);
+    
+    this.revenueSelectedYearMonths = Array.from(this.searchModelSession.DateTimeItems);
+    this.selectCustomers = Array.from(this.searchModelSession.NumberItems);
+
+  }
+
+
 }

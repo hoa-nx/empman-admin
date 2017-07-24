@@ -11,6 +11,9 @@ import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UploadService } from '../../core/services/upload.service';
 import { SharedModule} from '../../shared/module/shared.module';
+import { Fab } from '../../shared/components/fab-button/fab';
+import { FabButton } from '../../shared/components/fab-button/fabbutton';
+import { FabToggle } from '../../shared/components/fab-button/fabtoggle';
 
 const exchangeRateRoutes: Routes = [
   //localhost:4200/main/company
@@ -29,7 +32,7 @@ const exchangeRateRoutes: Routes = [
     SharedModule ,
     RouterModule.forChild(exchangeRateRoutes)
   ],
-  declarations: [ExchangeRateComponent],
+  declarations: [ExchangeRateComponent , Fab , FabButton, FabToggle ],
   providers: [DataService, NotificationService, UploadService],
   entryComponents: [],
   bootstrap: []

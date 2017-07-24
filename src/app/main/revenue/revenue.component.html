@@ -8,25 +8,24 @@
           <!-- Header -->
           <div class="row">
             <div class="row">
-              <div class="col-md-3 col-sm-6 col-xs-12 form-group">
-                <!--<input type="text" title="Tháng năm đối tượng" daterangepicker (selected)="selectedReportYearMonth($event)" [options]="dateOptions"
-                  [(ngModel)]="reportYearMonth" name="ReportYearMonth" class="form-control" placeholder="Tháng năm đối tượng"
-                />-->
-                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [options]="revenueAllYearMonths" [(ngModel)]="revenueSelectedYearMonths" ></ss-multiselect-dropdown>
+              <div class="col-md-3 col-sm-6 col-xs-12 ">
+                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}"  [texts]="myTexts" [settings]="mySettings"  [options]="revenueAllYearMonths" [(ngModel)]="revenueSelectedYearMonths"  (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
               </div>
-
-              <div class="col-md-4 col-sm-6 col-xs-12 form-group">
-                <div class="form-group contact-search m-b-30">
-                  <input type="text" id="search" class="form-control" placeholder="Nhập tên khách hàng ..." name="filter" (keyup.enter)="search()"
+              <div class="col-md-3 col-sm-6 col-xs-12 ">
+                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}"  [texts]="myTexts" [settings]="mySettings"  [options]="customers" [(ngModel)]="selectCustomers" ></ss-multiselect-dropdown>
+              </div>
+              <div class="col-md-2 col-sm-6 col-xs-12 ">
+                <div class=" contact-search m-b-30">
+                  <input type="text" id="search" class="form-control" placeholder="Nhập..." name="filter" (keyup.enter)="search()"
                     [(ngModel)]="filter" />
                   <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
                 </div>
               </div>
-              <div class="col-md-5 col-sm-6 col-xs-12 form-group">
+              <div class="col-md-4 col-sm-6 col-xs-12 ">
                 <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
                 <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
 
-                <a [routerLink]="['../../revenue',0,'edit']" class="btn btn-default waves-effect waves-light" data-animation="fadein"
+                <a [routerLink]="['../../revenue/edit',0,'new']" class="btn btn-default waves-effect waves-light" data-animation="fadein"
                 data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
 
               </div>
@@ -41,21 +40,21 @@
               <thead>
                 <tr>
                   <th rowspan="2">Chọn</th>
+                  <th rowspan="2">Thao tác</th>
                   <th rowspan="2">Tháng năm</th>
                   <th rowspan="2">Nội dung</th>
-                  <th rowspan="2">Loại dự án</th>
+                  <!--<th rowspan="2">Loại dự án</th>-->
                   <th rowspan="2">Khách hàng</th>
-                  <th colspan="4">Theo số liệu quotation/order</th>
+                  <th colspan="3">Theo số liệu quotation/order</th>
                   <th colspan="2">Lũy kế→tháng trước</th>
                   <th colspan="6">Đã thực hiện trong tháng (tạm tính)</th>
                   <th colspan="2">Số còn phải thực hiện các kỳ sau</th>
-                  <th rowspan="2">Leader</th>
+                  <th rowspan="1">Leader</th>
                 </tr>
                 <tr>
                   <!--<th>Bắt đầu</th>
                   <th>Kết thúc</th>-->
                   <th>Tổng MM</th>
-                  <th>ĐVT giá</th>
                   <th>Đơn giá </th>
                   <th>Số tiền ($)</th>
                   <th>Tổng số MM</th>
@@ -78,31 +77,36 @@
                       <label>
                     </label>
                     </div></td>
+                  <td>
+                      <a [routerLink]="['../../revenue/edit',item.ID,'copy']">Copy</a>
+                      <a *ngIf="item.NextMonthMM > 0" [routerLink]="['../../revenue/edit',item.ID,'nextmonth']">Next</a>
+                  </td>
                   <td>{{item.ReportYearMonth| date:'yyyy/MM'}}</td>
-                  <td><a [routerLink]="['../../revenue',item.ID,'edit']">{{item.ProjectContent}}</a></td>
-                  <td>{{item.EstimateType.Name}}</td>
+                  <td><a [routerLink]="['../../revenue/edit',item.ID,'edit']">{{item.ProjectContent}}</a></td>
+                  <!--<td>{{item.EstimateType.Name}}</td>-->
                   <td>{{item.Customer.Name}}</td>
 
                   <!--                  <td>{{item.OrderStartDate | date:'yyyy/MM/dd'}}</td>
                   <td>{{item.OrderEndDate | date:'yyyy/MM/dd'}}</td>-->
                   <td>{{item.OrderProjectSumMM}}</td>
-                  <td>{{item.OrderUnitPrice}}</td>
-                  <td>{{item.OrderPrice}}</td>
-                  <td>{{item.OrderPriceToUsd}}</td>
+                  
+                  <td *ngIf="item.OrderUnitMasterDetailID==2" >{{item.OrderPrice| currency:'USD':true:'1.0-0'}}</td>
+                  <td *ngIf="item.OrderUnitMasterDetailID==3" >{{item.OrderPrice| currency:'YEN':true:'1.0-0'}}</td>
+                  <td>{{item.OrderPriceToUsd| currency:'USD':true:'1.0-0'}}</td>
 
                   <td>{{item.AccPreMonthSumMM}}</td>
-                  <td>{{item.AccPreMonthSumToUsd}}</td>
+                  <td>{{item.AccPreMonthSumToUsd| currency:'VND':true:'1.0-0'}}</td>
 
                   <td>{{item.InMonthDevMM}}</td>
                   <td>{{item.InMonthTransMM}}</td>
                   <td>{{item.InMonthManagementMM}}</td>
                   <td>{{item.InMonthSumMM}}</td>
-                  <td>{{item.InMonthToUsd}}</td>
-                  <td>{{item.InMonthToVnd}}</td>
+                  <td>{{item.InMonthToUsd| currency:'USD':true:'1.0-0'}}</td>
+                  <td>{{item.InMonthToVnd| currency:'VND':true:'1.0-0'}}</td>
 
                   <td>{{item.NextMonthMM}}</td>
-                  <td>{{item.NextMonthToUsd}}</td>
-                  <td>{{item.PM.FullName}}</td>
+                  <td>{{item.NextMonthToUsd| currency:'USD':true:'1.0-0'}}</td>
+                  <td>{{item.PM.Name}}</td>
                   <!--                  <td>
                     <a [routerLink]="['../../revenue',item.ID,'edit']" class="table-action-btn"><i class="md md-edit"></i></a>
                     <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>

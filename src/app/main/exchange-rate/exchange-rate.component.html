@@ -5,6 +5,12 @@
         <div class="col-lg-12">
           <h4 class="m-t-0 header-title"><b>Danh sách tỉ giá</b></h4>
 
+            <app-fab dir="down">
+              <app-fab-toggle>+</app-fab-toggle>
+              <app-fab-button>A</app-fab-button>
+              <app-fab-button>B</app-fab-button>
+            </app-fab>
+
           <!-- Header -->
           <div class="row">
             <div class="col-sm-8">
@@ -18,6 +24,7 @@
                 data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
             </div>
           </div>
+
 
           <!-- Header end-->
           <!-- List -->
@@ -34,7 +41,7 @@
                   <th>Yen - Vnd</th>
                   <th>Usd - Yen</th>
                   <th>Ghi chú</th>
-                  <th style="min-width: 90px;"></th>
+                  <th style="min-width: 130px;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -51,6 +58,7 @@
 
                   <td>
                     <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
+                    <a href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
                     <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                   </td>
                 </tr>
@@ -133,7 +141,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá USD - VND</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="number" #usdtovnd="ngModel" [(ngModel)]="entity.UsdToVnd" required name="usdtovnd" class="form-control focusedInput"
-                placeholder="Tên tắt tỉ giá">
+                placeholder="Tỉ giá chuyển đổi Usd sang Vnd">
               <small [hidden]="usdtovnd.valid || (usdtovnd.pristine && !addEditForm.submitted)" class="text-danger">
                 Tỉ giá chuyển đổi Usd sang Vnd
               </small>
@@ -145,7 +153,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá Yen - VND</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="number" #yentovnd="ngModel" [(ngModel)]="entity.YenToVnd" required name="yentovnd" class="form-control focusedInput"
-                placeholder="Vốn(USD)">
+                placeholder="Tỉ giá chuyển đổi Yen sang Vnd">
               <small [hidden]="yentovnd.valid || (yentovnd.pristine && !addEditForm.submitted)" class="text-danger">
                 Tỉ giá chuyển đổi Yen sang Vnd
               </small>
@@ -156,7 +164,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá Usd - Yen</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="number" #usdtoyen="ngModel" [(ngModel)]="entity.UsdToYen" required name="usdtoyen" class="form-control focusedInput"
-                placeholder="Vốn(USD)">
+                placeholder="Tỉ giá chuyển đổi Usd sang Yen">
               <small [hidden]="usdtoyen.valid || (usdtoyen.pristine && !addEditForm.submitted)" class="text-danger">
                 Tỉ giá chuyển đổi Usd sang Yen
               </small>

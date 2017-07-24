@@ -1,0 +1,44 @@
+jqxNumberInput > div {
+  left: 120px;
+  top: 200px;
+  position: absolute;
+  background: transparent !important;
+  border: none !important;
+}
+
+jqxNumberInput > div > input {
+    font-size: 45px !important;
+}
+
+.inputField1 {
+  left: 10px;
+  top: -130px;
+  width: 180px;
+  height: 30px;
+  color: black;
+  font-size: 30px;
+  position: relative;
+  background: transparent;
+  text-align: center;
+  border: none;
+}
+
+.redLabel {
+  fill: #FF0000;
+  color: #FF0000;
+  font-size: 11px;
+  font-family: Verdana;
+}
+
+.greenLabel {
+  fill: dodgerblue;
+  color: dodgerblue;
+  font-size: 11px;
+  font-family: Verdana;
+}
+
+.revenue-centered-row { margin: auto; max-width: 300px;}
+
+.jqx-chart-legend-text{
+  display: block  ;
+}

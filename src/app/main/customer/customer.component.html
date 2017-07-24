@@ -114,10 +114,10 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên khách hàng</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required minlength="3" name="name" class="form-control focusedInput"
+              <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required  name="name" class="form-control focusedInput"
                 placeholder="Tên khách hàng">
               <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
-                Tên khách hàng ít nhất 3 ký tự
+                Tên khách hàng bắt buộc nhập
               </small>
             </div>
           </div>
@@ -125,10 +125,10 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tắt</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #ShortName="ngModel" [(ngModel)]="entity.ShortName" required minlength="3" name="ShortName" class="form-control focusedInput"
+              <input type="text" #ShortName="ngModel" [(ngModel)]="entity.ShortName" required name="ShortName" class="form-control focusedInput"
                 placeholder="Tên khách hàng">
               <small [hidden]="ShortName.valid || (ShortName.pristine && !addEditForm.submitted)" class="text-danger">
-                Tên tắt khách hàng ít nhất 3 ký tự
+                Tên tắt khách hàng bắt buộc nhập
               </small>
             </div>
           </div>

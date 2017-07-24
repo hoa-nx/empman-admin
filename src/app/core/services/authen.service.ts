@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { SystemConstants } from '../../core/common/system.constants';
 import { LoggedInUser } from '../domain/loggedin.user';
 import 'rxjs/add/operator/map';
+
 @Injectable()
 export class AuthenService {
 
@@ -26,6 +27,7 @@ export class AuthenService {
   }
   logout() {
     localStorage.removeItem(SystemConstants.CURRENT_USER);
+    localStorage.removeItem(SystemConstants.SESSION_KEY_SEARCH_ITEM_MODEL);
   }
 
   isUserAuthenticated(): boolean {
@@ -42,10 +44,16 @@ export class AuthenService {
     if (this.isUserAuthenticated()) {
       var userData = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
       user = new LoggedInUser(userData.access_token,
-        userData.username,
-        userData.fullName,
-        userData.email,
-        userData.avatar, userData.roles, userData.permissions);
+            userData.username,
+            userData.fullName,
+            userData.email,
+            userData.avatar, 
+            userData.roles, 
+            userData.permissions,
+            userData.companyid,
+            userData.deptid,
+            userData.teamid
+        );
     }
     else
       user = null;

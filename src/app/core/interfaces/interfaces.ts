@@ -77,8 +77,8 @@ export interface IRevenue {
     TeamID: number;
     ReporterID: number;
     ReportDate: Date;
-    ReportYearMonth: Date;
     OrderNo: string;
+    ReportYearMonth: Date;
     ProjectInMonthCount: number;
     ReportTitle: string;
     ProjectID: number;
@@ -91,34 +91,39 @@ export interface IRevenue {
     CustomerName: string;
     OrderStartDate: Date;
     OrderEndDate: Date;
-    OrderProjectSumMM: string;
+    OrderProjectSumMM: number;
     OrderUnitMasterID: number;
     OrderUnitMasterDetailID: number;
     ExchangeRateID: number;
-    OrderPrice: string;
-    OrderPriceToUsd: string;
-    AccPreMonthSumMM: string;
-    AccPreMonthSumToUsd: string;
-    InMonthDevMM: string;
-    InMonthTransMM: string;
-    InMonthManagementMM: string;
-    InMonthSumMM: string;
-    InMonthToUsd: string;
-    InMonthToVnd: string;
-    NextMonth: string;
-    NextMonthMM: string;
-    NextMonthToUsd: string;
+    CustomerUnitPriceID: number;
+    OrderPrice: number;
+    OrderPriceToUsd: number;
+    AccPreMonthSumMM: number;
+    AccPreMonthSumToUsd: number;
+    InMonthDevMM: number;
+    InMonthTransMM: number;
+    InMonthManagementMM: number;
+    InMonthOnsiteMM  : number;
+    InMonthSumMM: number;
+    InMonthSumIncludeOnsiteMM  : number;
+    InMonthDevSumExcludeTransMM  : number;
+    InMonthToUsd: number;
+    InMonthToVnd: number;
+    NextMonth: number;
+    NextMonthMM: number;
+    NextMonthToUsd: number;
     PMID: number;
     PLID: number;
     DisplayOrder: number;
     AccountData: string;
     Note: string;
     DeleteFlag: number;
-    Status: number;
+    DataStatus: number;
     CreatedDate: Date;
     CreatedBy: string;
     UpdatedDate: Date;
     UpdatedBy: string;
+
 
 
 }
@@ -130,8 +135,8 @@ export interface IRevenueDetails {
     TeamID: number;
     ReporterID: number;
     ReportDate: Date;
-    ReportYearMonth: Date;
     OrderNo: string;
+    ReportYearMonth: Date;
     ProjectInMonthCount: number;
     ReportTitle: string;
     ProjectID: number;
@@ -144,30 +149,34 @@ export interface IRevenueDetails {
     CustomerName: string;
     OrderStartDate: Date;
     OrderEndDate: Date;
-    OrderProjectSumMM: string;
+    OrderProjectSumMM: number;
     OrderUnitMasterID: number;
     OrderUnitMasterDetailID: number;
     ExchangeRateID: number;
-    OrderPrice: string;
-    OrderPriceToUsd: string;
-    AccPreMonthSumMM: string;
-    AccPreMonthSumToUsd: string;
-    InMonthDevMM: string;
-    InMonthTransMM: string;
-    InMonthManagementMM: string;
-    InMonthSumMM: string;
-    InMonthToUsd: string;
-    InMonthToVnd: string;
-    NextMonth: string;
-    NextMonthMM: string;
-    NextMonthToUsd: string;
+    CustomerUnitPriceID: number;
+    OrderPrice: number;
+    OrderPriceToUsd: number;
+    AccPreMonthSumMM: number;
+    AccPreMonthSumToUsd: number;
+    InMonthDevMM: number;
+    InMonthTransMM: number;
+    InMonthManagementMM: number;
+    InMonthOnsiteMM  : number;
+    InMonthSumMM: number;
+    InMonthSumIncludeOnsiteMM  : number;
+    InMonthDevSumExcludeTransMM  : number;
+    InMonthToUsd: number;
+    InMonthToVnd: number;
+    NextMonth: number;
+    NextMonthMM: number;
+    NextMonthToUsd: number;
     PMID: number;
     PLID: number;
     DisplayOrder: number;
     AccountData: string;
     Note: string;
     DeleteFlag: number;
-    Status: number;
+    DataStatus: number;
     CreatedDate: Date;
     CreatedBy: string;
     UpdatedDate: Date;
@@ -175,6 +184,188 @@ export interface IRevenueDetails {
 
     emps: IEmp[];
     EstimateTypes: string[];
+}
+
+export interface IRevenueStackBarChartItems {
+    CompanyID: number;
+    DeptID: number;
+    ReportYearMonth: Date;
+    MonthToName: string;
+    InMonthDevMM: number;
+    InMonthTransMM: number;
+    InMonthManagementMM: number;
+    InMonthOnsiteMM  : number;
+}
+
+export interface ITarget {
+    ID: number;
+    CompanyID: number;
+    DeptID: number;
+    TeamID: number;
+    YearMonth: Date;
+    Name: string;
+    CreatorBy: string;
+    CreateDate: Date;
+    ApprovedBy: string;
+    ApprovedDate: Date;
+    Koritu: number;
+    ActKoritu: number;
+    ChangePercentEmp: number;
+    ChangeEmp: number;
+    ManagerEmp: number;
+    Leader2Emp: number;
+    Leader1Emp: number;
+    SubLeader2: number;
+    SubLeader1: number;
+    DevEmp: number;
+    TransEmp: number;
+    OtherEmp: number;
+    LeaveJobPercentEmp: number;
+    LeaveJobEmp: number;
+    ActChangePercentEmp: number;
+    ActChangeEmp: number;
+    ActManagerEmp: number;
+    ActLeader2Emp: number;
+    ActLeader1Emp: number;
+    ActSubLeader2: number;
+    ActSubLeader1: number;
+    ActDevEmp: number;
+    ActTransEmp: number;
+    ActOtherEmp: number;
+    ActLeaveJobPercentEmp: number;
+    ActLeaveJobEmp: number;
+    ChangePercentMM: number;
+    ChangeMM: number;
+    QuotationMM: number;
+    DevMM: number;
+    TransMM: number;
+    OnsiteMM: number;
+    ManMM: number;
+    TotalMM: number;
+    ActChangePercentMM: number;
+    ActChangeMM: number;
+    ActQuotationMM: number;
+    ActDevMM: number;
+    ActTransMM: number;
+    ActOnsiteMM: number;
+    ActManMM: number;
+    ActTotalMM: number;
+    N1: number;
+    N2: number;
+    N3: number;
+    N4: number;
+    N5: number;
+    ActN1: number;
+    ActN2: number;
+    ActN3: number;
+    ActN4: number;
+    ActN5: number;
+    LongOnsiterNumber: number;
+    ShortOnsiterNumber: number;
+    InterShipNumber: number;
+    ActLongOnsiterNumber: number;
+    ActShortOnsiterNumber: number;
+    ActInterShipNumber: number;
+    Reason1: string;
+    Reason2: string;
+    Reason3: string;
+
+
+    DisplayOrder: number;
+    AccountData: string;
+    Note: string;
+    DeleteFlag: number;
+    DataStatus: number;
+    CreatedDate: Date;
+    CreatedBy: string;
+    UpdatedDate: Date;
+    UpdatedBy: string;
+}
+
+export interface ITargetDetails {
+    ID: number;
+    CompanyID: number;
+    DeptID: number;
+    TeamID: number;
+    YearMonth: Date;
+    Name: string;
+    CreatorBy: string;
+    CreateDate: Date;
+    ApprovedBy: string;
+    ApprovedDate: Date;
+    Koritu: number;
+    ActKoritu: number;
+    ChangePercentEmp: number;
+    ChangeEmp: number;
+    ManagerEmp: number;
+    Leader2Emp: number;
+    Leader1Emp: number;
+    SubLeader2: number;
+    SubLeader1: number;
+    DevEmp: number;
+    TransEmp: number;
+    OtherEmp: number;
+    LeaveJobPercentEmp: number;
+    LeaveJobEmp: number;
+    ActChangePercentEmp: number;
+    ActChangeEmp: number;
+    ActManagerEmp: number;
+    ActLeader2Emp: number;
+    ActLeader1Emp: number;
+    ActSubLeader2: number;
+    ActSubLeader1: number;
+    ActDevEmp: number;
+    ActTransEmp: number;
+    ActOtherEmp: number;
+    ActLeaveJobPercentEmp: number;
+    ActLeaveJobEmp: number;
+    ChangePercentMM: number;
+    ChangeMM: number;
+    QuotationMM: number;
+    DevMM: number;
+    TransMM: number;
+    OnsiteMM: number;
+    ManMM: number;
+    TotalMM: number;
+    ActChangePercentMM: number;
+    ActChangeMM: number;
+    ActQuotationMM: number;
+    ActDevMM: number;
+    ActTransMM: number;
+    ActOnsiteMM: number;
+    ActManMM: number;
+    ActTotalMM: number;
+    N1: number;
+    N2: number;
+    N3: number;
+    N4: number;
+    N5: number;
+    ActN1: number;
+    ActN2: number;
+    ActN3: number;
+    ActN4: number;
+    ActN5: number;
+    LongOnsiterNumber: number;
+    ShortOnsiterNumber: number;
+    InterShipNumber: number;
+    ActLongOnsiterNumber: number;
+    ActShortOnsiterNumber: number;
+    ActInterShipNumber: number;
+    Reason1: string;
+    Reason2: string;
+    Reason3: string;
+
+
+    DisplayOrder: number;
+    AccountData: string;
+    Note: string;
+    DeleteFlag: number;
+    DataStatus: number;
+    CreatedDate: Date;
+    CreatedBy: string;
+    UpdatedDate: Date;
+    UpdatedBy: string;
+
 }
 
 export interface ISchedule {
@@ -246,13 +437,13 @@ export interface IMasterDetailItemViewModel {
 export interface ISearchItemViewModel {
 
     /** ID */
-    ID? : number;
+    ID?: number;
     /**Số trang hiện tại */
-    Page? : number;
+    Page?: number;
     /**Số trang trến 1 page */
-    PageSize? : number;
+    PageSize?: number;
 
-    Keyword? : string;
+    Keyword?: string;
     /**
      * Mảng các số dùng để tìm kiếm
      */
@@ -265,9 +456,13 @@ export interface ISearchItemViewModel {
      * Mảng các item kiểu ngày dùng để tìm kiếm
      */
     DateTimeItems?: any[];
+    /**
+     * Mảng các item kiểu bool dùng để tìm kiếm
+     */
+    BoolItems?: any[];
 
-    MasterDetailItems? : IMasterDetailItemViewModel[];
-     
+    MasterDetailItems?: IMasterDetailItemViewModel[];
+
     IsDev?: boolean;
 
     IsTrans?: boolean;

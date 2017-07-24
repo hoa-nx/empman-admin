@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { LoaderService } from '../../shared/utils/spinner.service';
 declare var alertify: any;
 @Injectable()
 export class NotificationService {
   private _notifier: any = alertify;
-  constructor() {
+  constructor(private _loaderService : LoaderService) {
     alertify.defaults = {
       // dialogs defaults
       autoReset: true,
@@ -28,7 +29,7 @@ export class NotificationService {
       // notifier defaults
       notifier: {
         // auto-dismiss wait time (in seconds)  
-        delay: 5,
+        delay: 3,
         // default position
         position: 'top-right',
         // adds a close button to notifier messages
@@ -60,11 +61,13 @@ export class NotificationService {
 
 
   printSuccessMessage(message: string) {
-
+    this._loaderService.displayLoader(false);
     this._notifier.success(message);
+    
   }
 
   printErrorMessage(message: string) {
+    this._loaderService.displayLoader(false);
     this._notifier.error(message);
   }
 
@@ -76,5 +79,15 @@ export class NotificationService {
       }
     });
   }
+  //https://alertifyjs.org/
+  printAlertDialog(message: string, okCallback: () => any) {
+    this._notifier.alert(message, function (e) {
+      if (e) {
+        okCallback();
+      } else {
+      }
+    });
+  }
+
 
 }

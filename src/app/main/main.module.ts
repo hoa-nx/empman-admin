@@ -11,6 +11,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { SidebarMenuComponent } from '../shared/sidebar-menu/sidebar-menu.component';
 import { TopMenuComponent } from '../shared/top-menu/top-menu.component';
 import { RightbarMenuComponent } from '../shared/rightbar-menu/rightbar-menu.component';
+import { StickyModule } from 'ng2-sticky-kit/ng2-sticky-kit';
 
 // Statics
 import 'rxjs/add/observable/throw';
@@ -23,15 +24,17 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 
+
 @NgModule({
   imports: [
     CommonModule,
     UserModule,
     HomeModule,
     PaginationModule.forRoot(),
-    RouterModule.forChild(mainRoutes)
+    RouterModule.forChild(mainRoutes),
+    StickyModule
   ],
-  providers:[UtilityService,AuthenService ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, RightbarMenuComponent ]
+  providers: [UtilityService, AuthenService],
+  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, RightbarMenuComponent]
 })
 export class MainModule { }

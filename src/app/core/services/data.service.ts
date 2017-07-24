@@ -1,7 +1,7 @@
 //https://techmaster.vn/posts/33959/khai-niem-ve-json-web-token
 
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { Router } from '@angular/router';
 import { SystemConstants } from './../common/system.constants';
 import { AuthenService } from './authen.service';
@@ -26,6 +26,7 @@ export class DataService {
     this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
     return this._http.get(SystemConstants.BASE_API + uri, { headers: this.headers }).map(this.extractData);
   }
+
   post(uri: string, data?: any) {
     this.headers.delete("Authorization");
     this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
@@ -47,6 +48,24 @@ export class DataService {
     newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
     return this._http.post(SystemConstants.BASE_API + uri, data, { headers: newHeader })
       .map(this.extractData);
+  }
+
+  getPdfFile(uri: string) {
+    let newHeader = new Headers();
+    newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+    newHeader.append('Content-Type', 'application/json');
+    newHeader.append('Accept', 'application/pdf');
+
+    let options = new RequestOptions({ headers: newHeader });
+    options.responseType = ResponseContentType.Blob;
+    //options.responseType = ResponseContentType.ArrayBuffer;
+    return this._http.get(SystemConstants.BASE_API + uri,   options)
+      .map((res) => {
+            return new Blob([res.blob()], { type: 'application/pdf' })
+            //return new Blob([res.arrayBuffer()], { type: 'application/pdf' })
+            //return new Blob([(<any>res)._body], { type: 'application/pdf' })
+            //return new Blob([(<any>res.blob)], { type: 'application/pdf' })
+        });
   }
 
   /**

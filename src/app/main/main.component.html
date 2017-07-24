@@ -14,11 +14,11 @@
     <div class="content-page">
         <!-- Start content -->
         <div class="content">
-            <router-outlet></router-outlet>
-
+            <router-outlet>
+                <div *ngIf="showLoader" class="loading"></div>
+            </router-outlet>
         </div>
         <!-- content -->
-
         <footer class="footer">
             © 2017. All rights reserved.
         </footer>

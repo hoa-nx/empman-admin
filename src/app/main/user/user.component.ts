@@ -32,6 +32,9 @@ export class UserComponent implements OnInit {
   public baseFolder: string = SystemConstants.BASE_API;
   public allRoles: IMultiSelectOption[] = [];
   public roles: any[];
+  public companys: any[];
+  public depts: any[];
+  public teams: any[];
 
   public dateOptions: any = DateRangePickerConfig.dateOptions;
 
@@ -46,8 +49,20 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadRoles();
-    this.loadData();
+    this.loadMultiTable()
+      .subscribe((response: any) => {
+        this.companys = response[0];   //công ty
+        this.depts = response[1];   //phòng ban
+        this.teams = response[2];   //team
+
+        this.loadRoles();
+        this.loadData();
+
+      },
+      error => {
+        error => this._dataService.handleError(error);
+      });
+    
   }
 
   loadData() {
@@ -77,9 +92,20 @@ export class UserComponent implements OnInit {
         }
         this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format('YYYY/MM/DD');
 
-        console.log(this.entity.BirthDay);
       });
   }
+
+  /**
+     * Load các dữ liệu master
+     */
+  loadMultiTable() {
+    let uri = [];
+    uri.push('/api/company/getall');
+    uri.push('/api/dept/getall');
+    uri.push('/api/team/getall');
+    return this._dataService.getMulti(uri);
+  }
+
   pageChanged(event: any): void {
     this.pageIndex = event.page;
     this.loadData();

@@ -8,6 +8,9 @@ import { UtilityService } from '../../core/services/utility.service';
 
 import { MessageContstants } from '../../core/common/message.constants';
 import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
+import { Fab } from '../../shared/components/fab-button/fab';
+import { FabButton } from '../../shared/components/fab-button/fabbutton';
+import { FabToggle } from '../../shared/components/fab-button/fabtoggle';
 
 declare var moment: any;
 
@@ -60,12 +63,16 @@ export class ExchangeRateComponent implements OnInit {
       });
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any , isCopy : boolean=false) {
     this._dataService.get('/api/exchangerate/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this.entity.StartDate = moment(new Date(this.entity.StartDate)).format('YYYY/MM/DD');
         this.entity.EndDate = moment(new Date(this.entity.EndDate)).format('YYYY/MM/DD');
+        if(isCopy){
+          this.entity.ID = 0;
+          this.entity.No = 0;
+        }
       });
   }
   pageChanged(event: any): void {
@@ -76,10 +83,17 @@ export class ExchangeRateComponent implements OnInit {
     this.entity = {};
     this.modalAddEdit.show();
   }
+  
   showEditModal(id: any) {
     this.loadDetail(id);
     this.modalAddEdit.show();
   }
+
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
+    this.modalAddEdit.show();
+  }
+
   saveChange(valid: boolean) {
     if (valid) {
       this.saveData();

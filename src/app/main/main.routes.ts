@@ -42,7 +42,9 @@ export const mainRoutes: Routes = [
             //localhost:4200/main/exchange-rate
             { path: 'customer', loadChildren: './customer/customer.module#CustomerModule' },
             //localhost:4200/main/exchange-rate
-            { path: 'customer-unitprice', loadChildren: './customer-unitprice/customer-unitprice.module#CustomerUnitpriceModule' }
+            { path: 'customer-unitprice', loadChildren: './customer-unitprice/customer-unitprice.module#CustomerUnitpriceModule' },
+            //localhost:4200/main/target
+            { path: 'target', loadChildren: './target/target.module#TargetModule' },
 
         ]
     }

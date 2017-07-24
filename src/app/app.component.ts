@@ -1,4 +1,5 @@
 import { Component, ElementRef, AfterViewInit, OnInit,ViewContainerRef } from '@angular/core';
+import { LoaderService } from './shared/utils/spinner.service';
 //declare var $ : any;
 
 @Component({
@@ -9,7 +10,7 @@ import { Component, ElementRef, AfterViewInit, OnInit,ViewContainerRef } from '@
 export class AppComponent implements AfterViewInit {
     private runCount: number = 0;
 
-    constructor(private elementRef: ElementRef,private viewContainerRef: ViewContainerRef ) {
+    constructor(private elementRef: ElementRef,private viewContainerRef: ViewContainerRef) {
         this.runCount = 0;
         // You need this small hack in order to catch application root view container ref
         this.viewContainerRef = viewContainerRef;
@@ -30,6 +31,7 @@ export class AppComponent implements AfterViewInit {
         $.getScript('../assets/js/jquery.scrollTo.min.js');
         $.getScript('../assets/js/jquery.core.js');
         $.getScript('../assets/js/jquery.app.js');*/
+        
     }
 
     ngAfterViewInit() {

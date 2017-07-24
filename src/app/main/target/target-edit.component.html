@@ -1,0 +1,556 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #editTargetForm="ngForm" *ngIf="entity" novalidate>
+                <button type="button" class="btn btn-danger" (click)="back()">
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Trở về</button>
+                <button type="button" [disabled]="!editTargetForm.form.valid" class="btn btn-default" (click)="updateTarget(editTargetForm)">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>{{actionParam === 'edit' ? "Cập nhật" : "Đăng ký"}}</button>
+
+                <hr/>
+
+                <tabset>
+                    <!-- Thông tin cơ bản -->
+                    <tab heading="Thông tin chung">
+                        <div class="form-group">
+
+                            <div class="panel panel-color panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Thông tin chung kế hoạch</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tháng năm</label>
+                                            <input type="text" #YearMonth="ngModel" daterangepicker (selected)="selectedYearMonth($event)" [options]="dateOptions" [(ngModel)]="entity.YearMonth"
+                                                name="YearMonth" class="form-control focusedInput" placeholder="Tháng năm đối tượng"
+                                                [disabled]="actionParam ==''" required/>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tên mục tiêu</label>
+                                            <input type="text" #Name="ngModel" [(ngModel)]="entity.Name" name="Name" class="form-control focusedInput" placeholder="Tên mục tiêu"
+                                                required/>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Người lập kế hoạch</label>
+                                            <input type="text" #CreatorBy="ngModel" [(ngModel)]="entity.CreatorBy" name="CreatorBy" class="form-control focusedInput"
+                                                placeholder="Người lập kế hoạch" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Công ty</label>
+
+                                            <select class="form-control focusedInput" name="CompanyID" [(ngModel)]="entity.CompanyID" (ngModelChange)="onChangeCompany($event)">
+                                            <option *ngFor="let x of companys" [value]="x.ID">{{x.Name}}</option>
+                                            </select>
+                                            <input type="hidden" [(ngModel)]="entity.CompanyID" name="CompanyID" class="form-control" />
+
+                                        </div>
+
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Bộ phận</label>
+
+                                            <select class="form-control focusedInput" name="DeptID" [(ngModel)]="entity.DeptID" (ngModelChange)="onChangeDept($event)">
+                                            <option *ngFor="let x of depts" [value]="x.ID">{{x.Name}}</option>
+                                            </select>
+                                            <input type="hidden" [(ngModel)]="entity.DeptID" name="DeptID" class="form-control" />
+                                        </div>
+
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Nhóm/Team</label>
+
+                                            <select class="form-control focusedInput" name="TeamID" [(ngModel)]="entity.TeamID" (ngModelChange)="onChangeTeam($event)">
+                                            <option *ngFor="let x of teams" [value]="x.ID">{{x.Name}}</option>
+                                            </select>
+                                            <input type="hidden" [(ngModel)]="entity.TeamID" name="TeamID" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="panel panel-color panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Ghi chú/Giải thích</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Lý do không đạt / đạt</label>
+                                            <textarea class="form-control" #Reason1="ngModel" [(ngModel)]="entity.Reason1" name="Reason1" cols="70" wrap="soft" placeholder="Lý do không đạt / đạt"></textarea>
+
+                                        </div>
+                                    </div>
+                                    <!--<div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Lý do không đạt / đạt</label>
+                                            <textarea class="form-control" #Reason2="ngModel" [(ngModel)]="entity.Reason2" name="Reason2" cols="70" wrap="soft" placeholder="Lý do không đạt / đạt"></textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Lý do không đạt / đạt</label>
+                                            <textarea class="form-control" #Reason3="ngModel" [(ngModel)]="entity.Reason3" name="Reason3" cols="70" wrap="soft" placeholder="Lý do không đạt / đạt"></textarea>
+
+                                        </div>
+                                    </div>-->
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Ghi chú</label>
+                                            <textarea class="form-control" #Note="ngModel" [(ngModel)]="entity.Note" name="Note" cols="70" wrap="soft" placeholder="Ghi chú"></textarea>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </tab>
+                    <!-- Tab mục tiêu nhân viên-->
+                    <tab heading="Nhân viên">
+                        <div class="form-group">
+
+                            <div class="panel panel-color panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Mục tiêu(Đơn vị tính : Số nhân viên)</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tỉ lệ nghỉ việc(%)</label>
+                                            <input type="number" #LeaveJobPercentEmp="ngModel" [(ngModel)]="entity.LeaveJobPercentEmp" name="LeaveJobPercentEmp" class="form-control focusedInput"
+                                                placeholder="Tỉ lệ LTV nghỉ việc" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Số lượng nghỉ việc</label>
+                                            <input type="number" #LeaveJobEmp="ngModel" [(ngModel)]="entity.LeaveJobEmp" name="LeaveJobEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên nghỉ việc" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tổng LTV</label>
+                                            <input type="number" #DevEmp="ngModel" [(ngModel)]="entity.DevEmp" name="DevEmp" class="form-control focusedInput" placeholder="Số nhân viên lập trình"
+                                            />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tổng phiên dịch</label>
+                                            <input type="number" #TransEmp="ngModel" [(ngModel)]="entity.TransEmp" name="TransEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên phiên dịch" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tổng NV khác</label>
+                                            <input type="number" #OtherEmp="ngModel" [(ngModel)]="entity.OtherEmp" name="OtherEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên khác" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Manager</label>
+                                            <input type="number" #ManagerEmp="ngModel" [(ngModel)]="entity.ManagerEmp" name="ManagerEmp" class="form-control focusedInput"
+                                                placeholder="Số lượng manager" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Leader2</label>
+                                            <input type="number" #Leader2Emp="ngModel" [(ngModel)]="entity.Leader2Emp" name="Leader2Emp" class="form-control focusedInput"
+                                                placeholder="Số lượng leader 2" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Leader1</label>
+                                            <input type="number" #Leader1Emp="ngModel" [(ngModel)]="entity.Leader1Emp" name="Leader1Emp" class="form-control focusedInput"
+                                                placeholder="Số lượng leader 1" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Sub2</label>
+                                            <input type="number" #SubLeader2="ngModel" [(ngModel)]="entity.SubLeader2" name="SubLeader2" class="form-control focusedInput"
+                                                placeholder="Số lượng sub leader 2" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Sub1</label>
+                                            <input type="number" #SubLeader1="ngModel" [(ngModel)]="entity.SubLeader1" name="SubLeader1" class="form-control focusedInput"
+                                                placeholder="Số lượng sub leader 1" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="panel panel-color panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Thực tích</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tỉ lệ nghỉ việc(%)</label>
+                                            <input type="number" #ActLeaveJobPercentEmp="ngModel" [(ngModel)]="entity.ActLeaveJobPercentEmp" name="ActLeaveJobPercentEmp"
+                                                class="form-control focusedInput" placeholder="Tỉ lệ LTV nghỉ việc" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Số lượng nghỉ việc</label>
+                                            <input type="number" #ActLeaveJobEmp="ngModel" [(ngModel)]="entity.ActLeaveJobEmp" name="ActLeaveJobEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên nghỉ việc" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>LTV</label>
+                                            <input type="number" #ActDevEmp="ngModel" [(ngModel)]="entity.ActDevEmp" name="ActDevEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên lập trình" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Phiên dịch</label>
+                                            <input type="number" #ActTransEmp="ngModel" [(ngModel)]="entity.ActTransEmp" name="ActTransEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên phiên dịch" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>NV khác</label>
+                                            <input type="number" #ActOtherEmp="ngModel" [(ngModel)]="entity.ActOtherEmp" name="ActOtherEmp" class="form-control focusedInput"
+                                                placeholder="Số nhân viên khác" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Manager</label>
+                                            <input type="number" #ActManagerEmp="ngModel" [(ngModel)]="entity.ActManagerEmp" name="ActManagerEmp" class="form-control focusedInput"
+                                                placeholder="Số lượng manager" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Leader2</label>
+                                            <input type="number" #ActLeader2Emp="ngModel" [(ngModel)]="entity.ActLeader2Emp" name="ActLeader2Emp" class="form-control focusedInput"
+                                                placeholder="Số lượng leader 2" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Leader1</label>
+                                            <input type="number" #ActLeader1Emp="ngModel" [(ngModel)]="entity.ActLeader1Emp" name="ActLeader1Emp" class="form-control focusedInput"
+                                                placeholder="Số lượng leader 1" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Sub2</label>
+                                            <input type="number" #ActSubLeader2="ngModel" [(ngModel)]="entity.ActSubLeader2" name="ActSubLeader2" class="form-control focusedInput"
+                                                placeholder="Số lượng sub leader 2" />
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Sub1</label>
+                                            <input type="number" #ActSubLeader1="ngModel" [(ngModel)]="entity.ActSubLeader1" name="ActSubLeader1" class="form-control focusedInput"
+                                                placeholder="Số lượng sub leader 1" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </tab>
+                    <!-- Tab mục tiêu doanh số-->
+                    <tab heading="Doanh số">
+                        <div class="form-group">
+                            <div class="panel panel-color panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Mục tiêu (Đơn vị tính : MM)</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tỉ lệ ↑↓ với năm trước(%)</label>
+                                            <input type="number" #ChangePercentMM="ngModel" [(ngModel)]="entity.ChangePercentMM" name="ChangePercentMM" class="form-control focusedInput"
+                                                placeholder="Tỉ lệ tăng/giảm so với năm trước" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>MM ↑↓ với năm trước</label>
+                                            <input type="number" #ChangeMM="ngModel" [(ngModel)]="entity.ChangeMM" name="ChangeMM" class="form-control focusedInput"
+                                                placeholder="Số MM tăng/giảm so với năm trước" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Hiệu suất bình quân(%)</label>
+                                            <input type="number" #Koritu="ngModel" [(ngModel)]="entity.Koritu" name="Koritu" class="form-control focusedInput" placeholder="Hiệu suất hoạt động bình quân"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Lập trình</label>
+                                            <input type="number" #DevMM="ngModel" [(ngModel)]="entity.DevMM" name="DevMM" class="form-control focusedInput" placeholder="Số MM lập trình"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Onsite</label>
+                                            <input type="number" #OnsiteMM="ngModel" [(ngModel)]="entity.OnsiteMM" name="OnsiteMM" class="form-control focusedInput"
+                                                placeholder="Số MM onsite" />
+                                        </div>
+                                        <!--<div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Số MM phiên dịch</label>
+                                            <input type="number" #TransMM="ngModel" [(ngModel)]="entity.TransMM" name="TransMM" class="form-control focusedInput" placeholder="Số MM phiên dịch"
+                                            />
+                                        </div>-->
+
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Quản lý</label>
+                                            <input type="number" #ManMM="ngModel" [(ngModel)]="entity.ManMM" name="ManMM" class="form-control focusedInput" placeholder="Số MM quản lý"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tổng cộng </label>
+                                            <input type="number" #TotalMM="ngModel" [(ngModel)]="entity.TotalMM" name="TotalMM" class="form-control focusedInput" placeholder="Tổng MM mục tiêu"
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="panel panel-color panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Thực tích</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tỉ lệ ↑↓ với năm trước(%)</label>
+                                            <input type="number" #ActChangePercentMM="ngModel" [(ngModel)]="entity.ActChangePercentMM" name="ActChangePercentMM" class="form-control focusedInput"
+                                                placeholder="Tỉ lệ tăng/giảm so với năm trước" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>MM ↑↓ với năm trước</label>
+                                            <input type="number" #ActChangeMM="ngModel" [(ngModel)]="entity.ActChangeMM" name="ActChangeMM" class="form-control focusedInput"
+                                                placeholder="Số MM tăng/giảm so với năm trước" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Hiệu suất bình quân(%)</label>
+                                            <input type="number" #ActKoritu="ngModel" [(ngModel)]="entity.ActKoritu" name="ActKoritu" class="form-control focusedInput"
+                                                placeholder="Hiệu suất hoạt động bình quân" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Lập trình</label>
+                                            <input type="number" #ActDevMM="ngModel" [(ngModel)]="entity.ActDevMM" name="ActDevMM" class="form-control focusedInput"
+                                                placeholder="Thực tế số MM lập trình" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Onsite</label>
+                                            <input type="number" #ActOnsiteMM="ngModel" [(ngModel)]="entity.ActOnsiteMM" name="ActOnsiteMM" class="form-control focusedInput"
+                                                placeholder="Thực tế MM onsite" />
+                                        </div>
+                                        <!--<div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Phiên dịch</label>
+                                            <input type="number" #ActTransMM="ngModel" [(ngModel)]="entity.ActTransMM" name="ActTransMM" class="form-control focusedInput"
+                                                placeholder="Thực tế số MM phiên dịch" />
+                                        </div>-->
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Quản lý</label>
+                                            <input type="number" #ActManMM="ngModel" [(ngModel)]="entity.ActManMM" name="ActManMM" class="form-control focusedInput"
+                                                placeholder="Thực tế số MM quản lý" />
+                                        </div>
+
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tổng cộng</label>
+                                            <input type="number" #ActTotalMM="ngModel" [(ngModel)]="entity.ActTotalMM" name="ActTotalMM" class="form-control focusedInput"
+                                                placeholder="Thực tế tổng MM mục tiêu" />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </tab>
+                    <!-- Tab mục tiêu tiếng Nhật-->
+                    <tab heading="Tiếng Nhật">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="panel panel-color panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Mục tiêu(Số Nhân Viên)</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N1</label>
+                                            <input type="number" #N1="ngModel" [(ngModel)]="entity.N1" name="N1" class="form-control focusedInput" placeholder="Số NV có N1"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N2</label>
+                                            <input type="number" #N2="ngModel" [(ngModel)]="entity.N2" name="N2" class="form-control focusedInput" placeholder="Số NV có N2"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N3</label>
+                                            <input type="number" #N3="ngModel" [(ngModel)]="entity.N3" name="N3" class="form-control focusedInput" placeholder="Số NV có N3"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N4</label>
+                                            <input type="number" #N4="ngModel" [(ngModel)]="entity.N4" name="N4" class="form-control focusedInput" placeholder="Số NV có N4"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N5</label>
+                                            <input type="number" #N5="ngModel" [(ngModel)]="entity.N5" name="N5" class="form-control focusedInput" placeholder="Số NV có N5"
+                                            />
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+
+                                <div class="panel panel-color panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Thực tích</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N1</label>
+                                            <input type="number" #ActN1="ngModel" [(ngModel)]="entity.ActN1" name="ActN1" class="form-control focusedInput" placeholder="Thực tế số NV có N1"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N2</label>
+                                            <input type="number" #ActN2="ngModel" [(ngModel)]="entity.ActN2" name="ActN2" class="form-control focusedInput" placeholder="Thực tế số NV có N2"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N3</label>
+                                            <input type="number" #ActN3="ngModel" [(ngModel)]="entity.ActN3" name="ActN3" class="form-control focusedInput" placeholder="Thực tế số NV có N3"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N4</label>
+                                            <input type="number" #ActN4="ngModel" [(ngModel)]="entity.ActN4" name="ActN4" class="form-control focusedInput" placeholder="Thực tế số NV có N4"
+                                            />
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>N5</label>
+                                            <input type="number" #ActN5="ngModel" [(ngModel)]="entity.ActN5" name="ActN5" class="form-control focusedInput" placeholder="Thực tế số NV có N5"
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </tab>
+
+                    <!-- Tab mục tiêu onsite-->
+                    <tab>
+                        <ng-template tabHeading>
+                            <i class="glyphicon glyphicon-bell"></i>
+                        </ng-template>
+                        <div class="form-group">
+
+                            <div class="panel panel-color panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Mục tiêu(Đơn vị tính : Số nhân viên)</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Onsite dài hạn</label>
+                                            <input type="number" #LongOnsiterNumber="ngModel" [(ngModel)]="entity.LongOnsiterNumber" name="LongOnsiterNumber" class="form-control focusedInput"
+                                                placeholder="Số NV onsite dài hạn" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Onsite ngắn hạn</label>
+                                            <input type="number" #ShortOnsiterNumber="ngModel" [(ngModel)]="entity.ShortOnsiterNumber" name="ShortOnsiterNumber" class="form-control focusedInput"
+                                                placeholder="Số NV onsite ngắn hạn" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Intership</label>
+                                            <input type="number" #InterShipNumber="ngModel" [(ngModel)]="entity.InterShipNumber" name="InterShipNumber" class="form-control focusedInput"
+                                                placeholder="Số NV đi intership" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="panel panel-color panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Thực tích</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Onsite dài hạn</label>
+                                            <input type="number" #ActLongOnsiterNumber="ngModel" [(ngModel)]="entity.ActLongOnsiterNumber" name="ActLongOnsiterNumber"
+                                                class="form-control focusedInput" placeholder="Thực tế số NV onsite dài hạn"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Onsite ngắn hạn</label>
+                                            <input type="number" #ActShortOnsiterNumber="ngModel" [(ngModel)]="entity.ActShortOnsiterNumber" name="ActShortOnsiterNumber"
+                                                class="form-control focusedInput" placeholder="Thực tế số NV onsite ngắn hạn"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
+                                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Intership</label>
+                                            <input type="number" #ActInterShipNumber="ngModel" [(ngModel)]="entity.ActInterShipNumber" name="ActInterShipNumber" class="form-control focusedInput"
+                                                placeholder="Thực tế số NV đi intership" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </tab>
+
+                </tabset>
+            </form>
+        </div>
+    </div>
+</div>

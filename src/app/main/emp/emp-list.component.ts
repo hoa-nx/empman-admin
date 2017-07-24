@@ -28,7 +28,10 @@ export class EmpListComponent implements OnInit {
 
     constructor(private _dataService: DataService,
         private itemsService: ItemsService,
-        private notificationService: NotificationService) { }
+        private notificationService: NotificationService) { 
+
+            
+        }
 
     ngOnInit() {
         this._dataService.get('/api/emp/getall')
@@ -170,5 +173,9 @@ export class EmpListComponent implements OnInit {
     cancelAddUser() {
         this.addingUser = false;
         this.itemsService.removeItems<IEmp>(this.emps, x => x.ID < 0);
+    }
+
+    trackByFn(index, item){
+        return index;
     }
 }
