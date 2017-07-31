@@ -6,22 +6,41 @@ import { EmpListComponent } from './emp-list.component';
 import { EmpCardComponent } from './emp-card.component';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap';
+import { PaginationModule, TabsModule } from 'ngx-bootstrap';
 import { MobileHideDirective } from '../../shared/directives/mobile-hide.directive';
 import { ItemsService } from '../../shared/utils/items.service';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 import { MdRadioModule } from '@angular/material';
 import { SharedModule } from '../../shared/module/shared.module';
+import { EmpExpandableComponent } from './emp-expandable.component';
+import { DataService } from '../../core/services/data.service';
+import { MappingService } from '../../shared/utils/mapping.service';
+import { SessionService } from '../../core/services/session.service';
+import { NotificationService } from '../../core/services/notification.service';
+import { EmpBasicComponent } from './emp-basic.component';
+import { EmpProfileComponent } from './emp-profile.component';
+import { EmpProfileTechComponent } from './emp-profile-tech.component';
+import { EmpProfileWorkComponent } from './emp-profile-work.component';
+import { EmpContractComponent } from './emp-contract.component';
+import { EmpSalaryComponent } from './emp-salary.component';
+import { EmpAllowanceComponent } from './emp-allowance.component';
+import { EmpDetailWorkComponent } from './emp-detail-work.component';
+import { EmpOnsiteComponent } from './emp-onsite.component';
+import { EmpSupportComponent } from './emp-support.component';
+import { EmpEstimateComponent } from './emp-estimate.component';
+import { TabsetComponent } from 'ngx-bootstrap';
 
 const empRoutes: Routes = [
   //localhost:4200/main/emp
   { path: '', redirectTo: 'index', pathMatch: 'full' },
   { path: 'card-list', redirectTo: 'card-list', pathMatch: 'full' },
-
+  { path: 'emp-expandable', redirectTo: 'emp-expandable', pathMatch: 'full' },  
   //localhost:4200/main/emp/index
   { path: 'index', component: EmpComponent },
-  { path: 'card-list', component: EmpListComponent }
+  { path: 'card-list', component: EmpListComponent },
+  { path: 'emp-expandable', component: EmpExpandableComponent },
+  { path: 'emp-basic', component: EmpBasicComponent }
 ]
 @NgModule({
   imports: [
@@ -33,16 +52,27 @@ const empRoutes: Routes = [
     ModalModule.forRoot(),
     PaginationModule.forRoot(),
     RouterModule.forChild(empRoutes),
-    SharedModule
+    SharedModule,
+    TabsModule.forRoot()
   ],
   declarations: [
     MobileHideDirective,
     EmpComponent,
     EmpCardComponent,
-    EmpListComponent
+    EmpListComponent,
+    EmpExpandableComponent,
+    EmpBasicComponent,
+    EmpProfileComponent,
+    EmpProfileTechComponent,
+    EmpProfileWorkComponent,
+    EmpContractComponent,
+    EmpSalaryComponent,
+    EmpAllowanceComponent,
+    EmpDetailWorkComponent,
+    EmpOnsiteComponent,
+    EmpSupportComponent,
+    EmpEstimateComponent
   ],
-  providers: [
-    ItemsService
-  ]
+  providers: [DataService, NotificationService, ItemsService, MappingService, SessionService]
 })
 export class EmpModule { }

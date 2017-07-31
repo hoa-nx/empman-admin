@@ -17,6 +17,7 @@ import { NumberHelper } from '../../shared/utils/number-helper';
 import { routes } from '../../login/login.module';
 import { DateTimeHelper } from '../../shared/utils/datetime-helper';
 import { LoggedInUser } from '../../core/domain/loggedin.user';
+import { LoaderService } from '../../shared/utils/spinner.service';
 
 @Component({
     selector: 'app-revenue-edit',
@@ -51,8 +52,12 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     private oldRevenueValue: any = {};
     public actionParam: any;
     public idParam: any;
-    public user : LoggedInUser;
-    
+    public user: LoggedInUser;
+    public isApproved: boolean = false;
+    public isLoaded: boolean = false;
+    public orderNos : any[]=[];
+    public projectContents : any[]=[];
+
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
@@ -61,7 +66,8 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
         private _notificationService: NotificationService,
         private _utilityService: UtilityService,
         private _mappingService: MappingService,
-        private _authenService: AuthenService
+        private _authenService: AuthenService,
+        private _loaderService: LoaderService
     ) {
 
     }
@@ -74,7 +80,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
             .subscribe(params => {
                 this.id = +params['id'] || 0;
                 this.actionParam = params['action'];
-                
+
             });
 
         moment.locale("jp");
@@ -91,20 +97,23 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
     }
 
-    initByActionParam(){
-        switch (this.actionParam){
-            case 'new' :
+    initByActionParam() {
+        switch (this.actionParam) {
+            case 'new':
+                this.isApproved = false;
 
-            break;
+                break;
 
-            case 'edit' :
+            case 'edit':
+                this.isApproved = false;
+                break;
 
-            break;
-
-            case 'copy' :
-                this.entity.ID  = 0;
-            break;
-            case 'nextmonth' :
+            case 'copy':
+                this.entity.ID = 0;
+                this.isApproved = false;
+                break;
+            case 'nextmonth':
+                this.isApproved = false;
                 //Khởi tạo mặc định các ngày tháng
                 var futureMonth = moment(this.entity.ReportYearMonth).add(1, 'M');
                 var futureMonthEnd = moment(futureMonth).endOf('month');
@@ -112,24 +121,25 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                 this.setDateRangeValueDefault();
                 //kiểm tra xem đã có dữ liệu hay chưa?
                 this.loadRevenueDetailByMultiJoken().subscribe((response: any[]) => {
-                    if(response.length>0){
+                    if (response.length > 0) {
                         //có tồn tại dữ liệu
                         this.entity = response[0];
-                        this.actionParam ='edit';
+                        this.actionParam = 'edit';
                         this.bindingRevenueDetail();
-                    }else{
-                        this.entity.ID  = 0;
+                    } else {
+                        this.entity.ID = 0;
                     }
-                    
+
                 }, error => this._dataService.handleError(error));
 
-            break;
+                break;
 
-            default :
-            break;
+            default:
+                break;
 
         }
     }
+    
     initBaseInformationItem(mangRate: number,
         transRate: number,
         orderPrice: number,
@@ -163,19 +173,20 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
         return this._dataService.getMulti(uri);
     }
-    
-    setInitValue(){
-        if(this.entity){
+
+    setInitValue() {
+        if (this.entity) {
             if (!(this.entity.CompanyID && this.entity.CompanyID > 0))
-                this.entity.CompanyID = this.user.companyid|0;
+                this.entity.CompanyID = this.user.companyid | 0;
             if (!(this.entity.DeptID && this.entity.DeptID > 0))
-                this.entity.DeptID = this.user.deptid|0;
+                this.entity.DeptID = this.user.deptid | 0;
             if (!(this.entity.TeamID && this.entity.TeamID > 0))
-                this.entity.TeamID = this.user.teamid|0;
+                this.entity.TeamID = this.user.teamid | 0;
         }
     }
 
     loadMultiTableCallBack() {
+        this._loaderService.displayLoader(true);
         this.loadMultiTable()
             .subscribe((response: any) => {
                 this.estimateTypes = response[0];        //loại báo giá
@@ -193,6 +204,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                 } else {
                     this.loadInitRenueveDetails();
                 }
+
             },
             error => {
                 error => this._dataService.handleError(error);
@@ -200,6 +212,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     }
 
     loadInitRenueveDetails() {
+        this._loaderService.displayLoader(true);
         this._dataService.get('/api/revenue/new/' + this.id)
             .subscribe((response: any) => {
                 this.entity = response;
@@ -210,30 +223,38 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                 this.statuses = this.schedule.statuses;
                 this.types = this.schedule.types;*/
                 this.setInitValue();
-            },
-            error => {
-                error => this._dataService.handleError(error);
-            });
-    }
-    
-    loadRenueveDetails() {
-        this._dataService.get('/api/revenue/detail/' + this.id)
-            .subscribe((response: any) => {
-                this.entity = response;
-                this.bindingRevenueDetail();
-                
-                this.setInitValue();
-                /*this.schedule.timeStart = new Date(this.schedule.timeStart.toString()); // new DateFormatPipe().transform(schedule.timeStart, ['local']);
-                this.schedule.timeEnd = new Date(this.schedule.timeEnd.toString()); //new DateFormatPipe().transform(schedule.timeEnd, ['local']);
-                this.statuses = this.schedule.statuses;
-                this.types = this.schedule.types;*/
+                this.isApproved = false;
+                this._loaderService.displayLoader(false);
             },
             error => {
                 error => this._dataService.handleError(error);
             });
     }
 
-    bindingRevenueDetail(){
+    loadRenueveDetails() {
+        this._loaderService.displayLoader(true);
+        this._dataService.get('/api/revenue/detail/' + this.id)
+            .subscribe((response: any) => {
+                this.entity = response;
+                this.bindingRevenueDetail();
+
+                this.setInitValue();
+                if (this.entity.ApprovedStatus == 100) {
+                    this.isApproved = true;
+                }
+                /*this.schedule.timeStart = new Date(this.schedule.timeStart.toString()); // new DateFormatPipe().transform(schedule.timeStart, ['local']);
+                this.schedule.timeEnd = new Date(this.schedule.timeEnd.toString()); //new DateFormatPipe().transform(schedule.timeEnd, ['local']);
+                this.statuses = this.schedule.statuses;
+                this.types = this.schedule.types;*/
+                this._loaderService.displayLoader(false);
+            },
+            error => {
+                error => this._dataService.handleError(error);
+            });
+    }
+
+    bindingRevenueDetail() {
+        this._loaderService.displayLoader(true);
         this.selectedCustomer = this.entity.Customer;
         //this.entity = this._itemsService.getSerialized<IRevenueDetails>(response);
         this.entity.ReportYearMonth = moment(this.entity.ReportYearMonth).format('YYYY/MM/01');
@@ -249,11 +270,14 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
         //load data cho don gia tung khach hang
         this.loadMultiCustomerUnitPriceByCustomerID();
+        //get auto complete data
+        this.loadAutoCompleteDataByCustomer();
 
         this.getTotalZenMonth().subscribe((response: any[]) => {
             this.totalZenMonth = response;
             this.calRelationZenMonthItem();
             this.calRelationNextMonthItem();
+            this._loaderService.displayLoader(false);
         }, error => this._dataService.handleError(error));
 
         //xu ly init cac so lieu de tinh toan cac so tien
@@ -265,44 +289,54 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
         this.baseInformation.UsdToVnd = this.selectedExchangeRate.UsdToVnd;
         this.baseInformation.YenToVnd = this.selectedExchangeRate.YenToVnd;
         this.baseInformation.UsdToYen = this.selectedExchangeRate.UsdToVnd / this.selectedExchangeRate.YenToVnd;
+        this._loaderService.displayLoader(false);
     }
-    loadRevenueDetailByMultiJoken(){
-        if (this.entity.ReportYearMonth 
-            && this.entity.CustomerID > 0 
+    loadRevenueDetailByMultiJoken() {
+
+        if (this.entity.ReportYearMonth
+            && this.entity.CustomerID > 0
             && this.entity.CustomerUnitPriceID > 0
             && this.entity.EstimateTypeMasterDetailID > 0
             && this.entity.OrderNo
-            ) {
+        ) {
             return this._dataService.get('/api/revenue/detailbymultijoken?&ReportYearMonth=' + this.entity.ReportYearMonth +
-                                            '&CustomerID=' + this.entity.CustomerID + 
-                                            '&CustomerUnitPriceID=' + this.entity.CustomerUnitPriceID + 
-                                            '&EstimateTypeID=' + this.entity.EstimateTypeMasterDetailID + 
-                                            '&OrderNo=' + this.entity.OrderNo 
-                                            );
+                '&CustomerID=' + this.entity.CustomerID +
+                '&CustomerUnitPriceID=' + this.entity.CustomerUnitPriceID +
+                '&EstimateTypeID=' + this.entity.EstimateTypeMasterDetailID +
+                '&OrderNo=' + this.entity.OrderNo
+            );
         }
 
     }
     updateRevenue(editRevenueForm: NgForm) {
 
-        let messageConfirm : string = MessageContstants.CONFIRM_REGISTER_MSG;;
+        let messageConfirm: string = MessageContstants.CONFIRM_REGISTER_MSG;;
 
         this.entity.EstimateTypeMasterID = 20;
 
         this.entityRoundNumber();
+
         //kiểm tra xem đã có dữ liệu hay chưa?
         this.loadRevenueDetailByMultiJoken().subscribe((response: any[]) => {
-            if(response.length>0){
+            if (response.length > 0) {
                 //có tồn tại dữ liệu
                 this.entity.ID = response[0].ID;
-                this.actionParam ='edit';
+                this.actionParam = 'edit';
                 messageConfirm = MessageContstants.CONFIRM_UPDATE_MSG;
+
+                if (this.entity.ApprovedStatus == 100) {
+                    this.isApproved = true;
+                    messageConfirm = MessageContstants.CANNOT_EDIT_APPROVED_DATA;
+                }
             }
+            if (this.isApproved == true) {
+                this._notificationService.printAlertDialog(messageConfirm, () => { return; });
+            } else {
+                //map thong tin
+                var revenueMapped = this._mappingService.mapRevenueDetailsToRevenue(this.entity);
 
-            //map thong tin
-            var revenueMapped = this._mappingService.mapRevenueDetailsToRevenue(this.entity);
-
-            this._notificationService.printConfirmationDialog(messageConfirm, () => this.saveData(revenueMapped));
-            
+                this._notificationService.printConfirmationDialog(messageConfirm, () => this.saveData(revenueMapped));
+            }
         }, error => this._dataService.handleError(error));
         //this.saveData(revenueMapped);
     }
@@ -325,15 +359,17 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
         this.entity.NextMonthMM = NumberHelper.roundTo(this.entity.NextMonthMM, 10);
 
     }
-  
+
     private saveData(revenueMapped: IRevenue) {
         if (revenueMapped.ID == 0) {
+            //tao moi
             this._dataService.post('/api/revenue/add', JSON.stringify(revenueMapped))
                 .subscribe((response: any) => {
                     this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
                 }, error => this._dataService.handleError(error));
         }
         else {
+            //cap nhat
             this._dataService.put('/api/revenue/update', JSON.stringify(revenueMapped))
                 .subscribe((response: any) => {
                     this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
@@ -344,6 +380,26 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     private loadCustomerUnitPriceLasted() {
         if (this.entity.ReportYearMonth && this.entity.CustomerID > 0) {
             return this._dataService.get('/api/customerunitprice/getbycustomer?&customerID=' + this.entity.CustomerID + '&startDate=' + this.entity.ReportYearMonth);
+
+        }
+    }
+
+    private loadAutoCompleteDataByCustomer() {
+        this.orderNos=[];
+        this.projectContents=[];
+
+        if (this.entity.CustomerID > 0) {
+            return this._dataService.get('/api/revenue/getallautocompletedata?&customerID=' + this.entity.CustomerID )
+            .subscribe((response: any) => {
+                let responeData : any[] =  response;
+                responeData.forEach(e => {
+                    if(e.ID==1){
+                        this.orderNos.push(e.Name);
+                    }else{
+                        this.projectContents.push(e.Name);
+                    }
+                });
+            }, error => this._dataService.handleError(error));
 
         }
     }
@@ -479,7 +535,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     public onChangeOrderNo(value: any) {
         if (value && (this.oldRevenueValue.OrderNo !== (this.entity.OrderNo || '').toString())) {
             //Tính lại lũy kế trong trường hợp có tồn tại số tiền của tháng sau
-            if(this.entity.NextMonthMM !=0 ){
+            if (this.entity.NextMonthMM != 0) {
                 this.getTotalZenMonth().subscribe((response: any[]) => {
                     this.totalZenMonth = response;
                     this.calRelationZenMonthItem();
@@ -491,6 +547,9 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
     public onChangeCustomer(value: any) {
         if (value) {
+            //get auto complete data
+            this.loadAutoCompleteDataByCustomer();
+
             this.entity.CustomerName = this.customers.find(x => x.ID == value).Name;
             //lay tri mac dinh don vi tinh voi khach hang
             this.selectedCustomer = this.customers.find(x => x.ID == value);
@@ -535,7 +594,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
                     //tinh lai so tong MM trong thang trong trường hợp trị chưa được setting 
                     //nếu đã setting trị rồi thì không cập nhật lại.
-                    if((this.entity.OrderProjectSumMM|0)==0){
+                    if ((this.entity.OrderProjectSumMM | 0) == 0) {
                         this.entity.OrderProjectSumMM = +(this.entity.InMonthSumMM).toFixed(10);
                     }
                     //tinh toan cac so lieu lien quan
@@ -549,7 +608,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                     this.entity.InMonthSumMM = +(this.entity.InMonthDevMM + this.entity.InMonthTransMM + this.entity.InMonthManagementMM).toFixed(10);
                     //tinh lai so tong MM trong thang trong trường hợp trị chưa được setting 
                     //nếu đã setting trị rồi thì không cập nhật lại.
-                    if((this.entity.OrderProjectSumMM|0)==0){
+                    if ((this.entity.OrderProjectSumMM | 0) == 0) {
                         this.entity.OrderProjectSumMM = +(this.entity.InMonthSumMM).toFixed(10);
                     }
                     //tinh toan cac so lieu lien quan
@@ -565,7 +624,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                     this.entity.InMonthSumMM = +(this.entity.InMonthDevMM + this.entity.InMonthTransMM + this.entity.InMonthManagementMM).toFixed(10);
                     //tinh lai so tong MM trong thang trong trường hợp trị chưa được setting 
                     //nếu đã setting trị rồi thì không cập nhật lại.
-                    if((this.entity.OrderProjectSumMM|0)==0){
+                    if ((this.entity.OrderProjectSumMM | 0) == 0) {
                         this.entity.OrderProjectSumMM = +(this.entity.InMonthSumMM).toFixed(10);
                     }
                     //tinh toan cac so lieu lien quan
@@ -583,8 +642,8 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
             case 'OrderPrice':
                 //gan lai don gia trong truong hop thay doi bang tay ( do dang tinh theo this.baseInformation.OrderPrice)
-                this.baseInformation.OrderPrice  = this.entity.OrderPrice ;
-                break;    
+                this.baseInformation.OrderPrice = this.entity.OrderPrice;
+                break;
 
             case 'AccPreMonthSumMM':
                 //this.calRelationAccItem();
@@ -646,8 +705,8 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
      */
     calRelationOrderItem() {
         //Nếu tổng MM khac 0 va khac so voi tri lan truoc
-        if(this.entity.OrderProjectSumMM != 0 
-            && (this.oldRevenueValue.OrderProjectSumMM !== (this.entity.OrderProjectSumMM || 0).toString())){
+        if (this.entity.OrderProjectSumMM != 0
+            && (this.oldRevenueValue.OrderProjectSumMM !== (this.entity.OrderProjectSumMM || 0).toString())) {
             /**Tính số tiền qui đổi thành USD của MM toàn bộ tháng này(cột quotation/order) */
             let orderPriceToUsd: number = 0;
             if (this.entity.OrderUnitMasterDetailID == SystemConstants.ORDER_UNIT_USD) {
@@ -666,9 +725,9 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
             /* chyển đối thành USD */
 
             this.entity.OrderPriceToUsd = +(orderPriceToUsd).toFixed(10);
-        }else if(this.entity.OrderProjectSumMM === 0 ){
+        } else if (this.entity.OrderProjectSumMM === 0) {
             //gan tien va don gia nhu nhau ( dung trong giam gia)
-            this.entity.OrderPriceToUsd =  +(this.entity.OrderPrice).toFixed(10);
+            this.entity.OrderPriceToUsd = +(this.entity.OrderPrice).toFixed(10);
         }
     }
 
@@ -722,10 +781,10 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     }
 
     calRelationZenMonthItem() {
-        if(this.totalZenMonth.length>0){
-            let zenMonthRecord = this.totalZenMonth.find(x => (x.OrderNo == this.entity.OrderNo 
-                                                                        && x.CustomerID==this.entity.CustomerID 
-                                                                        && x.CustomerUnitPriceID == this.entity.CustomerUnitPriceID));
+        if (this.totalZenMonth.length > 0) {
+            let zenMonthRecord = this.totalZenMonth.find(x => (x.OrderNo == this.entity.OrderNo
+                && x.CustomerID == this.entity.CustomerID
+                && x.CustomerUnitPriceID == this.entity.CustomerUnitPriceID));
             this.entity.AccPreMonthSumMM = zenMonthRecord.ZenTotalMM;
             this.entity.AccPreMonthSumToUsd = zenMonthRecord.ZenTotalUSD;
 
@@ -742,19 +801,20 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     }
 
     back() {
-        this._router.navigate(['../main/revenue']);
+        //this._router.navigate(['../main/revenue']);
+        this._router.navigate(['../main/revenue/grid']);
     }
 
-    setDateRangeValueDefault(){
-        this.entity.OrderStartDate = DateTimeHelper.getStartDateWithSime(this.entity.ReportYearMonth,this.selectedCustomer.Sime||31);
-        this.entity.OrderEndDate = DateTimeHelper.getEndDateWithSime(this.entity.ReportYearMonth,this.selectedCustomer.Sime||31);
+    setDateRangeValueDefault() {
+        this.entity.OrderStartDate = DateTimeHelper.getStartDateWithSime(this.entity.ReportYearMonth, this.selectedCustomer.Sime || 31);
+        this.entity.OrderEndDate = DateTimeHelper.getEndDateWithSime(this.entity.ReportYearMonth, this.selectedCustomer.Sime || 31);
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.sub.unsubscribe();
     }
     //https://angular-2-training-book.rangle.io/handout/routing/query_params.html
     nextPage() {
-    this._router.navigate(['product-list'], { queryParams: { page: this.id + 1 } });
+        this._router.navigate(['product-list'], { queryParams: { page: this.id + 1 } });
     }
 }

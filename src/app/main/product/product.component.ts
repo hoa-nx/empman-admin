@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -19,17 +20,32 @@ export class ProductComponent implements OnInit {
   /*Declare modal */
   @ViewChild('addEditModal') public addEditModal: ModalDirective;
   @ViewChild("thumbnailImage") thumbnailImage;
-  /*Product manage */
   public baseFolder: string = SystemConstants.BASE_API;
   public entity: any;
   public totalRow: number;
   public pageIndex: number = 1;
   public pageSize: number = 20;
   public pageDisplay: number = 10;
-  public filter: string = '';
+  public filterKeyword: string = '';
   public filterCategoryID: number;
   public products: any[];
   public productCategories: any[];
+  public checkedItems: any[];
+
+  /*Product manage */
+  public imageEntity: any = {};
+  public productImages: any = [];
+  @ViewChild('imageManageModal') public imageManageModal: ModalDirective;
+  @ViewChild("imagePath") imagePath;
+  public sizeId: number = null;
+  public colorId: number = null;
+  public colors: any[];
+  public sizes: any[];
+
+  /*Quantity manage */
+  @ViewChild('quantityManageModal') public quantityManageModal: ModalDirective;
+  public quantityEntity: any = {};
+  public productQuantities: any = [];
 
   constructor(public _authenService: AuthenService,
     private _dataService: DataService,
@@ -45,14 +61,14 @@ export class ProductComponent implements OnInit {
     this.entity.Alias = this.utilityService.MakeSeoTitle(this.entity.Name);
   }
   public search() {
-    this._dataService.get('/api/product/getall?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filter + '&categoryId=' + this.filterCategoryID)
+    this._dataService.get('/api/product/getall?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword + '&categoryId=' + this.filterCategoryID)
       .subscribe((response: any) => {
         this.products = response.Items;
         this.pageIndex = response.PageIndex;
       }, error => this._dataService.handleError(error));
   }
   public reset() {
-    this.filter = '';
+    this.filterKeyword = '';
     this.filterCategoryID = null;
     this.search();
   }
@@ -77,7 +93,7 @@ export class ProductComponent implements OnInit {
       }, error => this._dataService.handleError(error));
     });
   }
-
+  
   private loadProductCategories() {
     this._dataService.get('/api/productCategory/getallhierachy').subscribe((response: any[]) => {
       this.productCategories = response;
@@ -120,7 +136,109 @@ export class ProductComponent implements OnInit {
     this.search();
   }
 
- public keyupHandlerContentFunction(e: any) {
+  public keyupHandlerContentFunction(e: any) {
     this.entity.Content = e;
+  }
+
+  public deleteMulti() {
+    this.checkedItems = this.products.filter(x => x.Checked);
+    var checkedIds = [];
+    for (var i = 0; i < this.checkedItems.length; ++i)
+      checkedIds.push(this.checkedItems[i]["ID"]);
+
+    this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/product/deletemulti', 'checkedProducts', JSON.stringify(checkedIds)).subscribe((response: any) => {
+        this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.search();
+      }, error => this._dataService.handleError(error));
+    });
+  }
+
+  /*Image management*/
+  public showImageManage(id: number) {
+    this.imageEntity = {
+      ProductId: id
+    };
+    this.loadProductImages(id);
+    this.imageManageModal.show();
+  }
+
+  public loadProductImages(id: number) {
+    this._dataService.get('/api/productImage/getall?productId=' + id).subscribe((response: any[]) => {
+      this.productImages = response;
+    }, error => this._dataService.handleError(error));
+  }
+  public deleteImage(id: number) {
+    this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/productImage/delete', 'id', id.toString()).subscribe((response: any) => {
+        this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.loadProductImages(this.imageEntity.ProductId);
+      }, error => this._dataService.handleError(error));
+    });
+  }
+
+  public saveProductImage(isValid: boolean) {
+    if (isValid) {
+      let fi = this.imagePath.nativeElement;
+      if (fi.files.length > 0) {
+        this.uploadService.postWithFile('/api/upload/saveImage?type=product', null, fi.files).then((imageUrl: string) => {
+          this.imageEntity.Path = imageUrl;
+          this._dataService.post('/api/productImage/add', JSON.stringify(this.imageEntity)).subscribe((response: any) => {
+            this.loadProductImages(this.imageEntity.ProductId);
+            this.notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+          });
+        });
+      }
+    }
+  }
+
+  /*Quản lý số lượng */
+  public showQuantityManage(id: number) {
+    this.quantityEntity = {
+      ProductId: id
+    };
+    this.loadColors();
+    this.loadSizes();
+    this.loadProductQuantities(id);
+    this.quantityManageModal.show();
+
+  }
+  public loadColors() {
+    this._dataService.get('/api/productQuantity/getcolors').subscribe((response: any[]) => {
+      this.colors = response;
+    }, error => this._dataService.handleError(error));
+  }
+  public loadSizes() {
+    this._dataService.get('/api/productQuantity/getsizes').subscribe((response: any[]) => {
+      this.sizes = response;
+    }, error => this._dataService.handleError(error));
+  }
+
+  public loadProductQuantities(id: number) {
+    this._dataService.get('/api/productQuantity/getall?productId=' + id + '&sizeId=' + this.sizeId + '&colorId=' + this.colorId).subscribe((response: any[]) => {
+      this.productQuantities = response;
+    }, error => this._dataService.handleError(error));
+  }
+
+  public saveProductQuantity(isValid: boolean) {
+    if (isValid) {
+      this._dataService.post('/api/productQuantity/add', JSON.stringify(this.quantityEntity)).subscribe((response: any) => {
+        this.loadProductQuantities(this.quantityEntity.ProductId);
+        this.quantityEntity = {
+          ProductId: this.quantityEntity.ProductId
+        };
+        this.notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+      }, error => this._dataService.handleError(error));
+    }
+  }
+
+   public deleteQuantity(productId: number, colorId: string, sizeId: string) {
+    var parameters = { "productId": productId, "sizeId": sizeId, "colorId": colorId };
+    this.notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.deleteWithMultiParams('/api/productQuantity/delete', parameters).subscribe((response: any) => {
+        this.notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.loadProductQuantities(productId);
+      }, error => this._dataService.handleError(error));
+    });
   }
 }

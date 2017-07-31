@@ -32,7 +32,6 @@
             <table class="table table-hover mails m-0 table table-actions-bar">
               <thead>
                 <tr>
-                  <th>No</th>
                   <th>Mã </th>
                   <th>Tên tỉ giá</th>
                   <th>Ngày start</th>
@@ -46,8 +45,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of exchangeRates">
-                  <td>{{item.No}}</td>
-                  <td>{{item.ID}}</td>
+                   <td>{{item.ID}}</td>
                   <td>{{item.Name}}</td>
                   <td>{{item.StartDate | date:'yyyy/MM/dd'}}</td>
                   <td>{{item.EndDate | date:'yyyy/MM/dd'}}</td>

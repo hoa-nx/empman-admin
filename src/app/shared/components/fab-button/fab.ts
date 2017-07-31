@@ -10,7 +10,7 @@ import {
 
 import { FabButton } from './fabbutton';
 import { FabToggle } from './fabtoggle';
-import { FabModule} from './fabmodule' ;
+//import { FabModule} from './fabmodule' ;
 
 @Component({
   selector: 'app-fab',

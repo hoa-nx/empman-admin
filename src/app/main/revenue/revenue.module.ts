@@ -18,6 +18,7 @@ import { RevenueGridComponent } from './revenue-grid.component';
 import { DataTableModule } from 'primeng/primeng';
 import { SessionService } from '../../core/services/session.service';
 import { MdCheckboxModule } from '@angular/material';
+import { MdAutocompleteModule } from '@angular/material';
 
 const revenueRoutes: Routes = [
   //localhost:4200/main/revenue
@@ -28,7 +29,7 @@ const revenueRoutes: Routes = [
   { path: 'grid', component: RevenueGridComponent },
   //localhost:4200/main/revenue/id/edit
   //{ path: ':id/edit', component: RevenueEditComponent}
-  { path: 'edit/:id/:action', component: RevenueEditComponent}
+  { path: 'edit/:id/:action', component: RevenueEditComponent }
 ]
 
 @NgModule({
@@ -42,9 +43,10 @@ const revenueRoutes: Routes = [
     RouterModule.forChild(revenueRoutes),
     SharedModule,
     MdCheckboxModule,
+    MdAutocompleteModule,
     DataTableModule
   ],
-  declarations: [RevenueComponent,RevenueEditComponent, RevenueListComponent,RevenueGridComponent],
-  providers : [DataService, NotificationService, ItemsService, MappingService, SessionService]
+  declarations: [RevenueComponent, RevenueEditComponent, RevenueListComponent, RevenueGridComponent],
+  providers: [DataService, NotificationService, ItemsService, MappingService, SessionService]
 })
 export class RevenueModule { }

@@ -8,4 +8,4 @@ import { SearchModalComponent } from './search-modal.component';
   ],
   declarations: [SearchModalComponent]
 })
-export class SearchModalModule { }
+class SearchModalModule { }

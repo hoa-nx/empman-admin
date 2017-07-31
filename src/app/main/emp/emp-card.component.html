@@ -1,6 +1,7 @@
 <div class="panel panel-primary" [ngClass]="{shadowCard: onEdit}" [@flyInOut]="'in'">
     <div class="panel-heading">
-        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="{true : 'fa fa-male fa-1x', false:'fa fa-female'}[edittedUser.Gender]" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>
+        <!--<h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="{true : 'fa fa-male fa-1x', false:'fa fa-female'}[edittedUser.Gender]" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>-->
+        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="(edittedUser.Gender==true)?'fa fa-male fa-1x' : 'fa fa-female'" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>
         <input [(ngModel)]="edittedUser.FullName" [class.hidden]="!onEdit" [style.color]="'brown'" required class="form-control"
         />
         <div class="clearfix"></div>
@@ -15,7 +16,7 @@
                 <div ng2FileDrop [ng2FileDropSupportedFileTypes]="supportedFileTypes" (ng2FileDropFileAccepted)="dragFileAccepted($event)"
                     class="profile-picture-section-drop-zone">
                     <div *ngIf="!edittedUser.ShowAvatar" class=profile-picture-section-request-image-group>
-                        <p class="profile-picture-section-request-image-instructions">Kéo hình nhân viên vào đây</p>
+                        <p class="profile-picture-section-request-image-instructions">Kéo hình vào đây</p>
                     </div>
                     <div *ngIf="edittedUser.ShowAvatar" class="profile-picture-section-request-image-container">
                         <img class="profile-picture-section-request-image" src="{{(edittedUser.ShowAvatar &&(!isFileChanged)) === false ? currentProfileImage : uriAvatarPath + edittedUser.Avatar}}"
@@ -40,8 +41,8 @@
                 <div [hidden]="!onEdit" class="emp-card-gender">
                     <div class="input-group">
                         <md-radio-group name="gender" [(ngModel)]="edittedUser.Gender">
-                            <md-radio-button (change)="selectGender($event)" [value]="1" [checked]="edittedUser.Gender==true">Nam</md-radio-button>
-                            <md-radio-button (change)="selectGender($event)" [value]="0" [checked]="edittedUser.Gender==false">Nữ</md-radio-button>
+                            <md-radio-button (change)="selectGender($event)" [value]="1" [checked]="edittedUser.Gender===true">Nam</md-radio-button>
+                            <md-radio-button (change)="selectGender($event)" [value]="0" [checked]="edittedUser.Gender===false">Nữ</md-radio-button>
                         </md-radio-group>
                     </div>
                 </div>
@@ -102,7 +103,8 @@
     <div class="panel-footer">
         <div [class.hidden]="edittedUser.ID < 0">
             <button class="{{onEdit === false ? 'btn btn-default btn-xs' : 'btn btn-inverse btn-xs'}}" (click)="editUser()">
-                <i [ngClass]="{false:'fa fa-pencil',true:'fa fa-ban'}[onEdit]" aria-hidden="true"></i>
+                <!--<i [ngClass]="{false:'fa fa-pencil',true:'fa fa-ban'}[onEdit]" aria-hidden="true"></i>-->
+                <i [ngClass]="(onEdit==true)?'fa fa-ban':'fa fa-pencil'" aria-hidden="true"></i>
                     {{onEdit === false ? "Chỉnh sửa" : "Hủy"}}
                 </button>
             <button class="btn btn-default btn-xs" [class.hidden]="!onEdit" (click)="updateUser()" [disabled]="!isUserValid()">

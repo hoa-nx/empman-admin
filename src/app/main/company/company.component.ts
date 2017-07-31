@@ -127,17 +127,18 @@ export class CompanyComponent implements OnInit {
     this.entity.DeleteFlag = event.target.value
   }
 
-  public selectedDate(value: any) {
-    this.entity.CreateDate = moment(value.end._d).format('YYYY/MM/DD');
+  public selectedCreateDate(value: any) {
+    console.log(value.start);
+    this.entity.CreateDate = moment(value.start).format('YYYY/MM/DD');
   }
 
-  selectedData(value: any): void {
+  public selectedData(value: any): void {
     this.ceoFullName = value.value.FullName;
     this.entity.CeoID = value.value.ID;
 
   }
 
-  onInputBlur(event) {
+  public onInputBlur(event) {
     switch (event.target.name) {
       case 'ceoid':
 
@@ -160,7 +161,7 @@ export class CompanyComponent implements OnInit {
     }
   }
 
-  loadDetailEmp(id: any) {
+  public loadDetailEmp(id: any) {
     this._dataService.get('/api/emp/detail/' + id)
       .subscribe((response: any) => {
         this.emp = response;

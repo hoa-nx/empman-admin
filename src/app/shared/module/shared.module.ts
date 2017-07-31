@@ -8,6 +8,7 @@ import { jqxGridComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxgr
 import { jqxKnobComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxknob';
 import { jqxNumberInputComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxnumberinput';
 import { jqxChartComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxchart';
+import { jqxTreeGridComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxtreegrid';
 
 @NgModule({
     declarations: [HighlightDirective,
@@ -17,7 +18,8 @@ import { jqxChartComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxc
         jqxMenuComponent,
         jqxKnobComponent,
         jqxChartComponent,
-        jqxNumberInputComponent
+        jqxNumberInputComponent,
+        jqxTreeGridComponent
 
     ],
 
@@ -29,7 +31,8 @@ import { jqxChartComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxc
         jqxMenuComponent,
         jqxKnobComponent,
         jqxChartComponent,
-        jqxNumberInputComponent
+        jqxNumberInputComponent,
+        jqxTreeGridComponent
     ]
 })
 export class SharedModule { }

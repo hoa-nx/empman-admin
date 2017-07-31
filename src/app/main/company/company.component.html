@@ -150,7 +150,7 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày thành lập</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #createdate="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.CreateDate"
+              <input type="text"  daterangepicker  (selected)="selectedCreateDate($event)" [options]="dateOptions" #createdate="ngModel" [(ngModel)]="entity.CreateDate"
                 name="createdate" class="form-control focusedInput" placeholder="Ngày thành lập">
             </div>
           </div>
@@ -179,4 +179,4 @@
 </div>
 
 <app-search-modal #childModal [searchTableName]="'emp'" [entity] = "entity" (selectedData)="selectedData($event);"  [title]="'Danh sách nhân viên'"> </app-search-modal>
-<span> {{selected}}</span>
+<!--<span> {{selected}}</span>-->

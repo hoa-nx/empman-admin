@@ -21,6 +21,7 @@ import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop'
 import { UploadService } from '../../core/services/upload.service';
 import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
 import { MdRadioButton, MdRadioGroup, MdRadioModule } from '@angular/material';
+import { LoaderService } from '../../shared/utils/spinner.service';
 
 declare var moment: any;
 
@@ -75,7 +76,7 @@ export class EmpCardComponent implements OnInit {
     isFileChanged: boolean;
     /* tslint:disable:no-unused-variable */
     // Supported image types
-    private supportedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/gif'];
+    public supportedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/gif'];
     /* tslint:enable:no-unused-variable */
 
     private currentProfileImage: string = 'http://localhost:4200/assets/images/profile-default.png';
@@ -87,7 +88,8 @@ export class EmpCardComponent implements OnInit {
     constructor(private itemsService: ItemsService,
         private _notificationService: NotificationService,
         private _dataService: DataService,
-        private _uploadService: UploadService) { }
+        private _uploadService: UploadService,
+        private _loaderService: LoaderService) { }
 
     ngOnInit() {
         //this.apiHost = this.configService.getApiHost();
@@ -256,13 +258,13 @@ export class EmpCardComponent implements OnInit {
 
     /* Drag Drop File Begin*/
     // File being dragged has moved into the drop region
-    private dragFileOverStart() {
+    public dragFileOverStart() {
     }
     // File being dragged has moved out of the drop region
-    private dragFileOverEnd() {
+    public dragFileOverEnd() {
     }
 
-    private dragFileAccepted(acceptedFile: Ng2FileDropAcceptedFile) {
+    public dragFileAccepted(acceptedFile: Ng2FileDropAcceptedFile) {
         // Load the image in
         let fileReader = new FileReader();
         fileReader.onload = () => {
@@ -279,7 +281,7 @@ export class EmpCardComponent implements OnInit {
     }
 
     // File being dragged has been dropped and has been rejected
-    private dragFileRejected(rejectedFile: Ng2FileDropRejectedFile) {
+    public dragFileRejected(rejectedFile: Ng2FileDropRejectedFile) {
     }
 
 

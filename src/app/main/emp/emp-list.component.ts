@@ -5,9 +5,10 @@ import { IEmp } from '../../core/interfaces/interfaces';
 import { EmpCardComponent } from './emp-card.component';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
-import { MdRadioModule, MdRadioButton, MdRadioGroup} from '@angular/material';
+import { MdRadioModule, MdRadioButton, MdRadioGroup } from '@angular/material';
 
 import * as moment from 'moment';
+import { LoaderService } from '../../shared/utils/spinner.service';
 
 @Component({
     moduleId: module.id,
@@ -25,21 +26,32 @@ export class EmpListComponent implements OnInit {
     public totalRow: number;
     public filter: string = '';
     public emps: any[];
+    public loading = true;
 
     constructor(private _dataService: DataService,
         private itemsService: ItemsService,
-        private notificationService: NotificationService) { 
+        private notificationService: NotificationService,
+        private _loaderService: LoaderService) {
 
-            
-        }
+
+    }
 
     ngOnInit() {
-        this._dataService.get('/api/emp/getall')
+        this.loadData();
+
+    }
+
+    loadData() {
+        this._loaderService.displayLoader(true);
+        this.loading = true;
+        this._dataService.get('/api/emp/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
             .subscribe((response: any) => {
-                this.emps = response;
+                this.emps = response.Items;
                 this.pageIndex = response.PageIndex;
                 this.pageSize = response.PageSize;
                 this.totalRow = response.TotalRows;
+                this._loaderService.displayLoader(false);
+                this.loading = false;
             },
             error => {
                 this.notificationService.printErrorMessage('Có lỗi xảy ra khi lấy danh sách nhân viên' + error);
@@ -155,18 +167,20 @@ export class EmpListComponent implements OnInit {
 
         };*/
         moment.locale("jp");
-        let currentDate : string =   moment().format("YYYY/MM/DD");
+        let currentDate: string = moment().format("YYYY/MM/DD");
 
         let newEmp = {
-                    ID  : -1,
-                    FullName  : '' ,
-                    Gender : true,
-                    StartWorkingDate  : currentDate ,
-                    StartTrialDate  : currentDate ,
-                    ShowAvatar  :  false 
+            ID: -1,
+            FullName: '',
+            Gender: true,
+            StartWorkingDate: currentDate,
+            StartTrialDate: currentDate,
+            ShowAvatar: false
 
         };
         this.itemsService.addItemToStart<IEmp>(this.emps, newEmp);
+        console.log(this.emps);
+
         //this.users.splice(0, 0, newUser);
     }
 
@@ -175,7 +189,13 @@ export class EmpListComponent implements OnInit {
         this.itemsService.removeItems<IEmp>(this.emps, x => x.ID < 0);
     }
 
-    trackByFn(index, item){
+    trackByFn(index, item) {
         return index;
     }
+
+    pageChanged(event: any): void {
+        this.pageIndex = event.page;
+        this.loadData();
+    }
+
 }

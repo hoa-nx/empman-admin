@@ -27,38 +27,13 @@
 
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tháng năm</label>
                             <input type="text" #ReportYearMonth="ngModel" daterangepicker (selected)="selectedReportYearMonthDate($event)" [options]="dateOptions"
                                 [(ngModel)]="entity.ReportYearMonth" name="ReportYearMonth" class="form-control focusedInput"
                                 placeholder="Tháng năm đối tượng" [disabled]="actionParam =='edit'" required/>
                         </div>
                         <div class="col-md-3">
-                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>No.đặt hàng</label>
-                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.OrderNo" name="OrderNo" #OrderNo="ngModel" (ngModelChange)="onChangeOrderNo($event)"
-                                placeholder="Số đặt hàng" required/>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Nội dung công việc</label>
-                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.ProjectContent" name="ProjectContent" #ProjectContent="ngModel"
-                                placeholder="Nội dung công việc" required/>
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Chọn tỉ giá</label>
-
-                            <select class="form-control focusedInput" name="ExchangeRateID" [(ngModel)]="entity.ExchangeRateID" (ngModelChange)="onChangeExchangeRate($event)" required>
-                            <option *ngFor="let x of exchangeRates" [value]="x.ID">{{x.Name}}</option>
-                            </select>
-                            <input type="hidden" [(ngModel)]="entity.ExchangeRateID" name="ExchangeRateID" class="form-control" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="row">
-
-                        <div class="col-md-4">
                             <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Khách hàng</label>
 
                             <select class="form-control focusedInput" name="CustomerID" [(ngModel)]="entity.CustomerID" (ngModelChange)="onChangeCustomer($event, true)"
@@ -69,7 +44,44 @@
                             <input type="hidden" [(ngModel)]="entity.CustomerName" name="CustomerName" class="form-control" />
                         </div>
 
+                        <div class="col-md-2">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>No.đặt hàng</label>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.OrderNo" name="OrderNo" #OrderNo="ngModel" (ngModelChange)="onChangeOrderNo($event)"
+                                placeholder="Số đặt hàng" [mdAutocomplete]="autoOrderNo" required/>
+                            <md-autocomplete #autoOrderNo="mdAutocomplete">
+                                <md-option *ngFor="let item of orderNos" [value]="item">
+                                    {{ item }}
+                                </md-option>
+                            </md-autocomplete>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Nội dung công việc</label>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.ProjectContent" name="ProjectContent" #ProjectContent="ngModel"
+                                placeholder="Nội dung công việc"  [mdAutocomplete]="autoProjectContent"  required/>
+
+                            <md-autocomplete #autoProjectContent="mdAutocomplete">
+                                <md-option *ngFor="let item of projectContents" [value]="item">
+                                    {{ item }}
+                                </md-option>
+                            </md-autocomplete>    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+
                         <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Chọn tỉ giá</label>
+
+                            <select class="form-control focusedInput" name="ExchangeRateID" [(ngModel)]="entity.ExchangeRateID" (ngModelChange)="onChangeExchangeRate($event)"
+                                required>
+                            <option *ngFor="let x of exchangeRates" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                            <input type="hidden" [(ngModel)]="entity.ExchangeRateID" name="ExchangeRateID" class="form-control" />
+                        </div>
+
+                        <div class="col-md-4">
                             <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Đơn giá áp dụng</label>
 
                             <select class="form-control focusedInput" name="CustomerUnitPriceID" [(ngModel)]="entity.CustomerUnitPriceID" (ngModelChange)="onChangeCustomerUnitPrice($event, true)"
@@ -111,7 +123,7 @@
                             <div class="portlet">
                                 <div class="portlet-heading bg-info">
                                     <h3 class="portlet-title">
-                                        Theo số liệu quotation/order 
+                                        Theo số liệu quotation/order
                                         <label>(USD→VND :{{this.baseInformation.UsdToVnd}} - YEN→VND: {{this.baseInformation.YenToVnd}} )</label>
                                     </h3>
                                     <!--<div class="portlet-widgets">
@@ -314,7 +326,7 @@
                                             <input type="number" class="form-control focusedInput" [(ngModel)]="entity.InMonthOnsiteMM" name="InMonthOnsiteMM" #InMonthOnsiteMM="ngModel"
                                                 (focus)="onFocus($event)" (mouseup)="$event.preventDefault()" />
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>

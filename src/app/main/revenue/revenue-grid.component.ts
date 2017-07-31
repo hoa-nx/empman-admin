@@ -55,7 +55,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
     public pageDisplay: number = 10;
     public totalRow: number;
     public filter: string = '';
-    public revenues: any[]=[];
+    public revenues: any[] = [];
     public estimateType: any;
     public customers: IMultiSelectOption[] = [];
     public selectCustomers: any[] = [];
@@ -74,7 +74,9 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
     public revenueMapped: any[];
 
-    public nextMonthInclude: boolean=false;
+    public nextMonthInclude: boolean = false;
+
+    public emps: any[];
 
     /** Xử lý init cho jqxGrid  start */
     theme: any;
@@ -88,6 +90,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         },*/
         datafields: [
             { name: 'ID', type: 'number' },
+            { name: 'IsCheck', type: 'bool' },
             { name: 'ReportYearMonth', type: 'date' },
             { name: 'CustomerName', type: 'string' },
             { name: 'ProjectContent', type: 'string' },
@@ -102,6 +105,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
             { name: 'InMonthDevMM', type: 'number' },
             { name: 'InMonthTransMM', type: 'number' },
             { name: 'InMonthManagementMM', type: 'number' },
+            { name: 'InMonthOnsiteMM', type: 'number' },
             { name: 'InMonthSumMM', type: 'number' },
             { name: 'InMonthToUsd', type: 'number' },
             { name: 'InMonthToVnd', type: 'number' },
@@ -115,6 +119,27 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
 
     dataAdapterGrid = new jqx.dataAdapter(this.sourceGrid);
+
+    columngroups: any[] =
+    [
+        { text: 'Theo số liệu quotation/order', align: 'center', name: 'QuotationGroupTitle' },
+        { text: 'Lũy kế → tháng trước', align: 'center', name: 'PreviousMonthGroupTitle' },
+        { text: 'Đã thực hiện  trong tháng (tạm tính)', align: 'center', name: 'InMonthGroupTitle' },
+        { text: 'Số MM kỳ tới', align: 'center', name: 'NextMonthGroupTitle' }
+
+    ];
+
+    /*cellbeginedit = (row: number, datafield: string, columntype: any, value: any): void | boolean => {       
+        //if (row == 0 || row == 2 || row == 5) return false;
+    }
+
+    cellsrenderer = (row: number, column: any, value: any, defaultHtml: string): string => {
+        if (row == 0 || row == 2 || row == 5) {
+            let element = defaultHtml.substring(0, 61) + "; color: #999" + defaultHtml.substring(61);
+            return element;
+        }
+        return defaultHtml;
+    }*/
 
     cellClass = (row: number, columnfield: any, value: number): string => {
         let cssName: string = 'none';
@@ -154,16 +179,18 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
     columnsGrid: any[] =
     [
-        { text: 'Id', groupable: false, aggregates: ['count'], datafield: 'ID', width: 60, hidden: true },
+        { text: 'Chọn', groupable: false, datafield: 'IsCheck', editable: true, threestatecheckbox: false, columntype: 'checkbox', width: 70, pinned: true },
+
+        { text: 'Id', groupable: false, aggregates: ['count'], datafield: 'ID', editable: false, width: 60, hidden: true },
         {
-            text: 'Tháng năm', groupable: true, aggregates: ['count'], datafield: 'ReportYearMonth', width: 180, cellsformat: 'yyyy/MM', pinned: true,
+            text: 'Tháng năm', groupable: true, aggregates: ['count'], datafield: 'ReportYearMonth', editable: false, width: 180, cellsformat: 'yyyy/MM', pinned: true,
             aggregatesrenderer: (aggregates: any, column: any, element: any): string => {
                 let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%; "/>';
                 return renderstring;
             },
             cellsrenderer: (row: number, column: any, value: any, defaultRender: string, rowData: any): string => {
                 let dataRecord = this.dataGrid.getrowdata(row);
-                 if (dataRecord.NextMonthMM && dataRecord.NextMonthMM != 0) {
+                if (dataRecord.NextMonthMM && dataRecord.NextMonthMM != 0) {
                     let doc = new DOMParser().parseFromString(defaultRender, 'text/html');
                     let firstDiv = doc.body.querySelector('div');
                     //[routerLink]="['../../revenue/edit',item.ID,'nextmonth']"
@@ -187,7 +214,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         },
         {
-            text: 'Khách hàng', groupable: true, aggregates: ['count'], datafield: 'CustomerName', width: 80, pinned: true,
+            text: 'Khách hàng', groupable: true, aggregates: ['count'], datafield: 'CustomerName', editable: false, width: 80, pinned: true,
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
                 if (value.toString().indexOf('Count:') >= 0) {
                     return defaultRender.replace(value, '');
@@ -200,7 +227,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         },
         {
-            text: 'Nội dung công việc', groupable: true, aggregates: ['count'], datafield: 'ProjectContent', width: 100, pinned: true,
+            text: 'Nội dung công việc', groupable: true, aggregates: ['count'], datafield: 'ProjectContent', editable: false, width: 100, pinned: true,
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
                 if (value.toString().indexOf('Count:') >= 0) {
                     return defaultRender.replace(value, '');
@@ -214,24 +241,63 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         },
 
         {
-            text: 'Ngày start', groupable: false, datafield: 'OrderStartDate', width: 100, cellsformat: 'yyyy/MM/dd', hidden: true,
+            text: 'Ngày start', groupable: false, datafield: 'OrderStartDate', editable: false, width: 100, cellsformat: 'yyyy/MM/dd', hidden: true,
             aggregatesrenderer: (aggregates: any, column: any, element: any): string => {
                 let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%; "/>';
                 return renderstring;
             }
         },
         {
-            text: 'Ngày end', groupable: false, datafield: 'OrderEndDate', width: 100, cellsformat: 'yyyy/MM/dd', hidden: true,
+            text: 'Ngày end', groupable: false, datafield: 'OrderEndDate', editable: false, width: 100, cellsformat: 'yyyy/MM/dd', hidden: true,
             aggregatesrenderer: (aggregates: any, column: any, element: any): string => {
                 let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%; "/>';
                 return renderstring;
             }
+        },
+
+        {
+            text: 'MM onsite', datafield: 'InMonthOnsiteMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f'
+            , rendered: function (header) {
+                header.html("Số MM<br> onsite DH");
+                //header.css("font-style", "italic");
+
+            },
+            cellsrenderer: (row, column, value, defaultRender, rowData) => {
+                if (value.toString().indexOf('Sum:') >= 0) {
+                    return defaultRender.replace('Sum:', '');
+                }
+            },
+
+            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
+                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
+                for (let obj in aggregates) {
+                    let name = obj == 'sum' ? 'Sum' : 'Avg';
+                    let color = 'green';
+                    let value = aggregates[obj];
+                    value = +(parseFloat(value)).toFixed(4);
+
+                    if (obj == 'sum' && summaryData['sum'] < 0) {
+                        color = 'red';
+                    }
+                    if (obj == 'avg' && summaryData['avg'] < 0) {
+                        color = 'red';
+                    }
+
+                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
+                }
+                renderstring += '</div>';
+
+
+                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
+                return renderstring;
+            }
+
         },
         //Item Tổng số MM 
         {
-            text: 'Tổng MM', datafield: 'OrderProjectSumMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass
+            text: 'Tổng MM', columngroup: 'QuotationGroupTitle', datafield: 'OrderProjectSumMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass
             , rendered: function (header) {
-                header.html("Tổng MM <br> đặt hàng");
+                header.html("Tổng MM");
                 //header.css("font-style", "italic");
             },
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
@@ -246,7 +312,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
                     let name = obj == 'sum' ? 'Sum' : 'Avg';
                     let color = 'green';
                     let value = aggregates[obj];
-
+                    value = +(parseFloat(value)).toFixed(4);
                     if (obj == 'sum' && summaryData['sum'] < 0) {
                         color = 'red';
                     }
@@ -266,7 +332,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         },
         //Item Đơn giá
         {
-            text: 'Đơn giá', datafield: 'OrderPrice', cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            text: 'Đơn giá', columngroup: 'QuotationGroupTitle', datafield: 'OrderPrice', editable: false, cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
             aggregatesrenderer: (aggregates: any, column: any, element: any): string => {
                 let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%; "/>';
                 return renderstring;
@@ -274,7 +340,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         },
         //Item Đơn vị tính giá 
         {
-            text: 'Đơn vị tính', groupable: true, aggregates: ['count'], datafield: 'OrderUnitMasterDetailID', width: 100, cellclassname: this.cellClass,
+            text: 'Đơn vị tính', columngroup: 'QuotationGroupTitle', groupable: true, editable: false, aggregates: ['count'], datafield: 'OrderUnitMasterDetailID', width: 100, cellclassname: this.cellClass,
             cellsrenderer: (row: number, column: any, value: any, defaultRender: string, rowData: any): string => {
                 if (value.toString() == 2) {
                     return defaultRender.replace('2', 'USD');
@@ -295,7 +361,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         },
 
         {
-            text: 'Thành tiền($)', datafield: 'OrderPriceToUsd', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            text: 'Thành tiền($)', columngroup: 'QuotationGroupTitle', datafield: 'OrderPriceToUsd', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
                 if (value.toString().indexOf('Sum:') >= 0) {
                     return defaultRender.replace('Sum:', '');
@@ -326,9 +392,9 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         },
 
         {
-            text: 'MM trước', datafield: 'AccPreMonthSumMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f'
+            text: 'MM trước', columngroup: 'PreviousMonthGroupTitle', datafield: 'AccPreMonthSumMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f'
             , rendered: function (header) {
-                header.html("Tổng MM<br> kỳ trước");
+                header.html("Số MM");
                 //header.css("font-style", "italic");
 
             },
@@ -344,7 +410,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
                     let name = obj == 'sum' ? 'Sum' : 'Avg';
                     let color = 'green';
                     let value = aggregates[obj];
-
+                    value = +(parseFloat(value)).toFixed(4);
                     if (obj == 'sum' && summaryData['sum'] < 0) {
                         color = 'red';
                     }
@@ -363,7 +429,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         },
         {
-            text: 'Thành tiền($)', datafield: 'AccPreMonthSumToUsd', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f',
+            text: 'Thành tiền($)', columngroup: 'PreviousMonthGroupTitle', datafield: 'AccPreMonthSumToUsd', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f',
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
                 if (value.toString().indexOf('Sum:') >= 0) {
                     return defaultRender.replace('Sum:', '');
@@ -395,9 +461,9 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         },
         {
-            text: 'Số công LTV', datafield: 'InMonthDevMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass
+            text: 'Số công LTV', columngroup: 'InMonthGroupTitle', datafield: 'InMonthDevMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass
             , rendered: function (header) {
-                header.html("Số công LTV <br> kỳ này");
+                header.html("MM LTV");
                 //header.css("font-style", "italic");
 
             },
@@ -413,7 +479,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
                     let name = obj == 'sum' ? 'Sum' : 'Avg';
                     let color = 'green';
                     let value = aggregates[obj];
-
+                    value = +(parseFloat(value)).toFixed(4);
                     if (obj == 'sum' && summaryData['sum'] < 0) {
                         color = 'red';
                     }
@@ -431,7 +497,104 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
             }
         },
         {
-            text: 'Số công PD', datafield: 'InMonthTransMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            text: 'MM PD', columngroup: 'InMonthGroupTitle', datafield: 'InMonthTransMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            cellsrenderer: (row, column, value, defaultRender, rowData) => {
+                if (value.toString().indexOf('Sum:') >= 0) {
+                    return defaultRender.replace('Sum:', '');
+                }
+            },
+
+            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
+                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
+                for (let obj in aggregates) {
+                    let name = obj == 'sum' ? 'Sum' : 'Avg';
+                    let color = 'green';
+                    let value = aggregates[obj];
+                    value = +(parseFloat(value)).toFixed(4);
+
+                    if (obj == 'sum' && summaryData['sum'] < 0) {
+                        color = 'red';
+                    }
+                    if (obj == 'avg' && summaryData['avg'] < 0) {
+                        color = 'red';
+                    }
+
+                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
+                }
+                renderstring += '</div>';
+
+
+                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
+                return renderstring;
+            }
+
+        },
+        {
+            text: 'MM QL', columngroup: 'InMonthGroupTitle', datafield: 'InMonthManagementMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            cellsrenderer: (row, column, value, defaultRender, rowData) => {
+                if (value.toString().indexOf('Sum:') >= 0) {
+                    return defaultRender.replace('Sum:', '');
+                }
+            },
+
+            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
+                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
+                for (let obj in aggregates) {
+                    let name = obj == 'sum' ? 'Sum' : 'Avg';
+                    let color = 'green';
+                    let value = aggregates[obj];
+                    value = +(parseFloat(value)).toFixed(4);
+                    if (obj == 'sum' && summaryData['sum'] < 0) {
+                        color = 'red';
+                    }
+                    if (obj == 'avg' && summaryData['avg'] < 0) {
+                        color = 'red';
+                    }
+
+                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
+                }
+                renderstring += '</div>';
+
+
+                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
+                return renderstring;
+            }
+
+        },
+        {
+            text: 'Tổng MM', columngroup: 'InMonthGroupTitle', datafield: 'InMonthSumMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            cellsrenderer: (row, column, value, defaultRender, rowData) => {
+                if (value.toString().indexOf('Sum:') >= 0) {
+                    return defaultRender.replace('Sum:', '');
+                }
+            },
+
+            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
+                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
+                for (let obj in aggregates) {
+                    let name = obj == 'sum' ? 'Sum' : 'Avg';
+                    let color = 'green';
+                    let value = aggregates[obj];
+                    value = +(parseFloat(value)).toFixed(4);
+                    if (obj == 'sum' && summaryData['sum'] < 0) {
+                        color = 'red';
+                    }
+                    if (obj == 'avg' && summaryData['avg'] < 0) {
+                        color = 'red';
+                    }
+
+                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
+                }
+                renderstring += '</div>';
+
+
+                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
+                return renderstring;
+            }
+
+        },
+        {
+            text: 'Thành tiền($)', columngroup: 'InMonthGroupTitle', datafield: 'InMonthToUsd', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
                 if (value.toString().indexOf('Sum:') >= 0) {
                     return defaultRender.replace('Sum:', '');
@@ -463,7 +626,69 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         },
         {
-            text: 'Số công QL', datafield: 'InMonthManagementMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            text: 'Thành tiền(VND)', columngroup: 'InMonthGroupTitle', datafield: 'InMonthToVnd', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
+            cellsrenderer: (row, column, value, defaultRender, rowData) => {
+                if (value.toString().indexOf('Sum:') >= 0) {
+                    return defaultRender.replace('Sum:', '');
+                }
+            },
+
+            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
+                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
+                for (let obj in aggregates) {
+                    let name = obj == 'sum' ? 'Sum' : 'Avg';
+                    let color = 'green';
+                    let value = aggregates[obj];
+
+                    if (obj == 'sum' && summaryData['sum'] < 0) {
+                        color = 'red';
+                    }
+                    if (obj == 'avg' && summaryData['avg'] < 0) {
+                        color = 'red';
+                    }
+
+                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
+                }
+                renderstring += '</div>';
+
+
+                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
+                return renderstring;
+            }
+        },
+        {
+            text: 'Số MM', columngroup: 'NextMonthGroupTitle', datafield: 'NextMonthMM', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f',
+            cellsrenderer: (row, column, value, defaultRender, rowData) => {
+                if (value.toString().indexOf('Sum:') >= 0) {
+                    return defaultRender.replace('Sum:', '');
+                }
+            },
+
+            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
+                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
+                for (let obj in aggregates) {
+                    let name = obj == 'sum' ? 'Sum' : 'Avg';
+                    let color = 'green';
+                    let value = aggregates[obj];
+                    value = +(parseFloat(value)).toFixed(4);
+                    if (obj == 'sum' && summaryData['sum'] < 0) {
+                        color = 'red';
+                    }
+                    if (obj == 'avg' && summaryData['avg'] < 0) {
+                        color = 'red';
+                    }
+
+                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
+                }
+                renderstring += '</div>';
+
+
+                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
+                return renderstring;
+            }
+        },
+        {
+            text: 'Thành tiền($)', columngroup: 'NextMonthGroupTitle', datafield: 'NextMonthToUsd', editable: false, aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f',
             cellsrenderer: (row, column, value, defaultRender, rowData) => {
                 if (value.toString().indexOf('Sum:') >= 0) {
                     return defaultRender.replace('Sum:', '');
@@ -495,172 +720,23 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         },
         {
-            text: 'Tổng MM', datafield: 'InMonthSumMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
-            cellsrenderer: (row, column, value, defaultRender, rowData) => {
-                if (value.toString().indexOf('Sum:') >= 0) {
-                    return defaultRender.replace('Sum:', '');
+            text: 'Ngưởi quản lý', datafield: 'PMID', editable: false, cellsalign: 'left', width: 100,
+            cellsrenderer: (row: number, column: any, value: any, defaultRender: string, rowData: any): string => {
+                if (this.emps && parseInt(value) > 0) {
+                    let pmName = this.emps.find(x => x.ID == value).Name;
+                    return defaultRender.replace(value, pmName);
+                } else {
+                    return defaultRender;
                 }
+
             },
-
-            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
-                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
-                for (let obj in aggregates) {
-                    let name = obj == 'sum' ? 'Sum' : 'Avg';
-                    let color = 'green';
-                    let value = aggregates[obj];
-
-                    if (obj == 'sum' && summaryData['sum'] < 0) {
-                        color = 'red';
-                    }
-                    if (obj == 'avg' && summaryData['avg'] < 0) {
-                        color = 'red';
-                    }
-
-                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
-                }
-                renderstring += '</div>';
-
-
-                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
-                return renderstring;
-            }
-
-        },
-        {
-            text: 'Thành tiền($)', datafield: 'InMonthToUsd', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
-            cellsrenderer: (row, column, value, defaultRender, rowData) => {
-                if (value.toString().indexOf('Sum:') >= 0) {
-                    return defaultRender.replace('Sum:', '');
-                }
-            },
-
-            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
-                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
-                for (let obj in aggregates) {
-                    let name = obj == 'sum' ? 'Sum' : 'Avg';
-                    let color = 'green';
-                    let value = aggregates[obj];
-
-                    if (obj == 'sum' && summaryData['sum'] < 0) {
-                        color = 'red';
-                    }
-                    if (obj == 'avg' && summaryData['avg'] < 0) {
-                        color = 'red';
-                    }
-
-                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
-                }
-                renderstring += '</div>';
-
-
-                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
-                return renderstring;
-            }
-
-        },
-        {
-            text: 'Thành tiền(VND)', datafield: 'InMonthToVnd', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f', cellclassname: this.cellClass,
-            cellsrenderer: (row, column, value, defaultRender, rowData) => {
-                if (value.toString().indexOf('Sum:') >= 0) {
-                    return defaultRender.replace('Sum:', '');
-                }
-            },
-
-            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
-                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
-                for (let obj in aggregates) {
-                    let name = obj == 'sum' ? 'Sum' : 'Avg';
-                    let color = 'green';
-                    let value = aggregates[obj];
-
-                    if (obj == 'sum' && summaryData['sum'] < 0) {
-                        color = 'red';
-                    }
-                    if (obj == 'avg' && summaryData['avg'] < 0) {
-                        color = 'red';
-                    }
-
-                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
-                }
-                renderstring += '</div>';
-
-
-                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
-                return renderstring;
-            }
-        },
-        {
-            text: 'Số MM kỳ tới', datafield: 'NextMonthMM', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f',
-            cellsrenderer: (row, column, value, defaultRender, rowData) => {
-                if (value.toString().indexOf('Sum:') >= 0) {
-                    return defaultRender.replace('Sum:', '');
-                }
-            },
-
-            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
-                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
-                for (let obj in aggregates) {
-                    let name = obj == 'sum' ? 'Sum' : 'Avg';
-                    let color = 'green';
-                    let value = aggregates[obj];
-
-                    if (obj == 'sum' && summaryData['sum'] < 0) {
-                        color = 'red';
-                    }
-                    if (obj == 'avg' && summaryData['avg'] < 0) {
-                        color = 'red';
-                    }
-
-                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
-                }
-                renderstring += '</div>';
-
-
-                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
-                return renderstring;
-            }
-        },
-        {
-            text: 'Thành tiền($)', datafield: 'NextMonthToUsd', aggregates: ['sum'], cellsalign: 'right', width: 100, cellsformat: 'f',
-            cellsrenderer: (row, column, value, defaultRender, rowData) => {
-                if (value.toString().indexOf('Sum:') >= 0) {
-                    return defaultRender.replace('Sum:', '');
-                }
-            },
-
-            aggregatesrenderer: (aggregates: any, column: any, element: any, summaryData: any): string => {
-                let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;">';
-                for (let obj in aggregates) {
-                    let name = obj == 'sum' ? 'Sum' : 'Avg';
-                    let color = 'green';
-                    let value = aggregates[obj];
-
-                    if (obj == 'sum' && summaryData['sum'] < 0) {
-                        color = 'red';
-                    }
-                    if (obj == 'avg' && summaryData['avg'] < 0) {
-                        color = 'red';
-                    }
-
-                    renderstring += '<div style="color: ' + color + '; position: relative; margin: 6px; text-align: right; overflow: hidden;">' + value + '</div>';
-                }
-                renderstring += '</div>';
-
-
-                //let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%;>"' + aggregates['sum'] + '</div>';
-                return renderstring;
-            }
-
-        },
-        {
-            text: 'Ngưởi quản lý', datafield: 'PMID', cellsalign: 'left', width: 100,
             aggregatesrenderer: (aggregates: any, column: any, element: any): string => {
                 let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%; "/>';
                 return renderstring;
             }
         },
         {
-            text: 'Ghi chú', datafield: 'Note', cellsalign: 'left', width: 100,
+            text: 'Ghi chú', datafield: 'Note', editable: false, cellsalign: 'left', width: 100,
             aggregatesrenderer: (aggregates: any, column: any, element: any): string => {
                 let renderstring = '<div class="jqx-widget-content jqx-widget-content-' + this.theme + '" style="float: left; width: 100%; height: 100%; "/>';
                 return renderstring;
@@ -725,6 +801,43 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
         }
     };
+
+    csvBtnOnClick() {
+        this.dataGrid.exportdata ('csv', 'Du lieu doanh so', true,undefined,true,undefined ,'shift_jis');
+    };
+
+    tsvBtnOnClick() {
+        this.dataGrid.exportdata('tsv', 'Du lieu doanh so');
+    };
+
+    htmlBtnOnClick() {
+        this.dataGrid.exportdata('html', 'Du lieu doanh so');
+    };
+
+    jsonBtnOnClick() {
+        this.dataGrid.exportdata('json', 'Du lieu doanh so');
+    };
+
+    pdfBtnOnClick() {
+        this.dataGrid.exportdata('pdf', 'Du lieu doanh so', true,undefined,true,undefined ,'utf-8');
+    };
+
+    printData(){
+        let gridContent = this.dataGrid.exportdata('html','Du lieu');
+        let newWindow = window.open('', '', 'width=800, height=500'),
+            document = newWindow.document.open(),
+            pageContent =
+                '<!DOCTYPE html>\n' +
+                '<html>\n' +
+                '<head>\n' +
+                '<meta charset="utf-8" />\n' +
+                '<title>Số liệu doanh số</title>\n' +
+                '</head>\n' +
+                '<body>\n' + gridContent + '\n</body>\n</html>';
+        document.write(pageContent);
+        document.close();
+        newWindow.print();
+    }
     /** Xử lý init cho jqxGrid  End */
 
     constructor(private _dataService: DataService,
@@ -747,11 +860,21 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
      * Init các xử lý
      */
     ngOnInit() {
-
         moment.locale("jp");
         let currentDate: string = moment().format("YYYY/MM/01");
         this.reportYearMonth = currentDate;
-        
+        this.revenueSelectedYearMonths = [];
+        this.selectCustomers = [];
+
+        this.loadAllCustomer();
+        this.loadAllRevenueByYearMonth();
+        this.loadMultiTableCallBack();
+
+        //xử lý khi quay lại màn hình 
+        this.loadSearchModelFromLocalStorage();
+        if (this.searchModelSession) {
+            this.loadData();
+        }
     }
 
     /**
@@ -764,11 +887,14 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         this.searchModel.Page = this.pageIndex;
         this.searchModel.PageSize = this.pageSize;
         this.searchModel.BoolItems = [this.nextMonthInclude];
+
+        this.saveSearchModelToLocalStorage();
         this._loaderService.displayLoader(true);
         //this._dataService.get('/api/revenue/getallpagingmasterdata?&bodyData=' + JSON.stringify(this.searchModel) + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
         this._dataService.post('/api/revenue/getallpagingmasterdata', JSON.stringify(this.searchModel))
             //this._dataService.get('/api/revenue/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
             .subscribe((response: any) => {
+                this._loaderService.displayLoader(true);
                 this.revenues = response.Items;
                 this.estimateType = response.Items.EstimateType;
                 this.customer = response.Items.Customer;
@@ -784,7 +910,29 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
             error => {
                 this._notificationService.printErrorMessage(MessageContstants.CALL_API_ERROR);
             });
-            
+
+    }
+
+    /**
+     * Load các dữ liệu master
+     */
+    loadMultiTable() {
+        let uri = [];
+        uri.push('/api/emp/getall');
+
+        return this._dataService.getMulti(uri);
+    }
+
+    loadMultiTableCallBack() {
+        this._loaderService.displayLoader(true);
+        this.loadMultiTable()
+            .subscribe((response: any) => {
+                this.emps = response[0];                 //danh sách nhân viên (chỉ leader??)
+                this._loaderService.displayLoader(false);
+            },
+            error => {
+                error => this._dataService.handleError(error);
+            });
     }
     /**
      * Lấy tất cả các tháng năm đã có trong bảng doanh số
@@ -794,6 +942,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         this._dataService.get('/api/revenue/getalldatabyyearmonth')
             .subscribe((response: any) => {
                 this.revenueAllYearMonths = response;
+                this.loadSearchModelFromLocalStorage();
             },
             error => {
                 this._notificationService.printErrorMessage(MessageContstants.CALL_API_ERROR);
@@ -860,6 +1009,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
             .subscribe((response: any) => {
                 //map 
                 this.customers = MappingService.mapIdNameToDropdownModel(response);
+                this.loadSearchModelFromLocalStorage();
             },
             error => {
                 this._notificationService.printErrorMessage(MessageContstants.CALL_API_ERROR);
@@ -913,8 +1063,44 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
 
     }
 
+    changeCheckAllCheckbox(event){
+        this.revenues.forEach(p => {
+            p.IsCheck = event.checked;
+        });
+        this.sourceGrid.localdata = JSON.stringify(this.revenues);
+        this.dataGrid.updatebounddata();
+        this.autoResizeColumn();
+        /*this.dataAdapterGrid.records.forEach(element => {
+            element.IsCheck = event.checked;
+        });
+        this.dataGrid.updatebounddata('cells');*/
+    }
+
     onChange(event) {
         //console.log(event);
+    }
+
+    approvedData(IsApproved: boolean) {
+        let checkedRecord: any[] = [];
+        let ids: any[] = [];
+
+        checkedRecord = this.dataAdapterGrid.records.filter(x => x.IsCheck === true);
+
+        checkedRecord.forEach(x => {
+            ids.push(x.ID);
+        });
+
+        if (checkedRecord.length > 0) {
+            this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_APPROVED_MSG, () => {
+                this.searchModel.NumberItems = ids;
+                this.searchModel.IsApproved = IsApproved;
+                //update
+                this._dataService.put('/api/revenue/approveddata', JSON.stringify(this.searchModel))
+                    .subscribe((response: any) => {
+                        this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
+                    }, error => this._dataService.handleError(error));
+            });
+        }
     }
 
 

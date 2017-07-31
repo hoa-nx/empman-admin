@@ -22,6 +22,7 @@ export interface IEmp {
     PhoneNumber3?: string;
     Address1?: string;
     Address2?: string;
+    CurrentCompanyID?:string;
     CurrentDeptID?: number;
     CurrentTeamID?: number;
     CurrentPositionID?: number;
@@ -471,4 +472,5 @@ export interface ISearchItemViewModel {
 
     IsBSE?: boolean;
 
+    IsApproved?: boolean;
 }

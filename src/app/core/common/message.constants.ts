@@ -8,4 +8,7 @@ export class MessageContstants {
     public static UPDATED_OK_MSG = "Cập nhật thành công";
     public static DELETED_OK_MSG = "Xóa thành công";
     public static CALL_API_ERROR = "Không thể đọc được dữ liệu";
+    public static FORBIDDEN = "Bạn bị chặn truy cập";
+    public static CANNOT_EDIT_APPROVED_DATA = "Không thể chỉnh sửa dữ liệu đã approved";
+    public static CONFIRM_APPROVED_MSG = "Các dữ liệu này sẽ được approved?";
 }

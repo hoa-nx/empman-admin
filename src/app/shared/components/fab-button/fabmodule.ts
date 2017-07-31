@@ -6,4 +6,4 @@ import { FabToggle } from './fabtoggle';
   declarations: [ FabButton, FabToggle ]
 
 })
-export class FabModule { }
+class FabModule { }

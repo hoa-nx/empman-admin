@@ -26,7 +26,7 @@ import { LoaderService } from './shared/utils/spinner.service';
     FormsModule,
     HttpModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes,{useHash:true}), //F5 when publish need useHash
     MaterialModule
   ],
   providers: [AuthGuard, LoaderService],
