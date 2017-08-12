@@ -1,0 +1,37 @@
+/* .accordion-list-item a:hover  {
+    background:aqua;
+    display: block;
+    height: 100%;
+    padding-top: 5px;
+    box-sizing: border-box;
+} */
+.accordion-list-item{
+    display: block;
+
+}
+
+.panel-color .panel-title {
+    color: #0275d8;
+}
+
+
+.jobleave-img-overlay{
+    position:relative;
+    top: 0px;
+    left: 0px;
+    z-index: 200;
+}
+
+.trialstaff-img-overlay{
+    position:relative;
+    z-index: 200;
+}
+.card-box{
+    padding: 5px;
+}
+
+.line-list-item{
+    width: 95%;
+    border: 1px solid lightslategray;    
+    
+}

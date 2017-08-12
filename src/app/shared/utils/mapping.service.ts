@@ -178,6 +178,17 @@ export class MappingService {
         return model;
     }
 
+    public static mapMasterDetailToDropdownModel(data: any[]) {
+        let model: IMultiSelectOption[] = [];
+        data.map(item => {
+            model.push({
+                id: item.MasterDetailCode,
+                name: item.Name
+            });
+        });
+        return model;
+    }
+
     public static mapYearMonhToDropdownModel(data: any[]) {
         let model: IMultiSelectOption[] = [];
         data.map(item => {

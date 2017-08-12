@@ -45,7 +45,8 @@ export const mainRoutes: Routes = [
             { path: 'customer-unitprice', loadChildren: './customer-unitprice/customer-unitprice.module#CustomerUnitpriceModule' },
             //localhost:4200/main/target
             { path: 'target', loadChildren: './target/target.module#TargetModule' },
-
+            //localhost:4200/main/setting
+            { path: 'setting', loadChildren: './setting/setting.module#SettingModule' },
         ]
     }
 

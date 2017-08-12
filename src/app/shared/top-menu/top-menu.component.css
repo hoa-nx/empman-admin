@@ -1,0 +1,34 @@
+.navbar-default .badge{
+    font-size: 12px;
+    top:5px impotant! ;
+}
+.dropdown-menu-lg{
+    width: 360px !important;
+}
+
+/* adapted from http://maxwells.github.io/bootstrap-tags.html */
+.tag {
+  font-size: 14px;
+  padding: .3em .4em .4em;
+  margin-left: 10px;
+}
+.tag a {
+  color:red;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.tag a:hover {
+  opacity: 1.0
+}
+.tag .remove {
+  vertical-align: bottom;
+  top: 0;
+}
+.tag a {
+  margin: 0 0 0 .3em;
+}
+.tag a .glyphicon-white {
+  color:white;
+  margin-bottom: 2px;
+}
+

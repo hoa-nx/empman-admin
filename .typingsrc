@@ -1,0 +1,4 @@
+{
+    "proxy": "http://proxy.fujinet.vn:8080",
+    "rejectUnauthorized": false
+}

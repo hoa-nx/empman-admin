@@ -73,13 +73,41 @@ export class DataService {
     let options = new RequestOptions({ headers: newHeader });
     options.responseType = ResponseContentType.Blob;
     //options.responseType = ResponseContentType.ArrayBuffer;
-    return this._http.get(SystemConstants.BASE_API + uri,   options)
+    return this._http.get(SystemConstants.BASE_API + uri, options)
       .map((res) => {
-            return new Blob([res.blob()], { type: 'application/pdf' })
-            //return new Blob([res.arrayBuffer()], { type: 'application/pdf' })
-            //return new Blob([(<any>res)._body], { type: 'application/pdf' })
-            //return new Blob([(<any>res.blob)], { type: 'application/pdf' })
-        });
+        return new Blob([res.blob()], { type: 'application/pdf' })
+        //return new Blob([res.arrayBuffer()], { type: 'application/pdf' })
+        //return new Blob([(<any>res)._body], { type: 'application/pdf' })
+        //return new Blob([(<any>res.blob)], { type: 'application/pdf' })
+      });
+  }
+
+  downloadFile(uri: string, fileType: string) {
+    let newHeader = new Headers();
+    newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+    newHeader.append('Content-Type', 'application/json');
+    newHeader.append('Accept', fileType);
+    
+    let options = new RequestOptions({ headers: newHeader });
+    options.responseType = ResponseContentType.Blob;
+    return this._http.get(SystemConstants.BASE_API + uri, options)
+      .map((res) => {
+        return new Blob([res.blob()], { type: fileType})
+      });
+  }
+
+  downloadFileWithParams(uri: string, fileType: string , data?:any) {
+    let newHeader = new Headers();
+    newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+    newHeader.append('Content-Type', 'application/json');
+    newHeader.append('Accept', fileType);
+
+    let options = new RequestOptions({ headers: newHeader });
+    options.responseType = ResponseContentType.Blob;
+    return this._http.post(SystemConstants.BASE_API + uri, data, options)
+      .map((res) => {
+        return new Blob([res.blob()], { type: fileType})
+      });
   }
 
   /**
@@ -102,7 +130,7 @@ export class DataService {
     let body = res.json();
     return body || {};
   }
-  
+
   public handleError(error: any) {
     if (error.status == 401) {
       localStorage.removeItem(SystemConstants.CURRENT_USER);

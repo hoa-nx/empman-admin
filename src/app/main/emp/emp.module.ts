@@ -12,6 +12,8 @@ import { ItemsService } from '../../shared/utils/items.service';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 import { MdRadioModule } from '@angular/material';
+import { MdCheckboxModule } from '@angular/material';
+import { MdAutocompleteModule } from '@angular/material';
 import { SharedModule } from '../../shared/module/shared.module';
 import { EmpExpandableComponent } from './emp-expandable.component';
 import { DataService } from '../../core/services/data.service';
@@ -30,17 +32,23 @@ import { EmpOnsiteComponent } from './emp-onsite.component';
 import { EmpSupportComponent } from './emp-support.component';
 import { EmpEstimateComponent } from './emp-estimate.component';
 import { TabsetComponent } from 'ngx-bootstrap';
+import { AccordionModule } from 'primeng/primeng';     //accordion and accordion tab
+import { CalendarModule } from 'primeng/primeng';     //CalendarModule
+import { MenuItem } from 'primeng/primeng';            //api
 
 const empRoutes: Routes = [
   //localhost:4200/main/emp
   { path: '', redirectTo: 'index', pathMatch: 'full' },
   { path: 'card-list', redirectTo: 'card-list', pathMatch: 'full' },
-  { path: 'emp-expandable', redirectTo: 'emp-expandable', pathMatch: 'full' },  
+  { path: 'emp-expandable', redirectTo: 'emp-expandable', pathMatch: 'full' },
   //localhost:4200/main/emp/index
   { path: 'index', component: EmpComponent },
   { path: 'card-list', component: EmpListComponent },
+  { path: 'card-list/:filter', component: EmpListComponent },
   { path: 'emp-expandable', component: EmpExpandableComponent },
-  { path: 'emp-basic', component: EmpBasicComponent }
+  //{ path: ':id/emp-basic', component: EmpBasicComponent}
+  { path: 'edit/:id/:action', component: EmpBasicComponent }
+
 ]
 @NgModule({
   imports: [
@@ -53,7 +61,11 @@ const empRoutes: Routes = [
     PaginationModule.forRoot(),
     RouterModule.forChild(empRoutes),
     SharedModule,
-    TabsModule.forRoot()
+    MdCheckboxModule,
+    MdAutocompleteModule,
+    TabsModule.forRoot(),
+    AccordionModule,
+    CalendarModule
   ],
   declarations: [
     MobileHideDirective,

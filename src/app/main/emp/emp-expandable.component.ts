@@ -8,8 +8,9 @@ import { AuthenService } from '../../core/services/authen.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../core/services/session.service';
 import { MessageContstants } from '../../core/common/message.constants';
+import { SystemConstants } from '../../core/common/system.constants';
 
-declare var $ : any;
+declare var $: any;
 @Component({
     selector: 'emp-expandable',
     templateUrl: './emp-expandable.component.html',
@@ -19,21 +20,51 @@ declare var $ : any;
 
 export class EmpExpandableComponent implements OnInit {
 
+    items: any;
+    listAExpanded = false;
+    listBExpanded = true;
+    listCExpanded = false;
+    public uriAvatarPath: string = SystemConstants.BASE_API;
     @ViewChild('TeamTreeGrid') teamTreeGrid: jqxTreeGridComponent;
-    public teamExpData : any[];
+    public teamExpData: any[];
+    public dataDeptGroups: any[];
+    public dataTeamGroups: any[];
+    public dataPositionGroups: any[];
+    public dataJapaneseLevelGroups: any[];
+    public dataBseGroups: any[];
+    public dataKeikenGroups: any[];
+    public dataCollectGroups: any[];
+    public dataEmpTypeGroups: any[];
+    public dataContractTypeGroups: any[];
+    public dataGenderGroups: any[];
+    public dataBussinessAllowanceGroups: any[];
+    public selectedTab : any;
+
+
+    public imgJobLeave : string ='http://localhost:4200/assets/images/danghiviec.png';
+    public imgTrialStaff : string ='http://localhost:4200/assets/images/thuviec.png';
 
     source: any =
     {
         datatype: 'json',
         dataFields: [
-            { name: 'TeamName', type: 'string' },
             { name: 'ID', type: 'number' },
             { name: 'FullName', type: 'string' },
             { name: 'Name', type: 'string' },
             { name: 'CompanyName', type: 'string' },
+            { name: 'Avatar', type: 'string' },
             { name: 'DeptName', type: 'string' },
-            { name: 'PositionName', type: 'string' }
-            
+            { name: 'TeamName', type: 'string' },
+            { name: 'PositionName', type: 'string' },
+            { name: 'JapaneseLevelName', type: 'string' },
+            { name: 'BseLevelName', type: 'string' },
+            { name: 'PhoneNumber1', type: 'string' },
+            { name: 'Age', type: 'string' },
+            { name: 'StartTrialDate', type: 'date' },
+            { name: 'ContractDate', type: 'date' },
+            { name: 'JobLeaveDate', type: 'date' },
+            { name: 'Note', type: 'string' }
+
         ],
         hierarchy:
         {
@@ -42,13 +73,13 @@ export class EmpExpandableComponent implements OnInit {
             groupingDataFields:
             [
                 {
-                    name: 'DeptName'
+                    name: 'TeamName'
                 }
             ]
         },
         id: 'ID',
         localData: this.teamExpData
-      
+
     };
 
     dataAdapter: any = new jqx.dataAdapter(this.source);
@@ -65,12 +96,22 @@ export class EmpExpandableComponent implements OnInit {
     }
 
     columns: any[] = [
-        { text: 'Tổ/nhóm', dataField: 'TeamName', width: 250 },
-        { text: 'Mã', dataField: 'ID', width: 250 },
-        { text: 'Tên nhân viên', dataField: 'FullName', minWidth: 100, width: 200 },
+
+        { text: 'Tổ/nhóm', dataField: 'TeamName', width: 250, groupable: true, aggregates: ['count'] },
+        { text: 'Mã', dataField: 'ID', width: 250, hidden: true },
+        { text: 'Tên nhân viên', dataField: 'FullName', minWidth: 150, width: 200 },
         { text: 'Công ty', dataField: 'CompanyName', width: 150 },
-        { text: 'Bộ phận', dataField: 'DeptName', width: 300 },
-        { text: 'Chức vụ', dataField: 'PositionName', width: 120 }
+        { text: 'Bộ phận', dataField: 'DeptName', width: 150 },
+        { text: 'Chức vụ', dataField: 'PositionName', width: 150 },
+        { text: 'Tiếng Nhật', dataField: 'JapaneseLevelName', width: 80 },
+        { text: 'BSE', dataField: 'BseLevelName', width: 80 },
+        { text: 'Điện thoại', dataField: 'PhoneNumber1', width: 150 },
+        { text: 'Tuổi', dataField: 'Age', width: 70 },
+        { text: 'Ngày thử việc', dataField: 'StartTrialDate', width: 70 },
+        { text: 'Ngày ký HĐ', dataField: 'ContractDate', width: 70 },
+        { text: 'Ngày nghỉ việc', dataField: 'JobLeaveDate', width: 70 },
+        { text: 'Ghi chú', dataField: 'Note', width: 70 },
+
     ];
 
     ready(): void {
@@ -88,22 +129,33 @@ export class EmpExpandableComponent implements OnInit {
         private _loaderService: LoaderService) { }
 
     ngOnInit() {
-        this.loadData();
+        this.loadDataByGroup('dept');
+        this.loadDataByGroup('team');
+        //this.loadDataByGroup('position');
+        //this.loadDataByGroup('japanese');
+        //this.loadDataByGroup('bussinessallowance');
+        //this.loadDataByGroup('bse');
+        //this.loadDataByGroup('keiken');
+        //this.loadDataByGroup('gender');
+        //this.loadDataByGroup('emptype');
+        //this.loadDataByGroup('collect');
+
+        //this.loadDataTeamTreeGrid();
+
     }
 
-        /**
-     * Lấy dữ liệu báo cáo doanh số
+    /**
+     * Lấy dữ liệu nhan vien
      */
-    loadData() {
+    loadDataTeamTreeGrid() {
         this._loaderService.displayLoader(true);
-        
+
         this._dataService.get('/api/emp/getexpandablebyteam')
             .subscribe((response: any) => {
                 this._loaderService.displayLoader(true);
                 this.teamExpData = response;
 
-                console.log(response);
-                this.bindDataToGrid();
+                this.bindDataToTeamTreeGrid();
                 this._loaderService.displayLoader(false);
             },
             error => {
@@ -112,16 +164,88 @@ export class EmpExpandableComponent implements OnInit {
 
     }
 
-    bindDataToGrid(): void {
-        this.clearDataOnGrid();
-        this.source.localdata = JSON.stringify(this.teamExpData);
-        // passing 'cells' to the 'updatebounddata' method will refresh only the cells values when the new rows count is equal to the previous rows count.
-        this.teamTreeGrid.updateBoundData();
+    /**
+     * Lấy dữ liệu nhan vien
+     */
+    loadDataByGroup(group: any) {
+        this._loaderService.displayLoader(true);
+        this._dataService.get('/api/emp/getlistbycommongroup?group=' + group)
+            .subscribe((response: any) => {
+                switch(group){
+                    case 'dept':
+                        this.dataDeptGroups = response;
+                    break;
+
+                    case 'team':
+                        this.dataTeamGroups = response;
+                    break;
+
+                    case 'position':
+                        this.dataPositionGroups = response;
+                    break;
+
+                    case 'japanese':
+                        this.dataJapaneseLevelGroups = response;
+                    break;
+                    
+                    case 'bussinessallowance':
+                        this.dataBussinessAllowanceGroups = response;
+                    break;
+                    
+                    case 'bse':
+                        this.dataBseGroups = response;
+                    break;
+                    
+                    case 'keiken':
+                        this.dataKeikenGroups = response;
+                    break;
+                    
+                    case 'gender':
+                        this.dataGenderGroups = response;
+                    break;
+                    
+                    case 'emptype':
+                        this.dataEmpTypeGroups = response;
+                    break;
+
+                    case 'collect':
+                        this.dataCollectGroups = response;
+                    break;
+
+                }
+                this._loaderService.displayLoader(false);
+            },
+            error => {
+                this._notificationService.printErrorMessage(MessageContstants.CALL_API_ERROR);
+            });
         
     }
 
-    clearDataOnGrid(): void {
+    bindDataToTeamTreeGrid(): void {
+        this.clearDataOnTeamTreeGrid();
+        this.source.localdata = JSON.stringify(this.teamExpData);
+        // passing 'cells' to the 'updatebounddata' method will refresh only the cells values when the new rows count is equal to the previous rows count.
+        this.teamTreeGrid.updateBoundData();
+
+    }
+
+    clearDataOnTeamTreeGrid(): void {
         this.teamTreeGrid.clear();
+    }
+  
+    trackByFn(index, item) {
+        return index;
+    }
+
+    public loadGroupData(event : any ,group: any[]): void {
+        
+        if(this.selectedTab != event.id){
+            group.forEach(element => {
+                this.loadDataByGroup(element);    
+            });
+            
+            this.selectedTab = event.id ;
+        }
     }
 
 }

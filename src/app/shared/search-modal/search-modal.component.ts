@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -6,7 +6,9 @@ import { UtilityService } from '../../core/services/utility.service';
 import { AuthenService } from '../../core/services/authen.service';
 import { SystemConstants } from '../../core/common/system.constants';
 
-declare var $ : any;
+//declare var $ : any;
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-search-modal',
   templateUrl: './search-modal.component.html',
@@ -14,7 +16,7 @@ declare var $ : any;
 })
 
 
-export class SearchModalComponent implements OnInit {
+export class SearchModalComponent implements OnInit, OnDestroy {
   @ViewChild('childModal') public childModal: ModalDirective;
  // @Input() title: string;
   @Input() searchTableName: string;
@@ -52,6 +54,12 @@ export class SearchModalComponent implements OnInit {
     this.loadDataModal(this.searchTableName.toLowerCase);
 
   }
+
+  // remove self from modal service when directive is destroyed
+    ngOnDestroy(): void {
+        //this.modalService.remove(this.id);
+        //this.element.remove();
+    }
 
   //Intercept input property changes with a setter START
   @Input()

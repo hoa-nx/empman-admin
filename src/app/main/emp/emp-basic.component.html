@@ -2,28 +2,37 @@
     <div class="col-sm-12">
         <div class="card-box">
             <form #editEmpBasicForm="ngForm" *ngIf="entity" novalidate>
-                <button type="button" class="btn btn-danger" (click)="back()">
+                <div class="row">
+                    <div class="col-md-10">
+                        <button type="button" class="btn btn-danger" (click)="back()">
                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Trở về</button>
-                <button type="button" [disabled]="!editEmpBasicForm.form.valid" class="btn btn-default" (click)="updateEmpBasic(editEmpBasicForm)">
+                        <button type="button" [disabled]="!editEmpBasicForm.form.valid" class="btn btn-default" (click)="saveChange(editEmpBasicForm.valid)">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>{{actionParam === 'edit' ? "Cập nhật" : "Đăng ký"}}</button>
+                    </div>
+
+                </div>
 
                 <hr/>
 
                 <div class="form-group">
+
                     <div class="row">
                         <div class="col-md-2">
                             <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Mã nhân viên</label>
-                            <input type="number" #ID="ngModel" [(ngModel)]="entity.ID" required maxlength="10" name="ID" class="form-control focusedInput" placeholder="Mã nhân viên">
+                            <input type="number" #ID="ngModel" [(ngModel)]="entity.ID" required maxlength="10" name="ID" class="form-control focusedInput"
+                                placeholder="Mã nhân viên">
                         </div>
 
                         <div class="col-md-4">
                             <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Họ tên</label>
-                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.FullName" name="FullName" #FullName="ngModel" placeholder="Họ và tên" required/>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.FullName" name="FullName" #FullName="ngModel" placeholder="Họ và tên"
+                                required/>
                         </div>
 
                         <div class="col-md-3">
                             <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Phiên âm tiếng Nhật</label>
-                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.Furigana" name="Furigana" #Furigana="ngModel" placeholder="Phiên âm tiếng Nhật" required/>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.Furigana" name="Furigana" #Furigana="ngModel" placeholder="Phiên âm tiếng Nhật"
+                                />
                         </div>
 
                         <div class="col-md-3">
@@ -85,9 +94,23 @@
                                         <div class="card-box">
                                             <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Thông tin cá nhân</b></h5>
 
+                                            <div class="profile-picture-section">
+                                                <div ng2FileDrop [ng2FileDropSupportedFileTypes]="supportedFileTypes" (ng2FileDropFileAccepted)="dragFileAccepted($event)"
+                                                    class="profile-picture-section-drop-zone">
+                                                    <div *ngIf="!entity.ShowAvatar" class=profile-picture-section-request-image-group>
+                                                        <p class="profile-picture-section-request-image-instructions">Kéo hình vào</p>
+                                                    </div>
+                                                    <div *ngIf="entity.ShowAvatar" class="profile-picture-section-request-image-container">
+                                                        <img class="profile-picture-section-request-image" src="{{(entity.ShowAvatar &&(!isFileChanged)) === false ? currentProfileImage : uriAvatarPath + entity.Avatar}}"
+                                                        />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Giới tính</label>
-                                                <md-radio-group name="Gender" [(ngModel)]="entity.Gender">
+                                                <md-radio-group name="Gender" [(ngModel)]="entity.Gender" class="form-control  no-border">
                                                     <md-radio-button (change)="selectGender($event)" [value]="1" [checked]="entity.Gender===true">Nam</md-radio-button>
                                                     <md-radio-button (change)="selectGender($event)" [value]="0" [checked]="entity.Gender===false">Nữ</md-radio-button>
                                                 </md-radio-group>
@@ -96,11 +119,26 @@
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày sinh</label>
-                                                <input type="text" title="Ngày sinh" #BirthDay="ngModel" daterangepicker (selected)="selectedBirthDayDate($event)" [options]="dateOptions" [(ngModel)]="entity.BirthDay" name="BirthDay" class="form-control" placeholder="Ngày sinh" />
+                                                <br>
+                                                <p-calendar   [showIcon]="true"  [(ngModel)]="entity.BirthDay" name="BirthDay"  #BirthDay="ngModel" 
+                                                (onSelect)="selectedBirthDayDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày sinh"
+                                                ></p-calendar>
+                                                
                                             </div>
+
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày kết hôn</label>
-                                                <input type="text" title="Ngày kết hôn" #MarriedDate="ngModel" daterangepicker (selected)="selectedMarriedDate($event)" [options]="dateOptions" [(ngModel)]="entity.MarriedDate" name="MarriedDate" class="form-control" placeholder="Ngày kết hôn" />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.MarriedDate" name="MarriedDate"  #MarriedDate="ngModel" 
+                                                (onSelect)="selectedMarriedDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày kết hôn"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
@@ -110,17 +148,26 @@
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày cấp</label>
-                                                <input type="text" title="Ngày cấp" #IdentDate="ngModel" daterangepicker (selected)="selectedIdentDate($event)" [options]="dateOptions" [(ngModel)]="entity.IdentDate" name="IdentDate" class="form-control" placeholder="Ngày cấp" />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.IdentDate" name="IdentDate"  #IdentDate="ngModel" 
+                                                (onSelect)="selectedIdentDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày cấp"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Nơi cấp</label>
-                                                <input type="text" #IdentPlace="ngModel" [(ngModel)]="entity.IdentPlace" name="IdentPlace" class="form-control focusedInput" placeholder="Nơi cấp">
+                                                <input type="text" #IdentPlace="ngModel" [(ngModel)]="entity.IdentPlace" name="IdentPlace" class="form-control focusedInput"
+                                                    placeholder="Nơi cấp">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Quê quán</label>
-                                                <input type="text" #BornPlace="ngModel" [(ngModel)]="entity.BornPlace" name="BornPlace" class="form-control focusedInput" placeholder="Quê quán">
+                                                <input type="text" #BornPlace="ngModel" [(ngModel)]="entity.BornPlace" name="BornPlace" class="form-control focusedInput"
+                                                    placeholder="Quê quán">
                                             </div>
 
                                             <div class="form-group m-b-20">
@@ -130,35 +177,37 @@
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Số điện thoại</label>
-                                                <input type="text" #PhoneNumber1="ngModel" [(ngModel)]="entity.PhoneNumber1" name="PhoneNumber1" class="form-control focusedInput" placeholder="Số điện thoại">
+                                                <input type="text" #PhoneNumber1="ngModel" [(ngModel)]="entity.PhoneNumber1" name="PhoneNumber1" class="form-control focusedInput"
+                                                    placeholder="Số điện thoại">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Email cá nhân</label>
-                                                <input type="text" #PersonalEmail="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.PersonalEmail" name="PersonalEmail" class="form-control focusedInput" placeholder="Email cá nhân">
+                                                <input type="text" #PersonalEmail="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.PersonalEmail"
+                                                    name="PersonalEmail" class="form-control focusedInput" placeholder="Email cá nhân">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Nhóm máu</label>
                                                 <select class="form-control focusedInput" name="BloodGroup" [(ngModel)]="entity.BloodGroup">
-                                                <option *ngFor="let x of bloodGroups" [value]="x.ID">{{x.Name}}</option>
+                                                <option *ngFor="let x of bloodGroups" [value]="x.id">{{x.name}}</option>
                                                 </select>
                                                 <input type="hidden" [(ngModel)]="entity.BloodGroup" name="BloodGroup" class="form-control" />
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Sở thích</label>
-                                                <input type="text" #Hobby="ngModel" [(ngModel)]="entity.Hobby" name="Hobby" class="form-control focusedInput" placeholder="Sở thích">
+                                                <textarea #Hobby="ngModel" [(ngModel)]="entity.Hobby" name="Hobby" class="form-control focusedInput" placeholder="Sở thích"></textarea>
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Mục tiêu công việc</label>
-                                                <input type="text" #Objective="ngModel" [(ngModel)]="entity.Objective" name="Objective" class="form-control focusedInput" placeholder="Mục tiêu công việc">
+                                                <textarea #Objective="ngModel" [(ngModel)]="entity.Objective" name="Objective" class="form-control focusedInput" placeholder="Mục tiêu công việc"></textarea>
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Đặc điểm khi làm việc</label>
-                                                <input type="text" #Temperament="ngModel" [(ngModel)]="entity.Temperament" name="Temperament" class="form-control focusedInput" placeholder="Đặc điểm khi làm việc">
+                                                <textarea #Temperament="ngModel" [(ngModel)]="entity.Temperament" name="Temperament" class="form-control focusedInput" placeholder="Đặc điểm khi làm việc"></textarea>
                                             </div>
 
 
@@ -169,23 +218,26 @@
                                             <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Kinh nghiệm - Giáo dục</b></h5>
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Thông tin kinh nghiệm trước khi vào công ty </label>
-                                                <input type="text" #ExperienceBeforeContent="ngModel" [(ngModel)]="entity.ExperienceBeforeContent" name="ExperienceBeforeContent" class="form-control focusedInput" placeholder="Thông tin kinh nghiệm trước khi vào công ty ">
+                                                <textarea #ExperienceBeforeContent="ngModel" [(ngModel)]="entity.ExperienceBeforeContent" name="ExperienceBeforeContent"
+                                                    class="form-control focusedInput" placeholder="Thông tin kinh nghiệm trước khi vào công ty "></textarea>
                                             </div>
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Số tháng kinh nghiệm đã có</label>
-                                                <input type="text" #ExperienceBeforeConvert="ngModel" [(ngModel)]="entity.ExperienceBeforeConvert" name="ExperienceBeforeConvert" class="form-control focusedInput" placeholder="Số tháng kinh nghiệm trước khi vào công ty">
+                                                <input type="text" #ExperienceBeforeConvert="ngModel" [(ngModel)]="entity.ExperienceBeforeConvert" name="ExperienceBeforeConvert"
+                                                    class="form-control focusedInput" placeholder="Số tháng kinh nghiệm trước khi vào công ty">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Qui đổi kinh nghiệm ( tháng )</label>
-                                                <input type="text" #ExperienceConvert="ngModel" [(ngModel)]="entity.ExperienceConvert" name="ExperienceConvert" class="form-control focusedInput" placeholder="Qui đổi kinh nghiệm ( tháng )">
+                                                <input type="text" #ExperienceConvert="ngModel" [(ngModel)]="entity.ExperienceConvert" name="ExperienceConvert" class="form-control focusedInput"
+                                                    placeholder="Qui đổi kinh nghiệm ( tháng )">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Loại nhân viên</label>
 
                                                 <select class="form-control focusedInput" name="EmpTypeMasterDetailID" [(ngModel)]="entity.EmpTypeMasterDetailID">
-                                                <option *ngFor="let x of empTypes" [value]="x.ID">{{x.Name}}</option>
+                                                <option *ngFor="let x of empTypes" [value]="x.MasterDetailCode">{{x.Name}}</option>
                                                 </select>
                                                 <input type="hidden" [(ngModel)]="entity.EmpTypeMasterDetailID" name="EmpTypeMasterDetailID" class="form-control" />
                                             </div>
@@ -194,27 +246,64 @@
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Bậc học</label>
 
                                                 <select class="form-control focusedInput" name="EducationLevelMasterDetailID" [(ngModel)]="entity.EducationLevelMasterDetailID">
-                                                <option *ngFor="let x of educationLevels" [value]="x.ID">{{x.Name}}</option>
+                                                <option *ngFor="let x of educationLevels" [value]="x.MasterDetailCode">{{x.Name}}</option>
                                                 </select>
-                                                <input type="hidden" [(ngModel)]="entity.EducationLevelMasterDetailID" name="EducationLevelMasterDetailID" class="form-control" />
+                                                <input type="hidden" [(ngModel)]="entity.EducationLevelMasterDetailID" name="EducationLevelMasterDetailID" class="form-control"
+                                                />
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Trường có bậc học cao nhất</label>
 
                                                 <select class="form-control focusedInput" name="CollectMasterDetailID" [(ngModel)]="entity.CollectMasterDetailID">
-                                                <option *ngFor="let x of collects" [value]="x.ID">{{x.Name}}</option>
+                                                <option *ngFor="let x of collects" [value]="x.MasterDetailCode">{{x.Name}}</option>
                                                 </select>
                                                 <input type="hidden" [(ngModel)]="entity.CollectMasterDetailID" name="CollectMasterDetailID" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Chứng chỉ tiếng Nhật mới nhất</label>
+
+                                                <select class="form-control focusedInput" name="JapaneseLevelMasterDetailID" [(ngModel)]="entity.JapaneseLevelMasterDetailID">
+                                                <option *ngFor="let x of japaneseLevels" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                                </select>
+                                                <input type="hidden" [(ngModel)]="entity.JapaneseLevelMasterDetailID" name="JapaneseLevelMasterDetailID" class="form-control" />
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Bậc BSE hiện tại</label>
 
                                                 <select class="form-control focusedInput" name="BSELevelMasterDetailID" [(ngModel)]="entity.BSELevelMasterDetailID">
-                                                <option *ngFor="let x of bseLevels" [value]="x.ID">{{x.Name}}</option>
+                                                <option *ngFor="let x of bseLevels" [value]="x.MasterDetailCode">{{x.Name}}</option>
                                                 </select>
                                                 <input type="hidden" [(ngModel)]="entity.BSELevelMasterDetailID" name="BSELevelMasterDetailID" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Phụ cấp nghiệp vụ</label>
+
+                                                <select class="form-control focusedInput" name="BusinessAllowanceLevelMasterDetailID" [(ngModel)]="entity.BusinessAllowanceLevelMasterDetailID">
+                                                <option *ngFor="let x of bussinessAllowanceLevels" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                                </select>
+                                                <input type="hidden" [(ngModel)]="entity.BusinessAllowanceLevelMasterDetailID" name="BusinessAllowanceLevelMasterDetailID" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Phụ cấp phòng chuyên biệt(không Internet)</label>
+
+                                                <select class="form-control focusedInput" name="RoomNoInternetAllowanceLevelMasterDetailID" [(ngModel)]="entity.RoomNoInternetAllowanceLevelMasterDetailID">
+                                                <option *ngFor="let x of roomNoInternetAllowanceLevels" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                                </select>
+                                                <input type="hidden" [(ngModel)]="entity.RoomNoInternetAllowanceLevelMasterDetailID" name="RoomNoInternetAllowanceLevelMasterDetailID" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Phụ cấp phòng chuyên biệt(có Internet)</label>
+
+                                                <select class="form-control focusedInput" name="RoomWithInternetAllowanceLevelMasterDetailID" [(ngModel)]="entity.RoomWithInternetAllowanceLevelMasterDetailID">
+                                                <option *ngFor="let x of roomWithInternetAllowanceLevels" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                                </select>
+                                                <input type="hidden" [(ngModel)]="entity.RoomWithInternetAllowanceLevelMasterDetailID" name="RoomWithInternetAllowanceLevelMasterDetailID" class="form-control" />
                                             </div>
 
 
@@ -229,31 +318,62 @@
                                             <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Hồ sơ công ty</b></h5>
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Tên tài khoản</label>
-                                                <input type="text" #AccountName="ngModel" [(ngModel)]="entity.AccountName" name="AccountName" class="form-control focusedInput" placeholder="Tài khoản trong công ty">
+                                                <input type="text" #AccountName="ngModel" [(ngModel)]="entity.AccountName" name="AccountName" class="form-control focusedInput"
+                                                    placeholder="Tài khoản trong công ty">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Email công việc</label>
-                                                <input type="text" #WorkingEmail="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.WorkingEmail" name="WorkingEmail" class="form-control focusedInput" placeholder="Email công ty">
+                                                <input type="text" #WorkingEmail="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.WorkingEmail"
+                                                    name="WorkingEmail" class="form-control focusedInput" placeholder="Email công ty">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>No trong công ty</label>
-                                                <input type="text" #ExtLinkNo="ngModel" [(ngModel)]="entity.ExtLinkNo" name="ExtLinkNo" class="form-control focusedInput" placeholder="No trong công ty">
+                                                <input type="text" #ExtLinkNo="ngModel" [(ngModel)]="entity.ExtLinkNo" name="ExtLinkNo" class="form-control focusedInput"
+                                                    placeholder="No trong công ty">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Số hồ sơ của phòng training</label>
-                                                <input type="text" #TrainingProfileNo="ngModel" [(ngModel)]="entity.TrainingProfileNo" name="TrainingProfileNo" class="form-control focusedInput" placeholder="Số hồ sơ của phòng training">
+                                                <input type="text" #TrainingProfileNo="ngModel" [(ngModel)]="entity.TrainingProfileNo" name="TrainingProfileNo" class="form-control focusedInput"
+                                                    placeholder="Số hồ sơ của phòng training">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Người giới thiệu</label>
-                                                <input type="text" #Introductor="ngModel" [(ngModel)]="entity.Introductor" name="Introductor" class="form-control focusedInput" placeholder="Người giới thiệu">
+                                                <input type="text" #Introductor="ngModel" [(ngModel)]="entity.Introductor" name="Introductor" class="form-control focusedInput"
+                                                    placeholder="Người giới thiệu">
                                             </div>
 
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày phỏng vấn</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.InterviewDate" name="InterviewDate"  #InterviewDate="ngModel" 
+                                                (onSelect)="selectedInterviewDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày phỏng vấn"
+                                                ></p-calendar>
 
 
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Người phỏng vấn</label>
+                                                <input type="text" #InterviewEmp="ngModel" [(ngModel)]="entity.InterviewEmp" name="InterviewEmp" class="form-control focusedInput"
+                                                    placeholder="Người phỏng vấn">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày nói chuyện DKLV</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.WorkingConditionTalkDate" name="WorkingConditionTalkDate"  #WorkingConditionTalkDate="ngModel" 
+                                                (onSelect)="selectedWorkingConditionTalkDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày nói chuyện DKLV"
+                                                ></p-calendar>
+
+                                            </div>
                                         </div>
 
                                         <div class="card-box">
@@ -261,79 +381,186 @@
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày vào thực tập</label>
-                                                <input type="text" title="Ngày vào thực tập" #StartIntershipDate="ngModel" daterangepicker (selected)="selectedStartIntershipDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartIntershipDate" name="StartIntershipDate" class="form-control" placeholder="Ngày vào thực tập"
-                                                />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.StartIntershipDate" name="StartIntershipDate"  #StartIntershipDate="ngModel" 
+                                                (onSelect)="selectedStartIntershipDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày vào thực tập"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày kết thúc thực tập</label>
-                                                <input type="text" title="Ngày kết thúc thực tập" #EndIntershipDate="ngModel" daterangepicker (selected)="selectedEndIntershipDate($event)" [options]="dateOptions" [(ngModel)]="entity.EndIntershipDate" name="EndIntershipDate" class="form-control" placeholder="Ngày kết thúc thực tập"
-                                                />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.EndIntershipDate" name="EndIntershipDate"  #EndIntershipDate="ngModel" 
+                                                (onSelect)="selectedEndIntershipDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày kết thúc thực tập"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày vào công ty</label>
-                                                <input type="text" title="Ngày vào công ty" #StartWorkingDate="ngModel" daterangepicker (selected)="selectedStartWorkingDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartWorkingDate" name="StartWorkingDate" class="form-control" placeholder="Ngày vào công ty"
-                                                />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.StartWorkingDate" name="StartWorkingDate"  #StartWorkingDate="ngModel" 
+                                                (onSelect)="selectedStartWorkingDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày vào công ty"
+                                                ></p-calendar>
+
                                             </div>
 
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày bắt đầu học việc</label>
-                                                <input type="text" title="Ngày bắt đầu học việc" #StartLearningDate="ngModel" daterangepicker (selected)="selectedStartLearningDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartLearningDate" name="StartLearningDate" class="form-control" placeholder="Ngày bắt đầu học việc"
-                                                />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.StartLearningDate" name="StartLearningDate"  #StartLearningDate="ngModel" 
+                                                (onSelect)="selectedStartLearningDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày bắt đầu học việc"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày kết thúc học việc</label>
-                                                <input type="text" title="Ngày kết thúc học việc" #EndLearningDate="ngModel" daterangepicker (selected)="selectedEndLearningDate($event)" [options]="dateOptions" [(ngModel)]="entity.EndLearningDate" name="EndLearningDate" class="form-control" placeholder="Ngày kết thúc học việc"
-                                                />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.EndLearningDate" name="EndLearningDate"  #EndLearningDate="ngModel" 
+                                                (onSelect)="selectedEndLearningDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày kết thúc học việc"
+                                                ></p-calendar>
+
                                             </div>
                                             <div class="form-group m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày bắt đầu thử việc</label>
-                                                <input type="text" title="Ngày bắt đầu học việc" #StartTrialDate="ngModel" daterangepicker (selected)="selectedStartTrialDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartTrialDate" name="StartTrialDate" class="form-control" placeholder="Ngày bắt đầu học việc"
-                                                />
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày bắt đầu học việc</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.StartTrialDate" name="StartTrialDate"  #StartTrialDate="ngModel" 
+                                                (onSelect)="selectedStartTrialDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày bắt đầu học việc"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày kết thúc thử việc</label>
-                                                <input type="text" title="Ngày kết thúc thử việc" #EndTrialDate="ngModel" daterangepicker (selected)="selectedEndTrialDate($event)" [options]="dateOptions" [(ngModel)]="entity.EndTrialDate" name="EndTrialDate" class="form-control" placeholder="Ngày kết thúc thử việc"
-                                                />
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.EndTrialDate" name="EndTrialDate"  #EndTrialDate="ngModel" 
+                                                (onSelect)="selectedEndTrialDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày kết thúc thử việc"
+                                                ></p-calendar>
+
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Kết quả thử việc</label>
+                                                <input type="text" #TrialResult="ngModel" [(ngModel)]="entity.TrialResult" name="TrialResult" class="form-control focusedInput"
+                                                    placeholder="Kết quả thử việc"  [mdAutocomplete]="autoTrialResult" >
+                                                    <md-autocomplete #autoTrialResult="mdAutocomplete">
+                                                    <md-option *ngFor="let item of trialResults" [value]="item"> {{ item }}
+                                                    </md-option>
+                                                    </md-autocomplete>
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày ký hợp đồng chính thức đầu tiên</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.ContractDate" name="ContractDate"  #ContractDate="ngModel" 
+                                                (onSelect)="selectedContractDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày ký hợp đồng chính thức đầu tiên"
+                                                ></p-calendar>
+
                                             </div>
 
                                             <div class="form-group m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày ký hợp đồng chính thức đầu tiên</label>
-                                                <input type="text" title="Ngày ký hợp đồng chính thức đầu tiên" #ContractDate="ngModel" daterangepicker (selected)="selectedContractDate($event)" [options]="dateOptions" [(ngModel)]="entity.ContractDate" name="ContractDate" class="form-control" placeholder="Ngày ký hợp đồng chính thức đầu tiên"
-                                                />
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày bắt đầu nghỉ thai sản</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.BabyBornStartDate" name="BabyBornStartDate"  #BabyBornStartDate="ngModel" 
+                                                (onSelect)="selectedBabyBornStartDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày bắt đầu nghỉ thai sản"
+                                                ></p-calendar>
+
                                             </div>
 
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày kết thúc nghỉ thai sản (dự định)</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.BabyBornScheduleEndDate" name="BabyBornScheduleEndDate"  #BabyBornScheduleEndDate="ngModel" 
+                                                (onSelect)="selectedBabyBornScheduleEndDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày kết thúc nghỉ thai sản (dự định)"
+                                                ></p-calendar>
+
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày kết thúc nghỉ thai sản thực tế</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.BabyBornActualEndDate" name="BabyBornActualEndDate"  #BabyBornActualEndDate="ngModel" 
+                                                (onSelect)="selectedBabyBornActualEndDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày kết thúc nghỉ thai sản thực tế"
+                                                ></p-calendar>
+
+                                            </div>
 
                                             <div class="form-group m-b-20">
                                                 <label class="control-label"><i class="fa" aria-hidden="true"></i>Loại hợp dồng</label>
                                                 <select class="form-control focusedInput" name="ContractTypeMasterDetailID" [(ngModel)]="entity.ContractTypeMasterDetailID">
-                                                <option *ngFor="let x of contractTypes" [value]="x.ID">{{x.Name}}</option>
+                                                <option *ngFor="let x of contractTypes" [value]="x.MasterDetailCode">{{x.Name}}</option>
                                                 </select>
-                                                <input type="hidden" [(ngModel)]="entity.ContractTypeMasterDetailID" name="ContractTypeMasterDetailID" class="form-control" />
-                                            </div>
-
-                                            <div class="form-group m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày gửi yêu cầu nghỉ việc</label>
-                                                <input type="text" title="Ngày gửi yêu cầu nghỉ việc" #JobLeaveRequestDate="ngModel" daterangepicker (selected)="selectedJobLeaveRequestDate($event)" [options]="dateOptions" [(ngModel)]="entity.JobLeaveRequestDate" name="JobLeaveRequestDate" class="form-control"
-                                                    placeholder="Ngày gửi yêu cầu nghỉ việc" />
-                                            </div>
-
-                                            <div class="form-group m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày làm cuối cùng</label>
-                                                <input type="text" title="Ngày nghỉ việc ( ngày làm cuối cùng)" #JobLeaveDate="ngModel" daterangepicker (selected)="selectedJobLeaveDate($event)" [options]="dateOptions" [(ngModel)]="entity.JobLeaveDate" name="JobLeaveDate" class="form-control" placeholder="Ngày nghỉ việc ( ngày làm cuối cùng)"
+                                                <input type="hidden" [(ngModel)]="entity.ContractTypeMasterDetailID" name="ContractTypeMasterDetailID" class="form-control"
                                                 />
                                             </div>
 
                                             <div class="form-group m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Lý do nghỉ việc</label>
-                                                <input type="text" #JobLeaveReason="ngModel" [(ngModel)]="entity.JobLeaveReason" name="JobLeaveReason" class="form-control focusedInput" placeholder="Lý do nghỉ việc">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày gửi yêu cầu nghỉ việc</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.JobLeaveRequestDate" name="JobLeaveRequestDate"  #JobLeaveRequestDate="ngModel" 
+                                                (onSelect)="selectedJobLeaveRequestDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày gửi yêu cầu nghỉ việc"
+                                                ></p-calendar>
+
                                             </div>
 
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày làm cuối cùng</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.JobLeaveDate" name="JobLeaveDate"  #JobLeaveDate="ngModel" 
+                                                (onSelect)="selectedJobLeaveDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày nghỉ việc ( ngày làm cuối cùng)"
+                                                ></p-calendar>
 
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Lý do nghỉ việc</label>
+                                                <textarea #JobLeaveReason="ngModel" [(ngModel)]="entity.JobLeaveReason" name="JobLeaveReason" class="form-control focusedInput"
+                                                    placeholder="Lý do nghỉ việc"></textarea>
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Chi chú</label>
+                                                <textarea class="form-control" #Note="ngModel" [(ngModel)]="entity.Note" name="Note" #Note="ngModel" wrap="soft"></textarea>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -351,12 +578,14 @@
                                         <div class="row">
                                             <div class="col-sm-8">
                                                 <div class="form-group contact-search m-b-30">
-                                                    <input type="text" id="search" class="form-control" placeholder="Nhập thông tin ..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
+                                                    <input type="text" id="search" class="form-control" placeholder="Nhập thông tin ..." name="filter" (keyup.enter)="loadData()"
+                                                        [(ngModel)]="filter">
                                                     <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
-                                                <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
+                                                <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
+                                                    data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
                                             </div>
                                         </div>
 
@@ -408,8 +637,9 @@
                                             <!-- paging -->
                                             <div class="col-md-12">
 
-                                                <pagination [ngModelOptions]="{standalone: true}" [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
-                                                    lastText="&raquo;"></pagination>
+                                                <pagination [ngModelOptions]="{standalone: true}" [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+                                                    [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
+                                                    nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
                                             </div>
 
                                             <!-- paging end-->
@@ -420,6 +650,67 @@
                                 </div>
 
                             </tab>
+
+                            <!-- Tab file đính kèm-->
+                            <tab heading="File">
+                                <div class="row">
+                                    <div class="row">
+                                        <label>Chọn file excel đính kèm liên quan đến nhân viên</label>
+                                        <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xls, *.xlsx, *.doc , *.pdf </p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-sm-6 col-xs-12">
+                                            <input type="file" required #filePath name="filePath" class="form-control">
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <button class="btn btn-link" (click)="uploadFile()"><i class="fa fa-upload"></i></button>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <!-- List -->
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mails m-0 table table-actions-bar">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="downloadMultiFile()"><i class="fa fa-download"></i></a>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="deleteMultiFile()"><i class="fa fa-trash"></i></a>
+                                                    </th>
+                                                    <th>Tên file</th>
+                                                    <th>Ngày tạo</th>
+                                                    <th>Người tạo</th>
+                                                    <th>Ghi chú</th>
+                                                    <th style="min-width: 90px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of fileStorages">
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input type="checkbox" [(ngModel)]="item.Checked" [name]="item.ID" [ngModelOptions]="{standalone: true}">
+                                                            <label></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{item.FileName}}</td>
+                                                    <td>{{item.CreatedDate}}</td>
+                                                    <td>{{item.CreatedBy}}</td>
+                                                    <td>{{item.Note}}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="downloadItemFile(item.ID)"><i class="md md-file-download"></i></a>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItemFile(item.ID)"><i class="md md-close"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- List end-->
+
+                                </div>
+
+                            </tab>
+
                         </tabset>
 
                     </div>

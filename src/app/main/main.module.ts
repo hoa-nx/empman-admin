@@ -12,6 +12,7 @@ import { SidebarMenuComponent } from '../shared/sidebar-menu/sidebar-menu.compon
 import { TopMenuComponent } from '../shared/top-menu/top-menu.component';
 import { RightbarMenuComponent } from '../shared/rightbar-menu/rightbar-menu.component';
 import { StickyModule } from 'ng2-sticky-kit/ng2-sticky-kit';
+import { SharedComponentService } from '../core/services/sharedcomponent.service';
 
 // Statics
 import 'rxjs/add/observable/throw';
@@ -24,7 +25,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +34,7 @@ import 'rxjs/add/operator/toPromise';
     RouterModule.forChild(mainRoutes),
     StickyModule
   ],
-  providers: [UtilityService, AuthenService],
-  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, RightbarMenuComponent]
+  providers: [UtilityService, AuthenService, SharedComponentService],
+  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, RightbarMenuComponent ]
 })
 export class MainModule { }

@@ -4,6 +4,7 @@
         <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="(edittedUser.Gender==true)?'fa fa-male fa-1x' : 'fa fa-female'" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>
         <input [(ngModel)]="edittedUser.FullName" [class.hidden]="!onEdit" [style.color]="'brown'" required class="form-control"
         />
+        
         <div class="clearfix"></div>
     </div>
 
@@ -13,19 +14,22 @@
             <!--<img src="{{apiHost}}images/{{edittedUser.Avatar}}" class="img-avatar" alt="">-->
             <!-- Image drag and drop -->
             <div class="profile-picture-section">
+                
                 <div ng2FileDrop [ng2FileDropSupportedFileTypes]="supportedFileTypes" (ng2FileDropFileAccepted)="dragFileAccepted($event)"
                     class="profile-picture-section-drop-zone">
                     <div *ngIf="!edittedUser.ShowAvatar" class=profile-picture-section-request-image-group>
-                        <p class="profile-picture-section-request-image-instructions">Kéo hình vào đây</p>
+                        <p class="profile-picture-section-request-image-instructions">Kéo hình vào</p>
                     </div>
                     <div *ngIf="edittedUser.ShowAvatar" class="profile-picture-section-request-image-container">
+                        
                         <img class="profile-picture-section-request-image" src="{{(edittedUser.ShowAvatar &&(!isFileChanged)) === false ? currentProfileImage : uriAvatarPath + edittedUser.Avatar}}"
                         />
-
-                        <button class="btn btn-primary" (click)="viewSchedules(edittedUser)" [disabled]="edittedUser.ID < 0">
+                        
+                        <button class="btn btn-primary" [routerLink]="['/main/emp/edit',edittedUser.ID,'edit']" [disabled]="edittedUser.ID < 0">
                         <i class="fa fa-alt" aria-hidden="true"></i> Chi tiết
                         </button>
                     </div>
+                    
                 </div>
             </div>
 
@@ -33,7 +37,7 @@
             <!-- Thông tin phòng ban - team - chức vụ -->
             <div class="caption pull-left profile-item">
                 <p>
-                    <span class="fa fa-sitemap" title="Thông tin phòng ban- nhóm - chức vụ" [class.hidden]="onEdit">&nbsp;Ban 1 - Team 1.x - Leader</span>
+                    <span class="fa fa-sitemap" title="Thông tin phòng ban- nhóm - chức vụ" [class.hidden]="onEdit">&nbsp;{{empInfo1}}</span>
                 </p>
             </div>
             <!-- Giới tính -->
@@ -50,7 +54,8 @@
             <!-- Ngày vào công ty -->
             <div class="caption pull-left profile-item">
                 <p>
-                    <span *ngIf="edittedUser.ContractDate" class="fa fa-calendar" title="Ngày vào công ty(thử việc)" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartTrialDate|  date:'yyyy/MM/dd'}}</span>
+                    <!--<span *ngIf="edittedUser.ContractDate" class="fa fa-calendar" title="Ngày vào công ty(thử việc)" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartTrialDate|  date:'yyyy/MM/dd'}}</span>-->
+                    <span class="fa fa-calendar" title="Ngày vào công ty(thử việc)" [class.hidden]="onEdit">&nbsp;{{edittedUser.StartTrialDate|  date:'yyyy/MM/dd'}}</span>
                 </p>
                 <div [hidden]="!onEdit">
                     <div class="input-group">
@@ -88,14 +93,16 @@
             <!-- Ngày ký hợp đồng -->
             <div class="caption pull-left profile-item">
                 <p>
-                    <span *ngIf="edittedUser.ContractDate" class="fa fa-calendar-check-o" title="Ngày ký hợp đồng chính thức" [class.hidden]="onEdit">&nbsp;{{edittedUser.ContractDate|  date:'yyyy/MM/dd'}}</span>
+                    <!--<span *ngIf="edittedUser.ContractDate" class="fa fa-calendar-check-o" title="Ngày ký hợp đồng chính thức" [class.hidden]="onEdit">&nbsp;{{edittedUser.ContractDate|  date:'yyyy/MM/dd'}}</span>
+                    <span *ngIf="edittedUser.JobLeaveDate" class="md md-settings-power" title="Ngày làm việc cuối cùng" [class.hidden]="onEdit">&nbsp;{{edittedUser.JobLeaveDate|  date:'yyyy/MM/dd'}} </span>-->
+                    <span class="fa fa-calendar-check-o" title="Ngày ký hợp đồng chính thức" [class.hidden]="onEdit">&nbsp;{{edittedUser.ContractDate|  date:'yyyy/MM/dd'}}</span>
                     <span *ngIf="edittedUser.JobLeaveDate" class="md md-settings-power" title="Ngày làm việc cuối cùng" [class.hidden]="onEdit">&nbsp;{{edittedUser.JobLeaveDate|  date:'yyyy/MM/dd'}} </span>
                 </p>
             </div>
             <!-- Thông tin thâm niên - tiếng nhật - -->
             <div class="caption pull-left profile-item">
                 <p>
-                    <span class="fa fa-id-card" title="Thâm niên - tiếng nhật" [class.hidden]="onEdit">&nbsp;10 tháng - N3 </span>
+                    <span class="fa fa-id-card" title="Thâm niên - tiếng nhật" [class.hidden]="onEdit">&nbsp;{{edittedUser.KeikenFromStartWorkingMonths}} tháng - {{edittedUser.JapaneseLevelName}} </span>
                 </p>
             </div>
         </div>

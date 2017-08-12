@@ -22,6 +22,9 @@ import { UploadService } from '../../core/services/upload.service';
 import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
 import { MdRadioButton, MdRadioGroup, MdRadioModule } from '@angular/material';
 import { LoaderService } from '../../shared/utils/spinner.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenService } from '../../core/services/authen.service';
+import { LoggedInUser } from '../../core/domain/loggedin.user';
 
 declare var moment: any;
 
@@ -29,6 +32,7 @@ declare var moment: any;
     moduleId: module.id,
     selector: 'emp-card',
     templateUrl: 'emp-card.component.html',
+     styleUrls: ['./emp-card.component.css'],
     animations: [
         trigger('flyInOut', [
             state('in', style({ opacity: 1, transform: 'translateX(0)' })),
@@ -52,11 +56,11 @@ declare var moment: any;
 
 export class EmpCardComponent implements OnInit {
     @ViewChild('childModal') public childModal: ModalDirective;
-    @Input() user: IEmp| undefined;  /* add | undefined to fix warning khen build */
+    @Input() user: IEmp | undefined;  /* add | undefined to fix warning khen build */
     @Output() removeUser = new EventEmitter();
     @Output() userCreated = new EventEmitter();
 
-    edittedUser: IEmp| undefined; /* add | undefined to fix warning khen build */
+    edittedUser: IEmp | undefined; /* add | undefined to fix warning khen build */
     onEdit: boolean = false;
     apiHost: string;
     // Modal properties
@@ -74,27 +78,62 @@ export class EmpCardComponent implements OnInit {
     backdrop: string | boolean = true;
     avatarFile: any;
     isFileChanged: boolean;
+    empInfo1: string = "";
+
     /* tslint:disable:no-unused-variable */
     // Supported image types
     public supportedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/gif'];
     /* tslint:enable:no-unused-variable */
 
     private currentProfileImage: string = 'http://localhost:4200/assets/images/profile-default.png';
-
+    private imgJobLeave : string ='http://localhost:4200/assets/images/IsJobLeave2.png';
     public dateOptions: any = DateRangePickerConfig.dateOptions;
-    
-    public uriAvatarPath: string = SystemConstants.BASE_API;
 
-    constructor(private itemsService: ItemsService,
+    public uriAvatarPath: string = SystemConstants.BASE_API;
+    public userLogin  : LoggedInUser;
+
+    constructor(
+        private _route: ActivatedRoute,
+        private _router: Router,
+        private _itemsService: ItemsService,
         private _notificationService: NotificationService,
         private _dataService: DataService,
         private _uploadService: UploadService,
-        private _loaderService: LoaderService) { }
+        private _loaderService: LoaderService,
+        private _authenService : AuthenService) { }
 
     ngOnInit() {
+        this.userLogin = this._authenService.getLoggedInUser();
+
         //this.apiHost = this.configService.getApiHost();
-        this.edittedUser = this.itemsService.getSerialized<IEmp>(this.user);
-        
+        this.edittedUser = this._itemsService.getSerialized<IEmp>(this.user);
+        if (this.edittedUser) {
+            //thong tin phong ban
+            if (this.edittedUser.DeptName) {
+                this.empInfo1 += this.edittedUser.DeptName || "";
+            }
+            //thong tin team nhom
+            if (this.edittedUser.TeamName) {
+                if (this.empInfo1.length > 0) {
+                    this.empInfo1 += " - " + this.edittedUser.TeamName || "";
+                } else {
+                    this.empInfo1 += this.edittedUser.TeamName || "";
+                }
+
+            }
+            //thong tin chuc vu
+            if (this.edittedUser.PositionName) {
+                if (this.empInfo1.length > 0) {
+                    this.empInfo1 += " - " + this.edittedUser.PositionName || "";
+                } else {
+                    this.empInfo1 += this.edittedUser.PositionName || "";
+                }
+            }
+            if (this.empInfo1.length === 0) {
+                this.empInfo1 += "Chưa chỉ định thông tin";
+            }
+        }
+        //console.log(this.edittedUser);
         if (this.user.ID < 0) {
             this.editUser();
         }
@@ -103,26 +142,26 @@ export class EmpCardComponent implements OnInit {
     }
 
     editUser() {
-        
+
         this.onEdit = !this.onEdit;
         //https://stackoverflow.com/questions/5515310/is-there-a-standard-function-to-check-for-null-undefined-or-blank-variables-in
-        if(this.onEdit && this.user.StartWorkingDate){
+        if (this.onEdit && this.user.StartWorkingDate) {
             this.user.StartWorkingDate = moment(this.user.StartWorkingDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.StartTrialDate){
+        if (this.onEdit && this.user.StartTrialDate) {
             this.user.StartTrialDate = moment(this.user.StartTrialDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.EndTrialDate){
+        if (this.onEdit && this.user.EndTrialDate) {
             this.user.EndTrialDate = moment(this.user.EndTrialDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.ContractDate){
+        if (this.onEdit && this.user.ContractDate) {
             this.user.ContractDate = moment(this.user.ContractDate).format('YYYY/MM/DD');
         }
-        if(this.onEdit && this.user.JobLeaveDate){
+        if (this.onEdit && this.user.JobLeaveDate) {
             this.user.JobLeaveDate = moment(this.user.JobLeaveDate).format('YYYY/MM/DD');
         }
 
-        this.edittedUser = this.itemsService.getSerialized<IEmp>(this.user);
+        this.edittedUser = this._itemsService.getSerialized<IEmp>(this.user);
         // <IUser>JSON.parse(JSON.stringify(this.user)); // todo Utils..
     }
 
@@ -144,11 +183,14 @@ export class EmpCardComponent implements OnInit {
     Tao moi 
     */
     insertData() {
+        this.edittedUser.CurrentCompanyID = this.userLogin.companyid;
+        this.edittedUser.CurrentDeptID = this.userLogin.deptid;
+
         this._dataService.post('/api/emp/add', JSON.stringify(this.edittedUser))
             .subscribe((response: any) => {
                 //this.loadData();
-                this.user = this.itemsService.getSerialized<IEmp>(response);
-                this.edittedUser = this.itemsService.getSerialized<IEmp>(this.user);
+                this.user = this._itemsService.getSerialized<IEmp>(response);
+                this.edittedUser = this._itemsService.getSerialized<IEmp>(this.user);
                 this.onEdit = false;
 
                 this.userCreated.emit({ value: response });
@@ -205,14 +247,14 @@ export class EmpCardComponent implements OnInit {
         this.edittedUser.StartTrialDate = moment(value.end._d).format('YYYY/MM/DD');
     }
 
-    public calendarCanceledStartTrialDate(e:any){
+    public calendarCanceledStartTrialDate(e: any) {
 
     }
 
     public selectedEndTrialDate(value: any) {
         this.edittedUser.EndTrialDate = moment(value.end._d).format('YYYY/MM/DD');
     }
-    
+
     public selectedContractDate(value: any) {
         this.edittedUser.ContractDate = moment(value.end._d).format('YYYY/MM/DD');
     }
@@ -221,8 +263,8 @@ export class EmpCardComponent implements OnInit {
         this.edittedUser.JobLeaveDate = moment(value.end._d).format('YYYY/MM/DD');
     }
 
-    public calendarEventsHandler(e:any) {
-        
+    public calendarEventsHandler(e: any) {
+
     }
     public selectGender(event) {
         this.edittedUser.Gender = event.source._checked;
@@ -277,7 +319,7 @@ export class EmpCardComponent implements OnInit {
         fileReader.readAsDataURL(acceptedFile.file);
         //Luu lai file da chon de cap nhat sau nay 
         this.avatarFile = acceptedFile.file;
-        console.log(this.avatarFile);
+
     }
 
     // File being dragged has been dropped and has been rejected
@@ -286,6 +328,10 @@ export class EmpCardComponent implements OnInit {
 
 
     /* Drag Drop File End*/
+
+    public editDetailUser(user: any) {
+        this._router.navigate(['../../emp/edit', user.ID, 'edit']);
+    }
 
     /*viewSchedules(user: IUser) {
     console.log(user);

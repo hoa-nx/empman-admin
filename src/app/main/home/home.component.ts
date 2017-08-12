@@ -489,7 +489,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     this._dataService.getPdfFile('/api/statistic/getmmbytypeandyearmonthreport2?&year=2017')
       .subscribe((response: any) => {
-        console.log(response);
         var fileURL = URL.createObjectURL(response);
         this._sanitizer.bypassSecurityTrustUrl(fileURL);
         window.open(fileURL);

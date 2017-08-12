@@ -77,7 +77,9 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
     public nextMonthInclude: boolean = false;
 
     public emps: any[];
-
+    public onsiteOnly : any;
+    public checkAll : any;
+    
     /** Xử lý init cho jqxGrid  start */
     theme: any;
     editrow: number = -1;

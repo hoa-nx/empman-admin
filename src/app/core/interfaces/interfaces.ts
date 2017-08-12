@@ -6,8 +6,10 @@ export interface IEmp {
     Furigana?: string;
     Gender?: boolean;
     IdentNo?: string;
-    IdentDate?: Date;
-    IdentPlace?: string;
+    IdentIssueDate?: Date;
+    IdentIssuePlace?: string;
+    TaxCode?: string;
+    TaxCodeIssueDate?: Date;
     ExtLinkNo?: string;
     TrainingProfileNo?: string;
     BornPlace?: string;
@@ -22,16 +24,26 @@ export interface IEmp {
     PhoneNumber3?: string;
     Address1?: string;
     Address2?: string;
-    CurrentCompanyID?:string;
+    CurrentCompanyID?: number;
     CurrentDeptID?: number;
     CurrentTeamID?: number;
     CurrentPositionID?: number;
-    StartWorkingDate?: any;
+    InterviewDate?: Date,
+    InterviewEmp?: string;
+    WorkingConditionTalkDate?: Date,
+    StartWorkingDate?: Date;
     StartLearningDate?: Date;
     EndLearningDate?: Date;
     StartTrialDate?: Date;
     EndTrialDate?: Date;
+    TrialResult?: string;
     ContractDate?: Date;
+    BabyBornStartDate?: Date;
+    BabyBornScheduleEndDate?: Date;
+    BabyBornActualEndDate?: Date;
+    BabyBornStartDate2?: Date;
+    BabyBornScheduleEndDate2?: Date;
+    BabyBornActualEndDate2?: Date;
     ContractTypeMasterID?: number;
     ContractTypeMasterDetailID?: number;
     JobLeaveRequestDate?: Date;
@@ -40,12 +52,23 @@ export interface IEmp {
     JobLeaveReason?: string;
     GoogleId?: string;
     MarriedDate?: Date;
+    IsMarried?: boolean;
     ExperienceBeforeContent?: string;
     ExperienceBeforeConvert?: string;
     ExperienceConvert?: string;
     EmpTypeMasterID?: number;
     EmpTypeMasterDetailID?: number;
     IsBSE?: boolean;
+    JapaneseLevelMasterID?: number;
+    JapaneseLevelMasterDetailID?: number;
+    BusinessAllowanceLevelMasterID?: number;
+    BusinessAllowanceLevelMasterDetailID?: number;
+    RoomWithInternetAllowanceLevelMasterID?: number;
+    RoomWithInternetAllowanceLevelMasterDetailID?: number;
+    RoomNoInternetAllowanceLevelMasterID?: number;
+    RoomNoInternetAllowanceLevelMasterDetailID?: number;
+    BseAllowanceLevelMasterID?: number;
+    BseAllowanceLevelMasterDetailID?: number;
     CollectMasterID?: number;
     CollectMasterDetailID?: number;
     EducationLevelMasterID?: number;
@@ -68,7 +91,34 @@ export interface IEmp {
     UpdatedBy?: string;
     MetaKeyword?: string;
     MetaDescription?: string;
-
+    Company?: any;
+    Dept?: any;
+    Team?: any;
+    Position?: any;
+    CompanyName?: any;
+    DeptName?: any;
+    TeamName?: any;
+    PositionName?: any;
+    JapaneseLevelName?: any;
+    BusinessAllowanceName?: any;
+    BusinessAllowanBseAllowanceLevelNameceName?: any;
+    RoomNoInternetAllowanceLevelName?: any;
+    RoomWithInternetAllowanceLevelName?: any;
+    ContracTypeName?: any;
+    EmpTypeName?: any;
+    CollectName?: any;
+    EducationLevelName?: any;
+    KeikenFromStartWorkingMonths?: any;
+    KeikenFromContractMonths?: any;
+    Age?: any;
+    AgeFFull?: any;
+    IsBirthDay?: any;
+    ContractedCount?: any;
+    TrialCount?: any;
+    ContractedLTNMonthCount?: any;
+    ContractedOtherCount?: any;
+    ContractedTransCount?: any;
+    OnsiteCount?: any;
 }
 
 export interface IRevenue {
@@ -104,10 +154,10 @@ export interface IRevenue {
     InMonthDevMM: number;
     InMonthTransMM: number;
     InMonthManagementMM: number;
-    InMonthOnsiteMM  : number;
+    InMonthOnsiteMM: number;
     InMonthSumMM: number;
-    InMonthSumIncludeOnsiteMM  : number;
-    InMonthDevSumExcludeTransMM  : number;
+    InMonthSumIncludeOnsiteMM: number;
+    InMonthDevSumExcludeTransMM: number;
     InMonthToUsd: number;
     InMonthToVnd: number;
     NextMonth: number;
@@ -162,10 +212,10 @@ export interface IRevenueDetails {
     InMonthDevMM: number;
     InMonthTransMM: number;
     InMonthManagementMM: number;
-    InMonthOnsiteMM  : number;
+    InMonthOnsiteMM: number;
     InMonthSumMM: number;
-    InMonthSumIncludeOnsiteMM  : number;
-    InMonthDevSumExcludeTransMM  : number;
+    InMonthSumIncludeOnsiteMM: number;
+    InMonthDevSumExcludeTransMM: number;
     InMonthToUsd: number;
     InMonthToVnd: number;
     NextMonth: number;
@@ -195,7 +245,7 @@ export interface IRevenueStackBarChartItems {
     InMonthDevMM: number;
     InMonthTransMM: number;
     InMonthManagementMM: number;
-    InMonthOnsiteMM  : number;
+    InMonthOnsiteMM: number;
 }
 
 export interface ITarget {
@@ -473,4 +523,68 @@ export interface ISearchItemViewModel {
     IsBSE?: boolean;
 
     IsApproved?: boolean;
+}
+
+export interface EmpFilterViewModel {
+    chkDept?: boolean;
+
+    selectDepts?: any[];
+
+    chkTeam?: boolean;
+
+    selectTeams?: any[];
+
+    chkPosition?: boolean;
+
+    selectPositions?: any[];
+
+    chkJapaneseLevel?: boolean;
+
+    selectJapaneseLevels?: any[];
+
+    chkBussinessAllowanceLevel?: boolean;
+
+    selectBussinessAllowanceLevels?: any[];
+
+    chkBseLevel?: boolean;
+
+    selectBseLevels?: any[];
+
+    chkEmpType?: boolean;
+
+    selectEmpTypes?: any[];
+
+    chkStartWorkingDate?: boolean;
+
+    startWorkingDateFrom?: any;
+    startWorkingDateTo?: any;
+
+    chkContractDate?: boolean;
+
+    contractDateFrom?: any;
+    contractDateTo?: any;
+
+    chkTrialDate?: boolean;
+    trialDateFrom?: any;
+    trialDateTo?: any;
+
+    chkJobLeaveDate?: boolean;
+    jobLeaveDateFrom?: any;
+    jobLeaveDateTo?: any;
+
+    chkLearning?: boolean;
+
+    chkTrainingInclude?: boolean;
+
+    chkExperence?: boolean;
+    /// <summary>
+    ///  1 : nghỉ việc 
+    ///  2 : bao gồm nhân viên trong kỳ
+    ///  3 : Đang làm việc
+    ///  4 : Sắp nghỉ
+    ///  99 : tất cả
+    /// </summary>
+    selectDataTypes?: any;
+
+    sort?: any[];
 }

@@ -1,0 +1,21 @@
+#content{
+    position : relative;
+}
+#content img{
+    position: absolute;
+    top:0px;
+    right: 0px;
+}
+
+
+.jobleave-img-overlay{
+    position:relative;
+    top: 0px;
+    left: 0px;
+    z-index: 200;
+}
+
+.trialstaff-img-overlay{
+    position:relative;
+    z-index: 200;
+}

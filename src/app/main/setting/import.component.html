@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #formData="ngForm" novalidate>
+
+                <div class="form-group">
+
+                    <div class="row">
+
+                        <div class="col-md-2">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <tabset>
+                            <!-- Tab nhân sự  -->
+                            <tab heading="Nhân viên">
+                                <div class="row">
+                                    <h5 class="m-t-0 header-title"><b>Thông tin import</b></h5>
+                                    <label>Chọn file excel để import dữ liệu nhân viên</label>
+                                </div>
+                                <div class="row">
+                                        <div class="col-md-10 col-sm-6 col-xs-12">                                            
+                                            <input type="file" required #filePath name="filePath" class="form-control">
+                                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xls, *.xlsx </p>
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <button class="btn btn-info" (click)="importEmp()">Import</button>
+                                        </div>
+                                    
+                                </div>
+                            </tab>
+
+                            <!-- Tab doanh số-->
+                            <tab heading="Doanh số">
+                                <div class="row">
+                                    <h5 class="m-t-0 header-title"><b>Thông tin import</b></h5>
+                                    <label>Chọn file excel để import dữ liệu doanh số</label>
+                                </div>
+                                <div class="row">
+                                        <div class="col-md-10 col-sm-6 col-xs-12">                                            
+                                            <input type="file" required #filePathRevenue name="filePathRevenue" class="form-control">
+                                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xls, *.xlsx </p>
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <button class="btn btn-info" (click)="importRevenue()">Import</button>
+                                        </div>
+                                    
+                                </div>
+
+                            </tab>
+                        </tabset>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

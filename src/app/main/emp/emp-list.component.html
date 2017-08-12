@@ -2,15 +2,23 @@
     <i class="fa fa-user-plus fa-1x" aria-hidden="true"></i>Thêm mới</button>
 <button [class.hidden]="!addingUser" class="btn btn-danger" (click)="cancelAddUser()">
     <i class="fa fa-ban fa-1x" aria-hidden="true"></i>Hủy</button>
+
 <p></p>
 <div class="row text-center">
+    <div *ngIf="emps && emps.length == 0" class="col-md-12">
+        <div class="alert alert-danger">
+            Không tìm thấy nhân viên nào.
+        </div>
+
+    </div>
+
     <!--<div class="col-md-4 col-sm-6 hero-feature" *ngFor="let user of emps; trackBy: trackByFn">-->
-    <div class="col-md-4 col-sm-6 hero-feature" *ngFor="let user of emps">    
+    <div class="col-md-4 col-sm-6 hero-feature" *ngFor="let user of emps">
         <emp-card [user]="user" (removeUser)="removeUser($event);" (userCreated)="userCreated($event);"></emp-card>
     </div>
 
     <!-- paging -->
-    <div class="col-md-12" [class.hidden]="loading">
+    <div *ngIf="emps && emps.length >0" class="col-md-12" [class.hidden]="loading">
         <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow"
             [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
     </div>
