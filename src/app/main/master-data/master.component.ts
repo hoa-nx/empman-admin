@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, NgZone, Input } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
@@ -7,40 +7,42 @@ import { AuthenService } from '../../core/services/authen.service';
 import { UtilityService } from '../../core/services/utility.service';
 
 import { MessageContstants } from '../../core/common/message.constants';
-import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
+import { SystemConstants } from '../../core/common/system.constants';
+
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { LoaderService } from '../../shared/utils/spinner.service';
 import { NgForm } from '@angular/forms';
 
 declare var moment: any;
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  selector: 'app-master',
+  templateUrl: './master.component.html',
+  styleUrls: ['./master.component.css']
 })
-export class CustomerComponent implements OnInit {
+export class MasterComponent implements OnInit {
 
   @ViewChild('modalAddEdit') public modalAddEdit: ModalDirective;
 
-  @ViewChild('avatar') avatar;
-
-  //common modal
-  public pageIndex: number = 1;
-  public pageSize: number = 10;
-  public pageDisplay: number = 10;
-  public totalRow: number;
-  public filter: string = '';
-  public customers: any[];
-  public entity: any;
   public baseFolder: string = SystemConstants.BASE_API;
-  public orderUnits: any[];
-
-  public dateOptions: any = DateRangePickerConfig.dateOptions;
+  public entity: any;
+  public totalRow: number;
+  public pageIndex: number = 1;
+  public pageSize: number = 20;
+  public pageDisplay: number = 10;
+  public filterKeyword: string = '';
+  public filterMasterID: number;
+  public masters: any[];
+  public checkedItems: any[];
 
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,
     private _utilityService: UtilityService,
     private _uploadService: UploadService,
-    public _authenService: AuthenService) {
+    public _authenService: AuthenService,
+    private viewContainerRef: ViewContainerRef,
+    private zone: NgZone,
+    private _loaderService: LoaderService) {
 
     /*if(_authenService.checkAccess('USER')==false){
         _utilityService.navigateToLogin();
@@ -48,47 +50,38 @@ export class CustomerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadData();
-    this.loadMultiTable();
+  
   }
 
-  loadData() {
-    this._dataService.get('/api/customer/getallpaging?&keyword=' + this.filter + '&page=' + this.pageIndex + '&pageSize=' + this.pageSize)
+  public search() {
+    this._loaderService.displayLoader(true);
+    this._dataService.get('/api/master/getallpaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword)
       .subscribe((response: any) => {
-        this.customers = response.Items;
+        this.masters = response.Items;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-      });
+        this._loaderService.displayLoader(false);
+      }, error => this._dataService.handleError(error));
   }
-
-  /**
- * Load các dữ liệu master
- */
-  loadMultiTable() {
-    let uri = [];
-    uri.push('/api/masterdetail/getbykbn/25');
-
-    this._dataService.getMulti(uri)
-      .subscribe((response: any) => {
-        this.orderUnits = response[0];   //đơn vị tính order
-      },
-      error => {
-        error => this._dataService.handleError(error);
-      });
+  public reset() {
+    this.filterKeyword = '';
+    this.filterMasterID = null;
+    this.search();
   }
 
   loadDetail(id: any) {
-    this._dataService.get('/api/customer/detail/' + id)
+    this._loaderService.displayLoader(true);
+    this._dataService.get('/api/master/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
-        this.entity.ContractDate = moment(new Date(this.entity.ContractDate)).format('YYYY/MM/DD');
+        this._loaderService.displayLoader(false);
 
       });
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
-    this.loadData();
+    this.search();
   }
   showAddModal() {
     this.entity = {};
@@ -104,20 +97,19 @@ export class CustomerComponent implements OnInit {
     }
   }
   private saveData(form: NgForm) {
-    this.entity.DefaultOrderUnitMasterID = 25;
     if (this.entity.No == undefined) {
-      this._dataService.post('/api/customer/add', JSON.stringify(this.entity))
+      this._dataService.post('/api/master/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
-          this.loadData();
+          this.search();
           this.modalAddEdit.hide();
           form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }
     else {
-      this._dataService.put('/api/customer/update', JSON.stringify(this.entity))
+      this._dataService.put('/api/master/update', JSON.stringify(this.entity))
         .subscribe((response: any) => {
-          this.loadData();
+          this.search();
           this.modalAddEdit.hide();
           form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
@@ -128,48 +120,27 @@ export class CustomerComponent implements OnInit {
     this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
   deleteItemConfirm(id: any) {
-    this._dataService.delete('/api/customer/delete', 'id', id).subscribe((response: Response) => {
+    this._dataService.delete('/api/master/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
-      this.loadData();
+      this.search();
     });
   }
 
-  public selectedContractDate(value: any) {
-    this.entity.ContractDate = moment(value.end._d).format('YYYY/MM/DD');
+  public deleteMulti() {
+    this.checkedItems = this.masters.filter(x => x.Checked);
+    var checkedIds = [];
+    for (var i = 0; i < this.checkedItems.length; ++i)
+      checkedIds.push(this.checkedItems[i]["ID"]);
+
+    this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/master/deletemulti', 'checkedItems', JSON.stringify(checkedIds)).subscribe((response: any) => {
+        this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.search();
+      }, error => this._dataService.handleError(error));
+    });
   }
 
-  selectedData(value: any): void {
-    this.entity.CeoID = value.value.ID;
+  changeCheckboxIsAllowanceType(event) {
 
   }
-
-  public onChangeOrderUnit(value: any) {
-    if (value) {
-
-    }
-  }
-
-  onInputBlur(event) {
-    switch (event.target.name) {
-      case 'ceoid':
-
-        //get name from code
-        let id: any = 0;
-        id = event.target.value | 0;
-        //kiem tra xem co thay doi tri hay khong?
-        if (id === this.entity.CeoID) {
-          return;
-        }
-        //seach & display
-
-        break;
-
-      default:
-
-        break;
-    }
-  }
-
-
-
 }

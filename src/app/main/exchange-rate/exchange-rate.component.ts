@@ -11,6 +11,7 @@ import { SystemConstants, DateRangePickerConfig } from '../../core/common/system
 import { Fab } from '../../shared/components/fab-button/fab';
 import { FabButton } from '../../shared/components/fab-button/fabbutton';
 import { FabToggle } from '../../shared/components/fab-button/fabtoggle';
+import { NgForm } from '@angular/forms';
 
 declare var moment: any;
 
@@ -94,17 +95,18 @@ export class ExchangeRateComponent implements OnInit {
     this.modalAddEdit.show();
   }
 
-  saveChange(valid: boolean) {
-    if (valid) {
-      this.saveData();
+  saveChange(form: NgForm) {
+    if (form.valid) {
+      this.saveData(form);
     }
   }
-  private saveData() {
+  private saveData(form: NgForm) {
     if (this.entity.No == undefined) {
       this._dataService.post('/api/exchangerate/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }
@@ -113,6 +115,7 @@ export class ExchangeRateComponent implements OnInit {
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }

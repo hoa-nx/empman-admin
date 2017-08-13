@@ -34,7 +34,7 @@ export const mainRoutes: Routes = [
             //localhost:4200/main/project-detail
             { path: 'project-detail', loadChildren: './project-detail/project-detail.module#ProjectDetailModule' },
             //localhost:4200/main/commondata
-            { path: 'master-data', loadChildren: './master-data/master-data.module#MasterDataModule' },
+            { path: 'master', loadChildren: './master-data/master.module#MasterDataModule' },
             //localhost:4200/main/revenue
             { path: 'revenue', loadChildren: './revenue/revenue.module#RevenueModule' },
             //localhost:4200/main/exchange-rate

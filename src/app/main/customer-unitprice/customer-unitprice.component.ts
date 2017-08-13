@@ -8,6 +8,7 @@ import { UtilityService } from '../../core/services/utility.service';
 
 import { MessageContstants } from '../../core/common/message.constants';
 import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
+import { NgForm } from '@angular/forms';
 
 declare var moment: any;
 
@@ -100,18 +101,19 @@ export class CustomerUnitpriceComponent implements OnInit {
     this.loadDetail(id);
     this.modalAddEdit.show();
   }
-  saveChange(valid: boolean) {
-    if (valid) {
-      this.saveData();
+  saveChange(form: NgForm) {
+    if (form.valid) {
+      this.saveData(form);
     }
   }
-  private saveData() {
+  private saveData(form: NgForm) {
     this.entity.OrderUnitMasterID = 25;
     if (this.entity.ID == undefined) {
       this._dataService.post('/api/customerunitprice/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }
@@ -120,6 +122,7 @@ export class CustomerUnitpriceComponent implements OnInit {
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }

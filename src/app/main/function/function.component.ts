@@ -6,6 +6,7 @@ import { NotificationService } from '../../core/services/notification.service';
 import { UtilityService } from '../../core/services/utility.service';
 import { MessageContstants } from '../../core/common/message.constants';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-function',
   templateUrl: './function.component.html',
@@ -69,12 +70,13 @@ public showPermission(id: any) {
   }
 
   //Save change for modal popup
-  public saveChanges(valid: boolean) {
-    if (valid) {
+  public saveChanges(form: NgForm) {
+    if (form.valid) {
       if (this.editFlag == false) {
         this._dataService.post('/api/function/add', JSON.stringify(this.entity)).subscribe((response: any) => {
           this.search();
           this.addEditModal.hide();
+          form.resetForm();
           this.notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
         }, error => this._dataService.handleError(error));
       }
@@ -82,6 +84,7 @@ public showPermission(id: any) {
         this._dataService.put('/api/function/update', JSON.stringify(this.entity)).subscribe((response: any) => {
           this.search();
           this.addEditModal.hide();
+          form.resetForm();
           this.notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
         }, error => this._dataService.handleError(error));
 

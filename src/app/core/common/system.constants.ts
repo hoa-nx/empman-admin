@@ -59,3 +59,23 @@ export class DateRangePickerConfig {
         singleDatePicker: true
     };
 }
+
+export class AccessRight{
+    public static RIGHT_DELETE = "delete";
+    public static RIGHT_ADD = "add";
+    public static RIGHT_UPDATE = "update";
+    public static RIGHT_IMPORT = "import";
+    public static RIGHT_EXPORT = "export";
+}
+
+export class AccessRightFolder{
+    /**
+     * Dữ liệu chung của hệ thống chẳng hạn như master công ty , phòng ban... 
+     */
+    public static MASTER_DATA = "MASTER_DATA";
+    public static BUSSINESS_DATA = "REV";
+    public static SYSTEM_DATA = "SYSTEM";
+    public static REPORT_DATA = "REPORT";
+    public static EMP_DATA = "EMP";
+    public static PROJECT_DATA = "PROJECT";
+}

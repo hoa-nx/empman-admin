@@ -1,189 +1,177 @@
 <div class="row">
-  <div class="col-sm-12">
-    <div class="card-box">
-      <div class="row">
-        <div class="col-lg-12">
-          <h4 class="m-t-0 header-title"><b>Danh sách tỉ giá</b></h4>
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="m-t-0 header-title"><b>Danh sách tỉ giá</b></h4>
 
-            <app-fab dir="down">
-              <app-fab-toggle>+</app-fab-toggle>
-              <app-fab-button>A</app-fab-button>
-              <app-fab-button>B</app-fab-button>
-            </app-fab>
+                    <app-fab dir="down">
+                        <app-fab-toggle>+</app-fab-toggle>
+                        <app-fab-button>A</app-fab-button>
+                        <app-fab-button>B</app-fab-button>
+                    </app-fab>
 
-          <!-- Header -->
-          <div class="row">
-            <div class="col-sm-8">
-              <div class="form-group contact-search m-b-30">
-                <input type="text" id="search" class="form-control" placeholder="Nhập tên ..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
-                <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
-              </div>
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group contact-search m-b-30">
+                                <input type="text" id="search" class="form-control" placeholder="Nhập tên ..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
+                                <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
+                        </div>
+                    </div>
+
+
+                    <!-- Header end-->
+                    <!-- List -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mails m-0 table table-actions-bar">
+                            <thead>
+                                <tr>
+                                    <th>Mã </th>
+                                    <th>Tên tỉ giá</th>
+                                    <th>Ngày start</th>
+                                    <th>Ngày end</th>
+                                    <th>Usd - Vnd</th>
+                                    <th>Yen - Vnd</th>
+                                    <th>Usd - Yen</th>
+                                    <th>Ghi chú</th>
+                                    <th style="min-width: 130px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of exchangeRates">
+                                    <td>{{item.ID}}</td>
+                                    <td>{{item.Name}}</td>
+                                    <td>{{item.StartDate | date:'yyyy/MM/dd'}}</td>
+                                    <td>{{item.EndDate | date:'yyyy/MM/dd'}}</td>
+                                    <td>{{item.UsdToVnd| currency:'VND':true:'1.2-2'}}</td>
+                                    <td>{{item.YenToVnd| currency:'VND':true:'1.2-2'}}</td>
+                                    <td>{{item.UsdToYen}}</td>
+                                    <td>{{item.Note}}</td>
+
+                                    <td>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- paging -->
+                        <div class="col-md-12">
+
+                            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                        </div>
+
+                        <!-- paging end-->
+                    </div>
+                    <!-- List end-->
+                </div>
+
             </div>
-            <div class="col-sm-4">
-              <a (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal"
-                data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
-            </div>
-          </div>
-
-
-          <!-- Header end-->
-          <!-- List -->
-          <div class="table-responsive">
-            <table class="table table-hover mails m-0 table table-actions-bar">
-              <thead>
-                <tr>
-                  <th>Mã </th>
-                  <th>Tên tỉ giá</th>
-                  <th>Ngày start</th>
-                  <th>Ngày end</th>
-                  <th>Usd - Vnd</th>
-                  <th>Yen - Vnd</th>
-                  <th>Usd - Yen</th>
-                  <th>Ghi chú</th>
-                  <th style="min-width: 130px;"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of exchangeRates">
-                   <td>{{item.ID}}</td>
-                  <td>{{item.Name}}</td>
-                  <td>{{item.StartDate | date:'yyyy/MM/dd'}}</td>
-                  <td>{{item.EndDate | date:'yyyy/MM/dd'}}</td>
-                  <td>{{item.UsdToVnd| currency:'VND':true:'1.2-2'}}</td>
-                  <td>{{item.YenToVnd| currency:'VND':true:'1.2-2'}}</td>
-                  <td>{{item.UsdToYen}}</td>
-                  <td>{{item.Note}}</td>
-
-                  <td>
-                    <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
-                    <a href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
-                    <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- paging -->
-            <div class="col-md-12">
-
-              <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow"
-                [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
-                lastText="&raquo;"></pagination>
-            </div>
-
-            <!-- paging end-->
-          </div>
-          <!-- List end-->
         </div>
-
-      </div>
     </div>
-  </div>
 </div>
 
 <!--Modal add and edit-->
-<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static', keyboard : false}">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Thêm/Sửa tỉ giá</h4>
-        <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" [config]="{backdrop: 'static', keyboard : false}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Thêm/Sửa tỉ giá</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm.valid)"
-          *ngIf="entity">
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm)" *ngIf="entity">
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã tỉ giá</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="hidden" #no="ngModel" [(ngModel)]="entity.No" name="no">
-              <input type="number" #id="ngModel" [(ngModel)]="entity.ID" required maxlength="10" name="id" class="form-control focusedInput"
-                placeholder="Mã tỉ giá">
-              <small [hidden]="id.valid || (id.pristine && !addEditForm.submitted)" class="text-danger">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã tỉ giá</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="hidden" #no="ngModel" [(ngModel)]="entity.No" name="no">
+                            <input type="number" #id="ngModel" [(ngModel)]="entity.ID" required maxlength="10" name="id" class="form-control focusedInput" placeholder="Mã tỉ giá">
+                            <small [hidden]="id.valid || (id.pristine && !addEditForm.submitted)" class="text-danger">
                 Mã tỉ giá bắt buộc nhập
               </small>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tỉ giá</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required minlength="3" name="name" class="form-control focusedInput"
-                placeholder="Tên tỉ giá">
-              <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tỉ giá</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required minlength="3" name="name" class="form-control focusedInput" placeholder="Tên tỉ giá">
+                            <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
                 Tên tỉ giá ít nhất 3 ký tự
               </small>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày áp dụng</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #startdate="ngModel" daterangepicker (selected)="selectedStartDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartDate"
-                name="startdate" class="form-control focusedInput" placeholder="Ngày áp dụng tỉ giá">
-            </div>
-          </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày áp dụng</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #startdate="ngModel" daterangepicker (selected)="selectedStartDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartDate" name="startdate" class="form-control focusedInput" placeholder="Ngày áp dụng tỉ giá">
+                        </div>
+                    </div>
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày kết thúc</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #enddate="ngModel" daterangepicker (selected)="selectedEndDate($event)" [options]="dateOptions" [(ngModel)]="entity.EndDate"
-                name="enddate" class="form-control focusedInput" placeholder="Ngày kết thúc áp dụng">
-            </div>
-          </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày kết thúc</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #enddate="ngModel" daterangepicker (selected)="selectedEndDate($event)" [options]="dateOptions" [(ngModel)]="entity.EndDate" name="enddate" class="form-control focusedInput" placeholder="Ngày kết thúc áp dụng">
+                        </div>
+                    </div>
 
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá USD - VND</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="number" #usdtovnd="ngModel" [(ngModel)]="entity.UsdToVnd" required name="usdtovnd" class="form-control focusedInput"
-                placeholder="Tỉ giá chuyển đổi Usd sang Vnd">
-              <small [hidden]="usdtovnd.valid || (usdtovnd.pristine && !addEditForm.submitted)" class="text-danger">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá USD - VND</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="number" #usdtovnd="ngModel" [(ngModel)]="entity.UsdToVnd" required name="usdtovnd" class="form-control focusedInput" placeholder="Tỉ giá chuyển đổi Usd sang Vnd">
+                            <small [hidden]="usdtovnd.valid || (usdtovnd.pristine && !addEditForm.submitted)" class="text-danger">
                 Tỉ giá chuyển đổi Usd sang Vnd
               </small>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá Yen - VND</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="number" #yentovnd="ngModel" [(ngModel)]="entity.YenToVnd" required name="yentovnd" class="form-control focusedInput"
-                placeholder="Tỉ giá chuyển đổi Yen sang Vnd">
-              <small [hidden]="yentovnd.valid || (yentovnd.pristine && !addEditForm.submitted)" class="text-danger">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá Yen - VND</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="number" #yentovnd="ngModel" [(ngModel)]="entity.YenToVnd" required name="yentovnd" class="form-control focusedInput" placeholder="Tỉ giá chuyển đổi Yen sang Vnd">
+                            <small [hidden]="yentovnd.valid || (yentovnd.pristine && !addEditForm.submitted)" class="text-danger">
                 Tỉ giá chuyển đổi Yen sang Vnd
               </small>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá Usd - Yen</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="number" #usdtoyen="ngModel" [(ngModel)]="entity.UsdToYen" required name="usdtoyen" class="form-control focusedInput"
-                placeholder="Tỉ giá chuyển đổi Usd sang Yen">
-              <small [hidden]="usdtoyen.valid || (usdtoyen.pristine && !addEditForm.submitted)" class="text-danger">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tỉ giá Usd - Yen</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="number" #usdtoyen="ngModel" [(ngModel)]="entity.UsdToYen" required name="usdtoyen" class="form-control focusedInput" placeholder="Tỉ giá chuyển đổi Usd sang Yen">
+                            <small [hidden]="usdtoyen.valid || (usdtoyen.pristine && !addEditForm.submitted)" class="text-danger">
                 Tỉ giá chuyển đổi Usd sang Yen
               </small>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Ghi chú</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <textarea class="form-control" #note="ngModel" [(ngModel)]="entity.Note" name="note" #note="ngModel" cols="70" wrap="soft"></textarea>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ghi chú</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea class="form-control" #note="ngModel" [(ngModel)]="entity.Note" name="note" #note="ngModel" cols="70" wrap="soft"></textarea>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-danger">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="ln_solid"></div>
-          <div class="form-group">
-            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-danger">Hủy bỏ</button>
-              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
-            </div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>

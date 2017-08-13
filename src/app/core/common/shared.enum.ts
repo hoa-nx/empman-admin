@@ -73,6 +73,10 @@ export enum MasterKbnEnum {
     /**
      * 27 : Loại thông báo ví dụ như nhân sự / qui định oniste….
      */
-    RuleType = 27
+    RuleType = 27,
+    /**
+     * 28 : Nhóm chức vụ.
+     */
+    PositionGroup = 28
 
 }

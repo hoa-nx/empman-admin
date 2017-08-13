@@ -11,6 +11,7 @@ import { SystemConstants, DateRangePickerConfig } from '../../core/common/system
 
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import { SearchModalComponent } from '../../shared/search-modal/search-modal.component';
+import { NgForm } from '@angular/forms';
 
 declare var moment: any;
 
@@ -50,7 +51,7 @@ export class CompanyComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private zone: NgZone) {
 
-    /*if(_authenService.checkAccess('USER')==false){
+    /*if(_authenService.checkAccess('MASTER_DATA')==false){
         _utilityService.navigateToLogin();
     }*/
   }
@@ -91,17 +92,18 @@ export class CompanyComponent implements OnInit {
     this.loadDetail(id);
     this.modalAddEdit.show();
   }
-  saveChange(valid: boolean) {
-    if (valid) {
-      this.saveData();
+  saveChange(form: NgForm) {
+    if (form.valid) {
+      this.saveData(form);
     }
   }
-  private saveData() {
+  private saveData(form: NgForm) {
     if (this.entity.No == undefined) {
       this._dataService.post('/api/company/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }
@@ -110,6 +112,7 @@ export class CompanyComponent implements OnInit {
         .subscribe((response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
         }, error => this._dataService.handleError(error));
     }

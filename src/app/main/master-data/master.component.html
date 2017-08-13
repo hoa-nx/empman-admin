@@ -3,16 +3,10 @@
         <div class="card-box">
             <div class="row">
                 <div class="col-lg-12">
-                    <h4 class="m-t-0 header-title"><b>Danh sách dữ liệu chung</b></h4>
+                    <h4 class="m-t-0 header-title"><b>Danh sách phân loại dữ liệu chung</b></h4>
 
                     <!-- Header -->
                     <div class="row">
-                        <div class="col-md-4 col-sm-6 col-xs-12 form-group">
-                            <select class="form-control" name="filterMasterID" [(ngModel)]="filterMasterID" (ngModelChange)="onChangeMaster($event)">
-                              <option *ngFor="let x of masters" [value]="x.ID">{{x.Name}}</option>
-                            </select>
-                        </div>
-
                         <div class="col-md-3 col-sm-6 col-xs-12 form-group">
                             <div class="form-group contact-search m-b-30">
                                 <input type="text" id="search" class="form-control" placeholder="Tìm ..." name="filter" (keyup.enter)="search()" [(ngModel)]="filterKeyword">
@@ -21,16 +15,14 @@
                         </div>
                         <div class="col-md-4 col-sm-6 col-xs-12 form-group">
                             <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
-                            <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
                             <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
-
                         </div>
 
                     </div>
 
                     <div class="row">
                         <div class="col-sm-3">
-                            <a *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới chi tiết</a>
+                            <a *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="showAddModal()" class="btn btn-default btn-md waves-effect waves-light m-b-30" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
                         </div>
                     </div>
                     <!-- Header end-->
@@ -42,35 +34,32 @@
                                 <tr>
                                     <th></th>
                                     <th>Mã phân loại</th>
-                                    <th>Mã chi tiết</th>
                                     <th>Tên </th>
                                     <th>Tên tắt</th>
                                     <th>Có phụ cấp</th>
-                                    <th>Phụ cấp</th>
-                                    <th>Ngày bắt đầu</th>
-                                    <th>Ngày kết thúc</th>
+                                    <th>Giá trị 1</th>
+                                    <th>Giá trị 2</th>
+                                    <th>Ghi chú</th>
                                     <th style="min-width: 90px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of masterDetails">
+                                <tr *ngFor="let item of masters">
                                     <td>
                                         <div class="checkbox">
                                             <input type="checkbox" [(ngModel)]="item.Checked" [name]="item.ID" [ngModelOptions]="{standalone: true}">
                                             <label></label>
                                         </div>
                                     </td>
-                                    <td>{{item.MasterID}}</td>
-                                    <td>{{item.MasterDetailCode}}</td>
+                                    <td>{{item.ID}}</td>
                                     <td>{{item.Name}}</td>
                                     <td>{{item.ShortName}}</td>
                                     <td>{{item.IsAllowanceType}}</td>
-                                    <td>{{item.Allowance}}</td>
-                                    <td>{{item.StartDate | date:'yyyy/MM/dd'}}</td>
-                                    <td>{{item.EndDate | date:'yyyy/MM/dd'}}</td>
-
+                                    <td>{{item.Value1}}</td>
+                                    <td>{{item.Value2}}</td>
+                                    <td>{{item.Note}}</td>
                                     <td>
-                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.MasterID,item.MasterDetailCode)"><i class="md md-edit"></i></a>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                                     </td>
                                 </tr>
@@ -79,13 +68,13 @@
                         <!-- paging -->
                         <div class="col-md-12">
 
-                            <div *ngIf="masterDetails && masterDetails.length == 0" class="col-md-12">
+                            <div *ngIf="masters && masters.length == 0" class="col-md-12">
                                 <div class="alert alert-info">
                                     <strong>Thông báo!</strong> Hiện tại chưa có dữ liệu nào ứng với loại đã chọn
                                 </div>
 
                             </div>
-                            <div *ngIf="masterDetails && masterDetails.length > 0" class="col-md-12">
+                            <div *ngIf="masters && masters.length > 0" class="col-md-12">
                                 <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
                             </div>
 
@@ -113,39 +102,23 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm)" *ngIf="entity">
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã phân loại</label>
-                        <!-- <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" #MasterID="ngModel" [(ngModel)]="entity.MasterID" name="MasterID" class="form-control focusedInput">
-                        </div> -->
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select class="form-control" name="MasterID" [(ngModel)]="entity.MasterID" required>
-                              <option *ngFor="let x of masters" [value]="x.ID">{{x.Name}}</option>
-                            </select>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã chi tiết</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="hidden" #ID="ngModel" [(ngModel)]="entity.ID" name="ID">
-                            <input type="number" #MasterDetailCode="ngModel" [(ngModel)]="entity.MasterDetailCode" required maxlength="10" name="MasterDetailCode" class="form-control focusedInput" placeholder="Mã phân loại chi tiết">
-                            <small [hidden]="MasterDetailCode.valid || (MasterDetailCode.pristine && !addEditForm.submitted)" class="text-danger">
-                            Mã chi tiết phân loại bắt buộc nhập
+                            <input type="hidden" #No="ngModel" [(ngModel)]="entity.No" name="No">
+                            <input type="number" #ID="ngModel" [(ngModel)]="entity.ID" required maxlength="10" name="ID" class="form-control focusedInput" placeholder="Mã phân loại">
+                            <small [hidden]="ID.valid || (ID.pristine && !addEditForm.submitted)" class="text-danger">
+                            Mã bắt buộc nhập
                           </small>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên phân loại chi tiết</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên phân loại</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" #Name="ngModel" [(ngModel)]="entity.Name" required name="Name" class="form-control focusedInput" placeholder="Tên phân loại chi tiết">
                             <small [hidden]="Name.valid || (Name.pristine && !addEditForm.submitted)" class="text-danger">
-                              Tên phân loại chi tiết bắt buộc nhập
+                              Tên bắt buộc nhập
                             </small>
                         </div>
                     </div>
@@ -176,25 +149,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mức phụ cấp</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Giá trị 1</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" #Allowance="ngModel" [(ngModel)]="entity.Allowance" name="Allowance" class="form-control focusedInput" placeholder="Mức phụ cấp">
+                            <input type="text" #Value1="ngModel" [(ngModel)]="entity.Value1" name="Value1" class="form-control focusedInput" placeholder="Giá trị 1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Giá trị 2</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #Value2="ngModel" [(ngModel)]="entity.Value2" name="Value2" class="form-control focusedInput" placeholder="Giá trị 2">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày bắt đầu áp dụng</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #StartDate="ngModel" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput" placeholder="Ngày bắt đầu áp dụng"></p-calendar>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày kết thúc áp dụng</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <p-calendar [showIcon]="true" [(ngModel)]="entity.EndDate" name="EndDate" #EndDate="ngModel" (onSelect)="selectedEndDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput" placeholder="Ngày kết thúc áp dụng"></p-calendar>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Ghi chú</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">

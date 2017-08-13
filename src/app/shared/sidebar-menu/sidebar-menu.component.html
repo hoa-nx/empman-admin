@@ -1,13 +1,13 @@
 <!-- ========== Left Sidebar Start ========== -->
 
 <div class="left side-menu">
-  <div class="sidebar-inner slimscrollleft">
-    <!--- Divider -->
-    <div id="sidebar-menu">
-      <ul>
+    <div class="sidebar-inner slimscrollleft">
+        <!--- Divider -->
+        <div id="sidebar-menu">
+            <ul>
 
-        <!-- Menu from DB -->
-        <!--<li class="text-muted menu-title">Trang chủ</li>
+                <!-- Menu from DB -->
+                <!--<li class="text-muted menu-title">Trang chủ</li>
         <li class="has_sub" *ngFor="let item of functions">
 
           <a href="javascript:void(0);" class="waves-effect"><i class="fa {{item.IconCss}}"></i> <span > {{item.Name}}  </span> <span  *ngIf="item.ChildFunctions.length>0" class="menu-arrow"></span> </a>
@@ -15,81 +15,82 @@
               <li *ngFor="let subItem of item.ChildFunctions"><a routerLink="{{subItem.URL}}" routerLinkActive="active">{{subItem.Name}}</a></li>
             </ul>
         </li>-->
-        <!-- Menu from DB end-->
+                <!-- Menu from DB end-->
 
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-paint-bucket"></i> <span>Hệ thống </span> <span class="menu-arrow"></span> </a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/role/index" routerLinkActive="active">Nhóm</a></li>
-            <li><a routerLink="/main/function/index" routerLinkActive="active">Chức năng</a></li>
-            <li><a routerLink="/main/user/index" routerLinkActive="active">Người dùng</a></li>
-            <li><a routerLink="/main/product-category/index" routerLinkActive="active">Danh mục</a></li>
-            <li><a routerLink="/main/product/index" routerLinkActive="active">Sản phẩm</a></li>
-          </ul>
-        </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-paint-bucket"></i> <span>Hệ thống </span> <span class="menu-arrow"></span> </a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/role/index" routerLinkActive="active">Nhóm</a></li>
+                        <li><a routerLink="/main/function/index" routerLinkActive="active">Chức năng</a></li>
+                        <li><a routerLink="/main/user/index" routerLinkActive="active">Người dùng</a></li>
+                        <li><a routerLink="/main/product-category/index" routerLinkActive="active">Danh mục</a></li>
+                        <li><a routerLink="/main/product/index" routerLinkActive="active">Sản phẩm</a></li>
+                    </ul>
+                </li>
 
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Thông tin chung </span> <span class="menu-arrow"></span></a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/company/index" routerLinkActive="active">Công ty</a></li>
-            <li><a routerLink="/main/customer/index" routerLinkActive="active">Khách hàng</a></li>
-            <li><a routerLink="/main/customer-unitprice/index" routerLinkActive="active">Đơn giá KH</a></li>
-            <li><a routerLink="/main/exchange-rate/index" routerLinkActive="active">Tỉ giá</a></li>
-            <li><a routerLink="/main/dept/index" routerLinkActive="active">Bộ phận</a></li>
-            <li><a routerLink="/main/team/index" routerLinkActive="active">Nhóm/tổ</a></li>
-            <li><a routerLink="/main/position/index" routerLinkActive="active">Chức vụ</a></li>
-            <li><a routerLink="/main/commondata/index" routerLinkActive="active">Dữ liệu chung</a></li>
-            <li><a [routerLink]="['/main/emp/card-list','']" routerLinkActive="active">Thẻ nhân viên</a></li>
-            <li><a routerLink="/main/emp/emp-basic" routerLinkActive="active">Nhân viên-Cơ bản</a></li>
-            <li><a routerLink="/main/emp/emp-work" routerLinkActive="active">Nhân viên-Công việc</a></li>
-            <li><a routerLink="/main/emp/emp-allowance" routerLinkActive="active">Nhân viên-phụ cấp</a></li>
-          </ul>
-        </li>
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Dự án - Doanh thu</span> <span class="menu-arrow"></span></a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/project/index" routerLinkActive="active">Dự án</a></li>
-            <li><a routerLink="/main/target/index" routerLinkActive="active">Mục tiêu</a></li>
-            <!--<li><a routerLink="/main/revenue/index" routerLinkActive="active">Doanh thu</a></li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Thông tin chung </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/company/index" routerLinkActive="active">Công ty</a></li>
+                        <li><a routerLink="/main/customer/index" routerLinkActive="active">Khách hàng</a></li>
+                        <li><a routerLink="/main/customer-unitprice/index" routerLinkActive="active">Đơn giá KH</a></li>
+                        <li><a routerLink="/main/exchange-rate/index" routerLinkActive="active">Tỉ giá</a></li>
+                        <li><a routerLink="/main/dept/index" routerLinkActive="active">Bộ phận</a></li>
+                        <li><a routerLink="/main/team/index" routerLinkActive="active">Nhóm/tổ</a></li>
+                        <li><a routerLink="/main/position/index" routerLinkActive="active">Chức vụ</a></li>
+                        <li><a routerLink="/main/master/master" routerLinkActive="active">Phân loại</a></li>
+                        <li><a routerLink="/main/master/index" routerLinkActive="active">Phân loại chi tiết</a></li>
+                        <li><a [routerLink]="['/main/emp/card-list','']" routerLinkActive="active">Thẻ nhân viên</a></li>
+                        <li><a routerLink="/main/emp/emp-basic" routerLinkActive="active">Nhân viên-Cơ bản</a></li>
+                        <li><a routerLink="/main/emp/emp-work" routerLinkActive="active">Nhân viên-Công việc</a></li>
+                        <li><a routerLink="/main/emp/emp-allowance" routerLinkActive="active">Nhân viên-phụ cấp</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Dự án - Doanh thu</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/project/index" routerLinkActive="active">Dự án</a></li>
+                        <li><a routerLink="/main/target/index" routerLinkActive="active">Mục tiêu</a></li>
+                        <!--<li><a routerLink="/main/revenue/index" routerLinkActive="active">Doanh thu</a></li>
             <li><a routerLink="/main/revenue/list" routerLinkActive="active">Danh sách doanh số</a></li>-->
-            <li><a routerLink="/main/revenue/grid" routerLinkActive="active">Doanh số</a></li>
-          </ul>
-        </li>
+                        <li><a routerLink="/main/revenue/grid" routerLinkActive="active">Doanh số</a></li>
+                    </ul>
+                </li>
 
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Xử lý tháng</span> <span class="menu-arrow"></span></a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/project/index" routerLinkActive="active">Dự án</a></li>
-          </ul>
-        </li>
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Cập nhật đồng loạt</span> <span class="menu-arrow"></span></a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/project/index" routerLinkActive="active">Cập nhật nhân viên</a></li>
-          </ul>
-        </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Xử lý tháng</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/project/index" routerLinkActive="active">Dự án</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Cập nhật đồng loạt</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/project/index" routerLinkActive="active">Cập nhật nhân viên</a></li>
+                    </ul>
+                </li>
 
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Thống kê - Báo cáo</span> <span class="menu-arrow"></span></a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/emp/emp-expandable" routerLinkActive="active">Thống kê theo nhân viên</a></li>
-            <li><a routerLink="/main/target/index" routerLinkActive="active">Thống kế doanh số</a></li>
-          </ul>
-        </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Thống kê - Báo cáo</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/emp/emp-expandable" routerLinkActive="active">Thống kê theo nhân viên</a></li>
+                        <li><a routerLink="/main/target/index" routerLinkActive="active">Thống kế doanh số</a></li>
+                    </ul>
+                </li>
 
-        <li class="has_sub">
-          <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Hệ thống</span> <span class="menu-arrow"></span></a>
-          <ul class="list-unstyled">
-            <li><a routerLink="/main/setting/index" routerLinkActive="active">Cấu hình hệ thống</a></li>
-            <li><a routerLink="/main/setting/import" routerLinkActive="active">Nhập dữ liệu</a></li>
-            <li><a routerLink="/main/setting/export" routerLinkActive="active">Xuất dữ liệu</a></li>
-          </ul>
-        </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Hệ thống</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled">
+                        <li><a routerLink="/main/setting/index" routerLinkActive="active">Cấu hình hệ thống</a></li>
+                        <li><a routerLink="/main/setting/import" routerLinkActive="active">Nhập dữ liệu</a></li>
+                        <li><a routerLink="/main/setting/export" routerLinkActive="active">Xuất dữ liệu</a></li>
+                    </ul>
+                </li>
 
-      </ul>
-      <div class="clearfix"></div>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
-  </div>
 </div>
 <!-- Left Sidebar End -->
