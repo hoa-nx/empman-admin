@@ -11,6 +11,7 @@ import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UploadService } from '../../core/services/upload.service';
 import { SharedModule} from '../../shared/module/shared.module';
+import { CalendarModule } from 'primeng/primeng';
 
 const exchangeRateRoutes: Routes = [
   //localhost:4200/main/company
@@ -28,7 +29,8 @@ const exchangeRateRoutes: Routes = [
     Daterangepicker,
     ModalModule.forRoot(),
     SharedModule ,
-    RouterModule.forChild(exchangeRateRoutes)
+    RouterModule.forChild(exchangeRateRoutes),
+    CalendarModule
   ],
   declarations: [CustomerUnitpriceComponent],
   providers: [DataService, NotificationService, UploadService],

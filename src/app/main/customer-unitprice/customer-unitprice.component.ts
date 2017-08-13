@@ -138,11 +138,11 @@ export class CustomerUnitpriceComponent implements OnInit {
   }
 
   public selectedStartDate(value: any) {
-    this.entity.StartDate = moment(value.end._d).format('YYYY/MM/DD');
+    this.entity.StartDate = moment(value).format('YYYY/MM/DD');
   }
 
   public selectedEndDate(value: any) {
-    this.entity.EndDate = moment(value.end._d).format('YYYY/MM/DD');
+    this.entity.EndDate = moment(value).format('YYYY/MM/DD');
   }
 
   selectedData(value: any): void {

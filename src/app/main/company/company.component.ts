@@ -131,8 +131,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public selectedCreateDate(value: any) {
-    console.log(value.start);
-    this.entity.CreateDate = moment(value.start).format('YYYY/MM/DD');
+    this.entity.CreateDate = moment(value).format('YYYY/MM/DD');
   }
 
   public selectedData(value: any): void {

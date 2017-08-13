@@ -135,7 +135,7 @@ export class CustomerComponent implements OnInit {
   }
 
   public selectedContractDate(value: any) {
-    this.entity.ContractDate = moment(value.end._d).format('YYYY/MM/DD');
+    this.entity.ContractDate = moment(value).format('YYYY/MM/DD');
   }
 
   selectedData(value: any): void {

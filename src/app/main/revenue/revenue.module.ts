@@ -15,7 +15,7 @@ import { MappingService } from '../../shared/utils/mapping.service';
 import { SharedModule } from '../../shared/module/shared.module';
 import { RevenueListComponent } from './revenue-list.component';
 import { RevenueGridComponent } from './revenue-grid.component';
-import { DataTableModule } from 'primeng/primeng';
+import { DataTableModule, CalendarModule } from 'primeng/primeng';
 import { SessionService } from '../../core/services/session.service';
 import { MdCheckboxModule } from '@angular/material';
 import { MdAutocompleteModule } from '@angular/material';
@@ -44,7 +44,8 @@ const revenueRoutes: Routes = [
     SharedModule,
     MdCheckboxModule,
     MdAutocompleteModule,
-    DataTableModule
+    DataTableModule,
+    CalendarModule
   ],
   declarations: [RevenueComponent, RevenueEditComponent, RevenueListComponent, RevenueGridComponent],
   providers: [DataService, NotificationService, ItemsService, MappingService, SessionService]

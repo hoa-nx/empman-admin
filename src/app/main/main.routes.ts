@@ -13,9 +13,9 @@ export const mainRoutes: Routes = [
             { path: 'role', loadChildren: './role/role.module#RoleModule' },
             //localhost:4200/main/user
             { path: 'user', loadChildren: './user/user.module#UserModule' },
-            //localhost:4200/main/user
+            //localhost:4200/main/function
             { path: 'function', loadChildren: './function/function.module#FunctionModule' },
-            //localhost:4200/main/user
+            //localhost:4200/main/product
             { path: 'product', loadChildren: './product/product.module#ProductModule' },
             //localhost:4200/main/user
             { path: 'product-category', loadChildren: './product-category/product-category.module#ProductCategoryModule' },
@@ -23,12 +23,18 @@ export const mainRoutes: Routes = [
             { path: 'emp', loadChildren: './emp/emp.module#EmpModule' },
             //localhost:4200/main/company
             { path: 'company', loadChildren: './company/company.module#CompanyModule' },
+            //localhost:4200/main/company-rule
+            { path: 'company-rule', loadChildren: './company-rule/company-rule.module#CompanyRuleModule' },
             //localhost:4200/main/dept
             { path: 'dept', loadChildren: './dept/dept.module#DeptModule' },
             //localhost:4200/main/team
             { path: 'team', loadChildren: './team/team.module#TeamModule' },
             //localhost:4200/main/position
             { path: 'position', loadChildren: './position/position.module#PositionModule' },
+            //localhost:4200/main/estimate
+            { path: 'estimate', loadChildren: './estimate/estimate.module#EstimateModule' },
+            //localhost:4200/main/order-received
+            //{ path: 'order-received', loadChildren: './order-received/order-received.module#OrderReceivedModule' },
             //localhost:4200/main/project
             { path: 'project', loadChildren: './project/project.module#ProjectModule' },
             //localhost:4200/main/project-detail
@@ -46,7 +52,13 @@ export const mainRoutes: Routes = [
             //localhost:4200/main/target
             { path: 'target', loadChildren: './target/target.module#TargetModule' },
             //localhost:4200/main/setting
-            { path: 'setting', loadChildren: './setting/setting.module#SettingModule' },
+            { path: 'setting', loadChildren: './setting/setting.module#SettingModule' }
+            //localhost:4200/main/file-storage
+            //{ path: 'file-storage', loadChildren: './file-storage/file-storage.module#FileStorageModule' },
+            //localhost:4200/main/seminar-course
+            //{ path: 'seminar-course', loadChildren: './seminar-course/seminar-course.module#SeminarCourseModule' },
+            //localhost:4200/main/seminar-record
+            //{ path: 'seminar-record', loadChildren: './seminar-record/seminar-record.module#SeminarRecordModule' },
         ]
     }
 

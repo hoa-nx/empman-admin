@@ -12,6 +12,7 @@ import { NotificationService } from '../../core/services/notification.service';
 import { UploadService } from '../../core/services/upload.service';
 import { SearchModalComponent } from '../../shared/search-modal/search-modal.component';
 import { OnReturnDirective } from '../../shared/directives/keyenter.directive';
+import { CalendarModule } from 'primeng/primeng';
 
 const companyRoutes: Routes = [
   //localhost:4200/main/company
@@ -28,7 +29,8 @@ const companyRoutes: Routes = [
     MultiselectDropdownModule,
     Daterangepicker,
     ModalModule.forRoot(),
-    RouterModule.forChild(companyRoutes)
+    RouterModule.forChild(companyRoutes),
+    CalendarModule
   ],
   declarations: [CompanyComponent, SearchModalComponent, OnReturnDirective],
   providers: [DataService, NotificationService, UploadService],

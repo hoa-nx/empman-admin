@@ -114,14 +114,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày áp dụng</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" #startdate="ngModel" daterangepicker (selected)="selectedStartDate($event)" [options]="dateOptions" [(ngModel)]="entity.StartDate" name="startdate" class="form-control focusedInput" placeholder="Ngày áp dụng tỉ giá">
+                            <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #Sime="ngModel" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput" placeholder="Ngày áp dụng tỉ giá"></p-calendar>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày kết thúc</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" #enddate="ngModel" daterangepicker (selected)="selectedEndDate($event)" [options]="dateOptions" [(ngModel)]="entity.EndDate" name="enddate" class="form-control focusedInput" placeholder="Ngày kết thúc áp dụng">
+                            <p-calendar [showIcon]="true" [(ngModel)]="entity.EndDate" name="EndDate" #Sime="ngModel" (onSelect)="selectedEndDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput" placeholder="Ngày kết thúc áp dụng"></p-calendar>
                         </div>
                     </div>
 

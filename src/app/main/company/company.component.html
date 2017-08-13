@@ -50,7 +50,7 @@
                                     <td>{{item.WebSiteUrl}}</td>
                                     <td>{{item.TaxCode}}</td>
                                     <td>{{item.CreateDate | date:'yyyy/MM/dd'}}</td>
-                                    <td>{{item.Captital}}</td>
+                                    <td>{{item.Captital| currency:'USD':true:'1.0-0'}}</td>
                                     <td>{{item.DomainEmail}}</td>
                                     <td>{{item.GlobalIpList}}</td>
                                     <td>
@@ -145,8 +145,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày thành lập</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" daterangepicker (selected)="selectedCreateDate($event)" [options]="dateOptions" #createdate="ngModel" [(ngModel)]="entity.CreateDate" name="createdate" class="form-control focusedInput" placeholder="Ngày thành lập">
+                            <p-calendar [showIcon]="true" [(ngModel)]="entity.CreateDate" name="CreateDate" #CreateDate="ngModel" (onSelect)="selectedCreateDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput"
+                                placeholder="Ngày thành lập "></p-calendar>
                         </div>
+
                     </div>
 
                     <div class="form-group">

@@ -480,11 +480,11 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
     }
 
     public selectedOrderStartDate(value: any) {
-        this.entity.OrderStartDate = moment(value.end._d).format('YYYY/MM/DD');
+        this.entity.OrderStartDate = moment(value).format('YYYY/MM/DD');
     }
 
     public selectedOrderEndDate(value: any) {
-        this.entity.OrderEndDate = moment(value.end._d).format('YYYY/MM/DD');
+        this.entity.OrderEndDate = moment(value).format('YYYY/MM/DD');
     }
 
     public onChangeOrderUnit(value: any) {
