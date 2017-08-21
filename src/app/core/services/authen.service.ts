@@ -52,7 +52,8 @@ export class AuthenService {
             userData.permissions,
             userData.companyid,
             userData.deptid,
-            userData.teamid
+            userData.teamid,
+            userData.empid
         );
     }
     else

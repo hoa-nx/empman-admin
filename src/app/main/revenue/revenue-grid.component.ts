@@ -1055,9 +1055,10 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
     loadSearchModelFromLocalStorage() {
         //setting init dieu kien search dua vao session da luu
         this.searchModelSession = this._sessionService.getByKey(SystemConstants.SESSION_KEY_SEARCH_ITEM_MODEL);
-
-        this.revenueSelectedYearMonths = Array.from(this.searchModelSession.DateTimeItems);
-        this.selectCustomers = Array.from(this.searchModelSession.NumberItems);
+        if(this.searchModelSession){
+            this.revenueSelectedYearMonths = Array.from(this.searchModelSession.DateTimeItems);
+            this.selectCustomers = Array.from(this.searchModelSession.NumberItems);
+        }
 
     }
 

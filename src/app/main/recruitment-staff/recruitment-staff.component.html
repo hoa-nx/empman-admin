@@ -1,0 +1,372 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <form #recruitmentStaffForm="ngForm" novalidate>
+                    <div class="col-lg-12">
+                        <h4 class="m-t-0 header-title"><b>Danh sách ứng viên({{totalRow}} người)</b></h4>
+
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-md-2 col-sm-6 col-xs-12 form-group">
+                                <p-multiSelect [options]="primeModelRecruitments" [(ngModel)]="filterRecruitmentID" name="filterRecruitmentID" (ngModelChange)="onChangeRecruitment($event)"></p-multiSelect>
+                            </div>
+                            <div class="col-md-2 col-sm-6 col-xs-12 form-group">
+                                <div class="form-group contact-search m-b-30">
+                                    <input type="text" id="search" class="form-control" placeholder="Tìm ..." name="filter" (keyup.enter)="search()" [(ngModel)]="filterKeyword">
+                                    <button class="btn btn-white" (click)="search()"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 col-xs-12 form-group">
+                                <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
+                                <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
+                                <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
+                                <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="showAddModal()" class="btn btn-info" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm</button>
+                                <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="registerNotification()" class="btn btn-purple" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="fa fa-bell"></i>Đăng ký</button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+
+                            </div>
+                        </div>
+                        <!-- Header end-->
+
+                        <!-- List -->
+                        <div class="table-responsive">
+                            <table class="table table-hover mails m-0 table table-actions-bar">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Mã đợt tuyển</th>
+                                        <th>No.</th>
+                                        <th>Tên </th>
+                                        <th>Ngày giờ PV </th>
+                                        <th>Quyết định</th>
+                                        <th>Lương mong muốn</th>
+                                        <th>Trình độ</th>
+                                        <th>Trường</th>
+                                        <th>Xếp loại</th>
+                                        <th>Nợ môn</th>
+                                        <th>Tiếng Nhật</th>
+                                        <th>Ghi chú</th>
+                                        <th style="min-width: 160px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of recruitmentStaffs">
+                                        <td>
+                                            <!-- <div class="checkbox">
+                      <input type="checkbox" [(ngModel)]="item.Checked" [name]="item.ID" [ngModelOptions]="{standalone: true}">
+                      <label></label>                     
+                    </div> -->
+                                            <md-checkbox [value]="0" [(ngModel)]="item.Checked" [ngModelOptions]="{standalone: true}">
+                                            </md-checkbox>
+
+                                            <!-- Image drag and drop -->
+                                            <div class="profile-picture-section">
+
+                                                <div ng2FileDrop [ng2FileDropSupportedFileTypes]="supportedFileTypes" (ng2FileDropFileAccepted)="dragFileAccepted(item,$event)" class="profile-picture-section-drop-zone">
+                                                    <div class="profile-picture-section-request-image-container">
+                                                        <img class="profile-picture-section-request-image" src="{{uriAvatarPath + item.Avatar}}" />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td><a [routerLink]="['/main/recruitment/index/',item.RecruitmentID]">{{item.RecruitmentID}}</a>
+                                            <a *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER_WAITING" href="javascript:void(0)" [ngClass]="(item.ApprovedStatusInterview == approvedStatus.Approved || item.InterviewResult ==interviewResults[0].id)?'table-action-btn disableClick':'table-action-btn'"
+                                                (click)="registerInterview(item)">
+                                                <span [ngClass]="(item.IsRegister == false )?'tag label label-success':'tag label label-danger'">{{(item.IsRegister === false ) ? "Đăng ký" : "Hủy"}}
+                        </span>
+                                            </a>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_UNRIGISTER" class="tag label label-warning">Không đăng ký</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_WAITING" class="tag label label-info">Chờ phỏng vấn</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RESULT_WAITING" class="tag label label-purple">Chờ kết quả phỏng vấn</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_CONDITION_WORKING_TALK_WAITING" class="tag label label-primary">Chờ nói DKLV</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_CONDITION_WORKING_TALK_FEEDBACK" class="tag label label-inverse">Chờ feedback sau DKLV</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL_WAITING" class="tag label label-pink">Chờ vào thử việc</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL" class="tag label label-success">Đã vào thử việc</span>
+                                            <span *ngIf="item.CurrentStatus==99" class="tag label label-danger">Không xác định</span>
+                                        </td>
+                                        <td>{{item.CompanyCvNo}}</td>
+                                        <td>{{item.Name}}</td>
+                                        <td>{{item.InterviewDate| date:'yyyy/MM/dd HH:mm'}}
+                                            <span *ngIf="item.interviewStatusEvent=='sắp diễn ra'" class="tag label label-info">{{item.interviewStatusEvent}}</span>
+                                            <span *ngIf="item.interviewStatusEvent=='đang diễn ra'" class="tag label label-purple">{{item.interviewStatusEvent}}</span>
+                                            <span *ngIf="item.interviewStatusEvent=='xong pv'" class="tag label label-inverse">{{item.interviewStatusEvent}}</span>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="item.InterviewResult==interviewResults[1].id || item.InterviewResult==interviewResults[3].id" class="tag label label-danger">{{item.InterviewResult}}</span>
+                                            <span *ngIf="item.InterviewResult==interviewResults[2].id" class="tag label label-success">{{item.InterviewResult}}</span>
+                                            <span *ngIf="item.InterviewResult==interviewResults[4].id" class="tag label label-pink">{{item.InterviewResult}}(Dept {{item.DeptReceived}})</span>
+                                            <span *ngIf="item.InterviewResult==interviewResults[5].id" class="tag label label-warning">{{item.InterviewResult}}</span>
+                                            <span *ngIf="item.InterviewResult==interviewResults[6].id" class="tag label label-purple">{{item.InterviewResult}}</span>
+                                        </td>
+
+                                        <td>{{item.KiboSalary| currency:'VND':true:'1.0-0'}}</td>
+                                        <td>{{item.EducationLevel}}</td>
+                                        <td>{{item.CollectName}}</td>
+                                        <td>{{item.Grade}}</td>
+                                        <td>{{item.DebtSubjectCount}}</td>
+                                        <td>{{item.JapaneseLevel}}</td>
+                                        <td>{{item.Note}}</td>
+                                        <td>
+                                            <input type="file" multiple="true" accept=".xls,.xlsx,.doc,.docx,.pdf,.gif,.jpg,.png" name="fileUpload" #fileUpload [(ngModel)]="item.fileUpload" [id]="item.ID" [name]="item.ID" [ngModelOptions]="{standalone: true}" (change)="uploadFiles(item , $event)"
+                                                style="visibility: hidden;">
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="showInterviewStaffModal(item)" title="Danh sách các nhân viên đăng ký phỏng vấn"><i class="fa fa-users"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="fileUpload.click()" title="Upload các file liên quan"><i class="fa fa-upload"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)" title="Cập nhật thông tin ứng viên"><i class="md md-edit"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close" title="Xóa ứng viên"></i></a>
+
+
+                                            <button *ngIf="item.AttachmentFileLists[0]" type="button" class="btn btn-dropbox dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Tải file <span class="m-l-5"><i class="fa fa-download"></i></span></button>
+                                            <ul class="dropdown-menu drop-menu-right" role="menu">
+                                                <li *ngFor="let file of item.AttachmentFileLists">
+                                                    <div class="form-group">
+                                                        <a href="javascript:void(0)" (click)="downloadItemFile(file)" routerLinkActive="active">{{file.FileName}}</a>
+                                                        <a href="javascript:void(0)" (click)="deleteItemFile(file)" routerLinkActive="active"><span class="m-l-5"><i class="fa fa-close deleteIconColor"></i></span></a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <!-- paging -->
+                        <div class="col-md-12">
+
+                            <div *ngIf="recruitmentStaffs && recruitmentStaffs.length == 0" class="col-md-12">
+                                <div class="alert alert-info">
+                                    <strong>Thông báo!</strong> Hiện tại chưa có dữ liệu nào ứng với loại đã chọn
+                                </div>
+
+                            </div>
+                            <div *ngIf="recruitmentStaffs && recruitmentStaffs.length > 0" class="col-md-12">
+                                <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                            </div>
+                        </div>
+                        <!-- paging end-->
+                        <!-- List end-->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" [config]="{backdrop: 'static', keyboard : false}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Thêm/Sửa chi tiết</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm)" *ngIf="entity">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã đợt tuyển dụng</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="hidden" #ID="ngModel" [(ngModel)]="entity.ID" name="ID">
+                            <input type="text" #RecruitmentID="ngModel" [(ngModel)]="entity.RecruitmentID" required maxlength="256" name="RecruitmentID" class="form-control focusedInput" placeholder="Mã đợt tuyển dụng">
+                            <small [hidden]="RecruitmentID.valid || (RecruitmentID.pristine && !addEditForm.submitted)" class="text-danger">
+                            Mã bắt buộc nhập
+                          </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã ứng viên</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #RecruitmentStaffID="ngModel" [(ngModel)]="entity.RecruitmentStaffID" required maxlength="256" name="RecruitmentStaffID" class="form-control focusedInput" placeholder="Mã ứng viên">
+                            <small [hidden]="RecruitmentStaffID.valid || (RecruitmentStaffID.pristine && !addEditForm.submitted)" class="text-danger">
+                            Mã bắt buộc nhập
+                          </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên ứng viên</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #Name="ngModel" [(ngModel)]="entity.Name" required name="Name" maxlength="256" class="form-control focusedInput" placeholder="Tên ứng viên">
+                            <small [hidden]="Name.valid || (Name.pristine && !addEditForm.submitted)" class="text-danger">
+                              Tên bắt buộc nhập
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày giờ phỏng vấn</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true" [showTime]="true" hourFormat="24" [(ngModel)]="entity.InterviewDate" #InterviewDate="ngModel" name="InterviewDate" (onSelect)="selectedInterviewDate($event)" dateFormat="yy/mm/dd" class="focusedInput" placeholder="Ngày giờ phỏng vấn"></p-calendar>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Phòng phỏng vấn</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #InterviewRoom="ngModel" [(ngModel)]="entity.InterviewRoom" maxlength="256" name="InterviewRoom" class="form-control focusedInput" placeholder="Phòng phỏng vấn">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Đánh giá</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea #InterviewComment="ngModel" [(ngModel)]="entity.InterviewComment" name="InterviewComment" class="form-control focusedInput" placeholder="Đánh giá"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Kết quả cuối cùng</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="InterviewResult" [(ngModel)]="entity.InterviewResult">
+                <option *ngFor="let x of interviewResults" [value]="x.id">{{x.name}}</option>
+              </select>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Bộ phận nhận</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="DeptReceived" [(ngModel)]="entity.DeptReceived">
+                              <option *ngFor="let x of depts" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Team nhận</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="TeamReceived" [(ngModel)]="entity.TeamReceived">
+                              <option *ngFor="let x of teams" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Người support</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="SupportEmpID" [(ngModel)]="entity.SupportEmpID">
+                              <option *ngFor="let x of emps" [value]="x.ID">{{x.FullName}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Bộ ghost</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-autoComplete [(ngModel)]="entity.GhostPC" name="GhostPC" #GhostPC="ngModel" [suggestions]="autoFilterGhostLists" (completeMethod)="filterGhostLists($event)"></p-autoComplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày nói chuyện DKLV</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true" [(ngModel)]="entity.WorkingConditionTalkDate" name="WorkingConditionTalkDate" #WorkingConditionTalkDate="ngModel" (onSelect)="selectedWorkingConditionTalkDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true"
+                                yearRange="2017:2100" class="focusedInput" placeholder="Ngày nói chuyện DKLV"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày vào thử việc</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true" [(ngModel)]="entity.TrialStartDate" name="TrialStartDate" #TrialStartDate="ngModel" (onSelect)="selectedTrialStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2017:2100" class="focusedInput"
+                                placeholder="Ngày vào thử việc"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày báo nhân sự/IT</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true" [(ngModel)]="entity.ResourceDeptMailNotificationDate" name="ResourceDeptMailNotificationDate" #ResourceDeptMailNotificationDate="ngModel" (onSelect)="selectedResourceDeptMailNotificationDate($event)" dateFormat="yy/mm/dd"
+                                [monthNavigator]="true" [yearNavigator]="true" yearRange="2017:2100" class="focusedInput" placeholder="Ngày báo nhân sự/IT"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Kết thúc phỏng vấn</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <md-checkbox (change)="changeCheckboxIsFinished($event)" [value]="0" [(ngModel)]="entity.IsFinished" #IsFinished="ngModel" name="IsFinished">Kết thúc phỏng vấn
+                            </md-checkbox>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ghi chú</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea #Note="ngModel" [(ngModel)]="entity.Note" name="Note" class="form-control focusedInput" placeholder="Ghi chú"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-danger">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal hien thi nguoi dang ky phong van -->
+<div bsModal #interviewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" *ngIf="recruitmentInterviewOfStaffs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="interviewModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                <h4 class="modal-title">Danh sách đăng ký phỏng vấn {{showInterviewStaffModalSave.FullName}}</h4>
+            </div>
+            <div class="modal-body">
+
+                <!-- Header -->
+                <div class="row">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Thêm người phỏng vấn</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <!-- <p-multiSelect [options]="primeModelRecruitments" [(ngModel)]="empRegisterSelectedLists" name="filterRecruitmentID"  (ngModelChange)="onChangeRecruitment($event)"></p-multiSelect>                -->
+                            <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empRegisterLists" [(ngModel)]="empRegisterSelectedLists" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 form-group">
+                            <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="addEmpToInterviewRegister()" [ngClass]="(showInterviewStaffModalSave.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER_WAITING)?'btn btn-info':'btn btn-info disableClick'">
+                <i class="md md-add"></i> Thêm
+              </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Người đăng ký</th>
+                            <th>Ngày giờ phỏng vấn</th>
+                            <th>Địa điểm</th>
+                            <th>Kết quả</th>
+                            <th>Ghi chú</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let interviewStaff of recruitmentInterviewOfStaffs">
+                            <td> {{interviewStaff.RegInterviewEmp.FullName}}</td>
+                            <td>{{interviewStaff.ActualInterviewDate | date:'yyyy/MM/dd HH:mm'}}</td>
+                            <td>{{interviewStaff.ActualInterviewRoom}}</td>
+                            <td>{{interviewStaff.InterviewResult}}</td>
+                            <td>{{interviewStaff.Note}}</td>
+                            <td>
+                                <button *ngIf="!interviewStaff.ApprovedStatus || (interviewStaff.ApprovedStatus==approvedStatus.Normal)" class="btn btn-danger" type="button" (click)="deleteItemInterviewStaff(interviewStaff.ID)">Xóa</button>
+
+                                <button *ngIf="!interviewStaff.ApprovedStatus || (interviewStaff.ApprovedStatus==approvedStatus.Normal)" class="btn btn-primary" type="button" (click)="approvedInterviewStaff(interviewStaff, approvedStatus.Approved)">Approved</button>
+                                <button *ngIf="(interviewStaff.ApprovedStatus==approvedStatus.Approved)" class="btn btn-warning" type="button" (click)="approvedInterviewStaff(interviewStaff, approvedStatus.Normal)">Hủy approved</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

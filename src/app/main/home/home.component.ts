@@ -443,13 +443,17 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.manRevenueMMTotal = 0;
     this.onsiteRevenueMMTotal = 0;
     this.sumaryRevenueMMTotal = 0;
+    
     //tính tong cua phan doanh số
-    this.revenueDataByType.forEach(element => {
-      this.devRevenueMMTotal += element.InMonthDevMM;
-      this.manRevenueMMTotal += element.InMonthManagementMM;
-      this.onsiteRevenueMMTotal += element.InMonthOnsiteMM;
+    if (this.revenueDataByType) {
+      this.revenueDataByType.forEach(element => {
+        this.devRevenueMMTotal += element.InMonthDevMM;
+        this.manRevenueMMTotal += element.InMonthManagementMM;
+        this.onsiteRevenueMMTotal += element.InMonthOnsiteMM;
 
-    });
+      });
+    }
+
     this.devRevenueMMTotal = +(this.devRevenueMMTotal).toFixed(2);
     this.manRevenueMMTotal = +(this.manRevenueMMTotal).toFixed(2);
     this.onsiteRevenueMMTotal = +(this.onsiteRevenueMMTotal).toFixed(2);

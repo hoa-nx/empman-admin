@@ -1,0 +1,273 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="m-t-0 header-title"><b>Danh sách đợt tuyển dụng</b></h4>
+
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-md-1 col-sm-6 col-xs-12 form-group">
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12 form-group">
+                            <div class="form-group contact-search m-b-30">
+                                <input type="text" id="search" class="form-control" placeholder="Tìm ..." name="filter" (keyup.enter)="search()" [(ngModel)]="filterKeyword">
+                                <button class="btn btn-white" (click)="search()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-sm-6 col-xs-12 form-group">
+                            <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
+                            <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
+                            <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
+                            <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="showAddModal()" class="btn btn-info" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm</button>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+
+                        </div>
+                    </div>
+                    <!-- Header end-->
+
+                    <!-- List -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mails m-0 table table-actions-bar">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Mã đợt tuyển</th>
+                                    <th>Tên </th>
+                                    <th>Tên tắt</th>
+                                    <th>Loại tuyển dụng </th>
+                                    <th>Đường dẫn hồ sơ</th>
+                                    <th>Đường dẫn tại dept</th>
+                                    <th>Số hồ sơ</th>
+                                    <th>Người gửi thông báo</th>
+                                    <th>Ngày giờ hết hạn</th>
+                                    <th>Đã gửi thông báo</th>
+                                    <th>Kết thúc đợt tuyển</th>
+                                    <th>Ghi chú</th>
+                                    <th style="min-width: 90px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of recruitments">
+                                    <td>
+                                        <div class="checkbox">
+                                            <input type="checkbox" [(ngModel)]="item.Checked" [name]="item.ID" [ngModelOptions]="{standalone: true}">
+                                            <label></label>
+                                        </div>
+                                    </td>
+                                    <td>{{item.ID}}</td>
+                                    <td>{{item.Name}}</td>
+                                    <td>{{item.ShortName}}</td>
+                                    <td>{{item.RecruitmentTypeMasterDetailID}}</td>
+                                    <td>{{item.CvCompanyFolderPath}}</td>
+                                    <td>{{item.CvDeptFolderPath}}</td>
+
+                                    <td><a [routerLink]="['/main/recruitment-staff/index/',item.ID]">{{item.CvCount}}</a></td>
+
+                                    <td>{{item.SendMailFromEmpID}}</td>
+                                    <td>{{item.AnsRecruitDeptDeadlineDate| date:'yyyy/MM/dd HH:mm'}}</td>
+                                    <td>{{item.IsNotification}}</td>
+                                    <td>{{item.IsFinished}}</td>
+                                    <td>{{item.Note}}</td>
+                                    <td>
+                                        <a *ngIf="item.FileID" href="javascript:void(0)" class="table-action-btn" (click)="downloadItemFile(item)"><i class="md md-file-download"></i></a>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <!-- paging -->
+                    <div class="col-md-12">
+
+                        <div *ngIf="recruitments && recruitments.length == 0" class="col-md-12">
+                            <div class="alert alert-info">
+                                <strong>Thông báo!</strong> Hiện tại chưa có dữ liệu nào ứng với loại đã chọn
+                            </div>
+
+                        </div>
+                        <div *ngIf="recruitments && recruitments.length > 0" class="col-md-12">
+                            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                        </div>
+
+                    </div>
+
+                    <!-- paging end-->
+                    <!-- List end-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" [config]="{backdrop: 'static', keyboard : false}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Thêm/Sửa chi tiết</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(addEditForm)" *ngIf="entity">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã đợt tuyển dụng</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="hidden" #No="ngModel" [(ngModel)]="entity.No" name="No">
+                            <input type="text" #ID="ngModel" [(ngModel)]="entity.ID" required maxlength="256" name="ID" class="form-control focusedInput" placeholder="Mã đợt tuyển dụng">
+                            <small [hidden]="ID.valid || (ID.pristine && !addEditForm.submitted)" class="text-danger">
+                            Mã bắt buộc nhập
+                          </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên đợt tuyển dụng</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #Name="ngModel" [(ngModel)]="entity.Name" required name="Name" maxlength="256" class="form-control focusedInput" placeholder="Tên đợt tuyển dụng">
+                            <small [hidden]="Name.valid || (Name.pristine && !addEditForm.submitted)" class="text-danger">
+                              Tên bắt buộc nhập
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tắt</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #ShortName="ngModel" [(ngModel)]="entity.ShortName" maxlength="256" required name="ShortName" class="form-control focusedInput" placeholder="Tên tắt">
+                            <small [hidden]="ShortName.valid || (ShortName.pristine && !addEditForm.submitted)" class="text-danger">
+                              Tên tắt bắt buộc nhập
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Loại tuyển dụng</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="RecruitmentTypeMasterDetailID" [(ngModel)]="entity.RecruitmentTypeMasterDetailID">
+                              <option *ngFor="let x of recruitmentTypes" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Đường dẫn hồ sơ</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #CvCompanyFolderPath="ngModel" [(ngModel)]="entity.CvCompanyFolderPath" name="CvCompanyFolderPath" class="form-control focusedInput" placeholder="Đường dẫn hồ sơ tuyển dụng gửi">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Đường dẫn hồ sơ tại dept</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #CvDeptFolderPath="ngModel" [(ngModel)]="entity.CvDeptFolderPath" name="CvDeptFolderPath" class="form-control focusedInput" placeholder="Đường dẫn hồ sơ tuyển dụng tại dept">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Số hồ sơ nộp</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #CvCount="ngModel" [(ngModel)]="entity.CvCount" name="CvCount" class="form-control focusedInput" placeholder="Số hồ sơ phỏng vấn">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Người gửi </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="SendMailFromEmpID" [(ngModel)]="entity.SendMailFromEmpID">
+                              <option *ngFor="let x of emps" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Người trả lời</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control" name="SendMailToEmpID" [(ngModel)]="entity.SendMailToEmpID">
+                              <option *ngFor="let x of emps" [value]="x.ID">{{x.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Kỳ hạn trả lời</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true" [showTime]="true" [(ngModel)]="entity.AnsRecruitDeptDeadlineDate" #AnsRecruitDeptDeadlineDate="ngModel" name="AnsRecruitDeptDeadlineDate" (onSelect)="selectedAnsRecruitDeptDeadlineDate($event)" dateFormat="yy/mm/dd" class="focusedInput"
+                                placeholder="Kỳ hạn trả lời"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Kỳ hạn trả lời nội bộ</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true" [showTime]="true" [(ngModel)]="entity.AnsLocalDeadlineDate" name="AnsLocalDeadlineDate" #AnsLocalDeadlineDate="ngModel" (onSelect)="selectedAnsLocalDeadlineDate($event)" dateFormat="yy/mm/dd" class="focusedInput" placeholder="Kỳ hạn trả lời trong dept"></p-calendar>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Đã thông báo leaders</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <md-checkbox (change)="changeCheckboxIsNotification($event)" [value]="0" [(ngModel)]="entity.IsNotification" #IsNotification="ngModel" name="IsNotification">Đã thông báo leaders
+                            </md-checkbox>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Deadline đăng ký phỏng vấn</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <p-calendar [showIcon]="true"  [showTime]="true" hourFormat="24"  [(ngModel)]="entity.ExpireDate" name="ExpireDate" #ExpireDate="ngModel" (onSelect)="selectedExpireDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput"
+                                placeholder="Ngày giờ hết hạn đăng ký phỏng vấn"></p-calendar>
+                        </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Kết thúc đợt tuyển</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <md-checkbox (change)="changeCheckboxIsFinished($event)" [value]="0" [(ngModel)]="entity.IsFinished" #IsFinished="ngModel" name="IsFinished">Kết thúc đợt tuyển dụng
+                            </md-checkbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Nội dung</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea #Content="ngModel" [(ngModel)]="entity.Content" name="Objective" class="form-control focusedInput" placeholder="Nội dung liên quan"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">File hồ sơ</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="col-md-10 col-sm-6 col-xs-12">
+                                <input type="file" accept=".xls,.xlsx,pdf,.doc,.docx" #filePathRecruitment name="filePathRecruitment" class="form-control">
+                                <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xlsx , *.pdf </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Ghi chú</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #Note="ngModel" [(ngModel)]="entity.Note" name="Note" class="form-control focusedInput" placeholder="Ghi chú">
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-danger">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

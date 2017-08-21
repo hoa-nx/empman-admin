@@ -247,7 +247,7 @@ export class SettingComponent implements OnInit {
   }
 
   loadDataSearchFilter() {
-    this._dataService.get('/api/setting/detailsearchfilter/' + this.user.username)
+    this._dataService.get('/api/setting/detailsearchfilterbyuser')
       .subscribe((response: any) => {
         this.searchFilterEntity = response;
         this.mapFilterToModel();
@@ -278,23 +278,58 @@ export class SettingComponent implements OnInit {
     this.selectBseLevels = this.searchFilterEntity.selectBseLevels;
 
     this.chkStartWorkingDate = this.searchFilterEntity.chkStartWorkingDate;
-    this.startWorkingDateFrom = moment(this.searchFilterEntity.startWorkingDateFrom).format('YYYY/MM/DD');
-    this.startWorkingDateTo = moment(this.searchFilterEntity.startWorkingDateTo).format('YYYY/MM/DD');
+    if(this.searchFilterEntity.startWorkingDateFrom){
+      this.startWorkingDateFrom = moment(this.searchFilterEntity.startWorkingDateFrom).format('YYYY/MM/DD');
+    }else{
+      this.startWorkingDateFrom =null;
+    }
 
+    if(this.searchFilterEntity.startWorkingDateTo){
+      this.startWorkingDateTo = moment(this.searchFilterEntity.startWorkingDateTo).format('YYYY/MM/DD');
+    }else{
+      this.startWorkingDateTo =null;
+    }
+    
     this.chkContractDate = this.searchFilterEntity.chkContractDate;
-    this.contractDateFrom = moment(this.searchFilterEntity.contractDateFrom).format('YYYY/MM/DD');
-
-    this.contractDateTo = moment(this.searchFilterEntity.contractDateTo).format('YYYY/MM/DD');
+    if(this.searchFilterEntity.contractDateFrom){
+      this.contractDateFrom = moment(this.searchFilterEntity.contractDateFrom).format('YYYY/MM/DD');
+    }else{
+      this.contractDateFrom = null;
+    }
+    
+    if(this.searchFilterEntity.contractDateTo){
+      this.contractDateTo = moment(this.searchFilterEntity.contractDateTo).format('YYYY/MM/DD');
+    }else{
+      this.contractDateTo =null;
+    }
 
     this.chkTrialDate = this.searchFilterEntity.chkTrialDate;
-    this.trialDateFrom = moment(this.searchFilterEntity.trialDateFrom).format('YYYY/MM/DD');
-    this.trialDateTo = moment(this.searchFilterEntity.trialDateTo).format('YYYY/MM/DD');;
+    
+    if(this.searchFilterEntity.trialDateFrom){
+      this.trialDateFrom = moment(this.searchFilterEntity.trialDateFrom).format('YYYY/MM/DD');
+    }else{
+      this.trialDateFrom =null;
+    }
 
+    if(this.searchFilterEntity.trialDateTo){
+      this.trialDateTo = moment(this.searchFilterEntity.trialDateTo).format('YYYY/MM/DD');
+    }else{
+      this.trialDateTo =null;
+    }
+    
     this.chkJobLeaveDate = this.searchFilterEntity.chkJobLeaveDate;
-    this.jobLeaveDateFrom = moment(this.searchFilterEntity.jobLeaveDateFrom).format('YYYY/MM/DD');
-    this.jobLeaveDateTo = moment(this.searchFilterEntity.jobLeaveDateTo).format('YYYY/MM/DD');;
+    if(this.searchFilterEntity.jobLeaveDateFrom){
+      this.jobLeaveDateFrom = moment(this.searchFilterEntity.jobLeaveDateFrom).format('YYYY/MM/DD');
+    }else{
+      this.jobLeaveDateFrom = null;
+    }
 
-
+    if(this.searchFilterEntity.jobLeaveDateTo){
+      this.jobLeaveDateTo = moment(this.searchFilterEntity.jobLeaveDateTo).format('YYYY/MM/DD');
+    }else{
+      this.jobLeaveDateTo = null;
+    }
+   
     this.chkExperence = this.searchFilterEntity.chkExperence;
 
     this.chkLearning = this.searchFilterEntity.chkLearning;
@@ -304,11 +339,17 @@ export class SettingComponent implements OnInit {
     this.selectDataTypes = this.searchFilterEntity.selectDataTypes;
 
     //luu dieu kien search 
-
     //luu trinh tu sap xep
-    this.listSelectedItemSorts = this.searchFilterEntity.sort;
-    let initItemSorts = this.listEmpItemSorts.filter(x => !this.listSelectedItemSorts.includes(x));
-    this.listEmpItemSorts = initItemSorts;
+    if(this.searchFilterEntity.sort){
+      this.listSelectedItemSorts = this.searchFilterEntity.sort;
+    }
+    
+    //check null
+    if(this.listSelectedItemSorts){
+      let initItemSorts = this.listEmpItemSorts.filter(x => !this.listSelectedItemSorts.includes(x));
+      this.listEmpItemSorts = initItemSorts;
+    }
+    
   }
 
   initSearchFilterModel() {
@@ -418,6 +459,7 @@ export class SettingComponent implements OnInit {
       //luu trinh tu sap xep
       this.filterViewModel.sort = this.listSelectedItemSorts;
 
+      console.log(this.filterViewModel);
       this._dataService.put('/api/setting/updateempfilter', JSON.stringify(this.filterViewModel))
         .subscribe((response: any) => {
           this.reLoadDataEmp();

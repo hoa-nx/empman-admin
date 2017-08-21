@@ -52,7 +52,14 @@ export const mainRoutes: Routes = [
             //localhost:4200/main/target
             { path: 'target', loadChildren: './target/target.module#TargetModule' },
             //localhost:4200/main/setting
-            { path: 'setting', loadChildren: './setting/setting.module#SettingModule' }
+            { path: 'setting', loadChildren: './setting/setting.module#SettingModule' },
+            //localhost:4200/main/recruitment
+            { path: 'recruitment', loadChildren: './recruitment/recruitment.module#RecruitmentModule' },
+            //localhost:4200/main/recruitment-staff
+            { path: 'recruitment-staff', loadChildren: './recruitment-staff/recruitment-staff.module#RecruitmentStaffModule' },
+            //localhost:4200/main/recruitment-interview
+            { path: 'recruitment-interview', loadChildren: './recruitment-interview/recruitment-interview.module#RecruitmentInterviewModule' }
+
             //localhost:4200/main/file-storage
             //{ path: 'file-storage', loadChildren: './file-storage/file-storage.module#FileStorageModule' },
             //localhost:4200/main/seminar-course

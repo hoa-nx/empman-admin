@@ -16,6 +16,9 @@ export class ImportComponent implements OnInit {
 
     @ViewChild("filePath") filePath;
     @ViewChild("filePathRevenue") filePathRevenue;
+    @ViewChild("filePathRecruitment") filePathRecruitment;
+    public recruitments : any[];
+    public recruitmentID : any;
 
     constructor(private _dataService: DataService,
         private _itemsService: ItemsService,
@@ -27,9 +30,15 @@ export class ImportComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.loadDataRecruitments();
+    }   
 
+
+    private loadDataRecruitments() {
+        this._dataService.get('/api/recruitment/getall').subscribe((response: any[]) => {
+            this.recruitments = response;
+        }, error => this._dataService.handleError(error));
     }
-
     /**
      * Import thông tin nhân viên
      */
@@ -66,4 +75,31 @@ export class ImportComponent implements OnInit {
             this._notificationService.printAlertDialog(MessageContstants.CONFIRM_NOT_SELECT_FILE_MSG, () => { });
         }
     }
+
+    /**
+     * Import thông tin nhân viên
+     */
+    importRecruitment() {
+        let fi = this.filePathRecruitment.nativeElement;
+        if (fi.files.length > 0) {
+            this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_IMPORT_NO_DELETE_DATA_MSG, () => {
+                this._loaderService.displayLoader(true);
+
+                let postData: any = {
+                    recruitmentID: this.recruitmentID,
+                    
+                    recruitmentType: this.recruitments.find(x => x.ID == this.recruitmentID).RecruitmentTypeMasterDetailID
+
+                };
+                this._uploadService.postWithFile('/api/recruitmentstaff/import', postData, fi.files).then((message: string) => {
+                    this._loaderService.displayLoader(false);
+                    this._notificationService.printSuccessMessage(message);
+                });
+            });
+        } else {
+            this._notificationService.printAlertDialog(MessageContstants.CONFIRM_NOT_SELECT_FILE_MSG, () => { });
+        }
+    }
+
+
 }

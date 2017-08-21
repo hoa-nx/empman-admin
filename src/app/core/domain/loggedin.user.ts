@@ -9,7 +9,8 @@ export class LoggedInUser {
         permissions: any,
         companyid: any,
         deptid: any,
-        teamid: any
+        teamid: any,
+        empid: any
     ) 
     {
         this.access_token = access_token;
@@ -22,6 +23,7 @@ export class LoggedInUser {
         this.teamid = teamid;
         this.roles = roles;
         this.permissions = permissions;
+        this.empid = empid;
     }
 
     public id: string;
@@ -35,4 +37,5 @@ export class LoggedInUser {
     public teamid: any;
     public permissions: any;
     public roles: any;
+    public empid: any;
 }

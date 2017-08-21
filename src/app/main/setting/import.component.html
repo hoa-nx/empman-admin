@@ -23,15 +23,15 @@
                                     <label>Chọn file excel để import dữ liệu nhân viên</label>
                                 </div>
                                 <div class="row">
-                                        <div class="col-md-10 col-sm-6 col-xs-12">                                            
-                                            <input type="file" required #filePath name="filePath" class="form-control">
-                                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xls, *.xlsx </p>
-                                        </div>
+                                    <div class="col-md-10 col-sm-6 col-xs-12">
+                                        <input type="file"  accept=".xlsx" required #filePath name="filePath" class="form-control" >
+                                        <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xlsx </p>
+                                    </div>
 
-                                        <div class="col-md-2 col-sm-6 col-xs-12">
-                                            <button class="btn btn-info" (click)="importEmp()">Import</button>
-                                        </div>
-                                    
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <button class="btn btn-info" (click)="importEmp()">Import</button>
+                                    </div>
+
                                 </div>
                             </tab>
 
@@ -42,18 +42,50 @@
                                     <label>Chọn file excel để import dữ liệu doanh số</label>
                                 </div>
                                 <div class="row">
-                                        <div class="col-md-10 col-sm-6 col-xs-12">                                            
-                                            <input type="file" required #filePathRevenue name="filePathRevenue" class="form-control">
-                                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xls, *.xlsx </p>
-                                        </div>
+                                    <div class="col-md-10 col-sm-6 col-xs-12">
+                                        <input type="file"  accept=".xlsx" required #filePathRevenue name="filePathRevenue" class="form-control">
+                                        <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xlsx </p>
+                                    </div>
 
-                                        <div class="col-md-2 col-sm-6 col-xs-12">
-                                            <button class="btn btn-info" (click)="importRevenue()">Import</button>
-                                        </div>
-                                    
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <button class="btn btn-info" (click)="importRevenue()">Import</button>
+                                    </div>
+
                                 </div>
 
                             </tab>
+
+                            <!-- Tab hồ sơ ứng viên thử việc-->
+                            <tab heading="Thử việc">
+                                <div class="row">
+                                    <label>Mã đợt ứng tuyển</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10 col-sm-6 col-xs-12">
+                                        <select class="form-control" name="recruitmentID" [(ngModel)]="recruitmentID" required>
+                                            <option *ngFor="let x of recruitments" [value]="x.ID">{{x.Name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <h5 class="m-t-0 header-title"><b>Thông tin import</b></h5>
+                                    <label>Chọn file excel để import hồ sơ thử việc</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10 col-sm-6 col-xs-12">
+                                        <input type="file"  accept=".xlsx" required #filePathRecruitment name="filePathRecruitment" class="form-control">
+                                        <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xlsx </p>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <button class="btn btn-info" (click)="importRecruitment()">Import</button>
+                                    </div>
+
+                                </div>
+
+                            </tab>
+
                         </tabset>
 
                     </div>

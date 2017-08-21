@@ -188,6 +188,28 @@ export class MappingService {
         });
         return model;
     }
+    
+    public static mapMasterDetailToPrimeMultiSelectModel(data: any[]) {
+    let model: any[] = [];
+    data.map(item => {
+        model.push({
+            label: item.ID,
+            value: item.Name
+        });
+    });
+    return model;
+    }
+
+    public static mapIdNameToPrimeMultiSelectModel(data: any[]) {
+        let model: any[] = [];
+        data.map(item => {
+            model.push({
+                label: item.Name,
+                value: item.ID
+            });
+        });
+        return model;
+    }
 
     public static mapYearMonhToDropdownModel(data: any[]) {
         let model: IMultiSelectOption[] = [];

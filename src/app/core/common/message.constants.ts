@@ -12,6 +12,7 @@ export class MessageContstants {
     public static CALL_API_ERROR = "Không thể đọc được dữ liệu";
     public static FORBIDDEN = "Bạn bị chặn truy cập";
     public static CANNOT_EDIT_APPROVED_DATA = "Không thể chỉnh sửa dữ liệu đã approved";
+    public static CHANGE_STAUTUS_APPROVED_DATA = "Bạn có chắc thay đổi trạng thái approved?";
     public static CONFIRM_APPROVED_MSG = "Các dữ liệu này sẽ được approved?";
     public static CONFIRM_NOT_SELECT_FILE_MSG = "Chưa chọn file, hãy chọn file rồi thực thi lại";
     public static CONFIRM_IMPORT_NO_DELETE_DATA_MSG = "Bạn có chắc import các dữ liệu trong file đã chọn?";
