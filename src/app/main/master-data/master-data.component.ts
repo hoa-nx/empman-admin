@@ -77,13 +77,15 @@ export class MasterDataComponent implements OnInit {
     this.search();
   }
 
-  loadDetail(masterID: any, masterDetailID: any) {
+  loadDetail(masterID: any, masterDetailID: any, isCopy : boolean=false) {
     this._loaderService.displayLoader(true);
     this._dataService.get('/api/masterdetail/detailpk?masterID=' + masterID + '&masterDetailID=' + masterDetailID)
       .subscribe((response: any) => {
         this.entity = response;
         this._loaderService.displayLoader(false);
-
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
       });
   }
   pageChanged(event: any): void {
@@ -96,6 +98,10 @@ export class MasterDataComponent implements OnInit {
   }
   showEditModal(masterID: any, masterDetailID: any) {
     this.loadDetail(masterID, masterDetailID);
+    this.modalAddEdit.show();
+  }
+  showCopyModal(masterID: any, masterDetailID: any) {
+    this.loadDetail(masterID,masterDetailID, true);
     this.modalAddEdit.show();
   }
   saveChange(form: NgForm) {

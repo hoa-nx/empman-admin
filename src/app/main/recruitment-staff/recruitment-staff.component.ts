@@ -103,8 +103,8 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
   public supportedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/gif'];
   /* tslint:enable:no-unused-variable */
 
-  private currentProfileImage: string = 'http://localhost:4200/assets/images/profile-default.png';
-  private imgJobLeave: string = 'http://localhost:4200/assets/images/IsJobLeave2.png';
+  private currentProfileImage: string = SystemConstants.BASE_WEB + '/assets/images/profile-default.png';
+  private imgJobLeave: string = SystemConstants.BASE_WEB + '/assets/images/IsJobLeave2.png';
 
   public uriAvatarPath: string = SystemConstants.BASE_API;
   public imageShown: boolean = false;
@@ -234,7 +234,7 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
         this.formatDateDisplay();
         this._loaderService.displayLoader(false);
 
-      });
+      }, error => this._dataService.handleError(error));
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -664,11 +664,11 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
           relatedKey: item.RecruitmentStaffID,
 
         };
-        
+
         //for (let i = 0; i < fi.files.length; i++) {
         //  postData.append('file[]', fi.files.item(i));
         //}
-        
+
         this._uploadService.postWithFile('/api/upload/upload?type=recruitmentStaff', postData, fi.files).then((data: any) => {
           this.search();
           fi.value = "";//xoa file
@@ -713,4 +713,49 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
     });
   }
 
+  public createEmp(item: any) {
+    //check lai lan nua thong tin co the tao Emp
+    if (item.TrialStartDate && (!item.SystemEmpID)) {
+      //tao thong tin cua user de cap nhat 
+      let empData: any = {};
+      empData.ID = 0;
+      empData.FullName = item.Name;
+      empData.Gender = item.Gender;
+      empData.BirthDay = item.BirthDay;
+      empData.IdentNo = item.IdentNo;
+      empData.ExtLinkNo = item.RecruitmentStaffID;
+      empData.TrainingProfileNo = item.CompanyCvNo;
+      empData.Avatar = item.Avatar;
+      empData.PersonalEmail = item.Email;
+      empData.PhoneNumber1 = item.PhoneNumber;
+      empData.Address1 = item.AdddressPlace;
+      empData.CurrentCompanyID = this.user.companyid;
+      empData.CurrentDeptID = item.DeptReceived;
+      empData.CurrentTeamID = item.TeamReceived;
+      empData.InterviewDate = item.InterviewDate;
+      empData.WorkingConditionTalkDate = item.WorkingConditionTalkDate;
+      empData.StartWorkingDate = item.TrialStartDate;
+      empData.StartTrialDate = item.TrialStartDate;
+      empData.Hobby = item.Hobby;
+      empData.Objective = item.Objective;
+      empData.Note = item.Note;
+
+      this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_CREATE_EMP_FROM_RECRUITMENT_MSG, () => {
+        // tao nhan vien 
+        this._dataService.post('/api/emp/add', JSON.stringify(empData))
+          .subscribe((response: any) => {
+            //cap nhat lai thong tin empID
+            if (response.ID) {
+              item.SystemEmpID = response.ID;
+              this._dataService.put('/api/recruitmentstaff/update', JSON.stringify(item))
+                .subscribe((response: any) => {
+                  this.search();
+
+                  this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
+                }, error => this._dataService.handleError(error));
+            }
+          }, error => this._dataService.handleError(error));
+      });
+    }
+  }
 }

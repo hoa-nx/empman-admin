@@ -68,16 +68,18 @@ export class CompanyComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-      });
+      }, error => this._dataService.handleError(error));
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._dataService.get('/api/company/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this.entity.CreateDate = moment(new Date(this.entity.CreateDate)).format('YYYY/MM/DD');
-
-      });
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -92,6 +94,11 @@ export class CompanyComponent implements OnInit {
     this.loadDetail(id);
     this.modalAddEdit.show();
   }
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
+    this.modalAddEdit.show();
+  }
+  
   saveChange(form: NgForm) {
     if (form.valid) {
       this.saveData(form);
@@ -135,7 +142,10 @@ export class CompanyComponent implements OnInit {
   }
 
   public selectedData(value: any): void {
+    //truong hop get tat ca cac cot 
     this.ceoFullName = value.value.FullName;
+    //truong hop su dung codename model thi 
+    //this.ceoFullName = value.value.Name;
     this.entity.CeoID = value.value.ID;
 
   }

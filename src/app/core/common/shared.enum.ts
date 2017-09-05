@@ -222,7 +222,7 @@ export enum DataStatusEnum {
     REC_INTERVIEW_UNRIGISTER = 10,
 
     /** <summary>
-     *  Đăng ký phỏng vấn
+     *  Đăng ký phỏng vấn nhưng chưa có lịch phỏng vấn
      */ 
     REC_INTERVIEW_RIGISTER = 20,
 
@@ -234,6 +234,10 @@ export enum DataStatusEnum {
      *  Chờ kết quả phỏng vấn
      */
     REC_INTERVIEW_RESULT_WAITING = 40,
+    /** <summary>
+     *  Phỏng vấn NG hoặc đã tìm được việc
+     */
+    REC_INTERVIEW_RESULT_NG = 41,
 
     /** <summary>
      *  Chờ nói chuyện DKLC
@@ -248,10 +252,14 @@ export enum DataStatusEnum {
      */ 
     REC_INTERVIEW_TRIAL_WAITING = 70,
     /** <summary>
-     *  Vào thử việc
+     *  Vào thử việc nhưng chưa đăng ký emp
      */ 
     REC_INTERVIEW_TRIAL = 80,
 
+    /** <summary>
+     *  Đang thử việc
+     */ 
+    REC_INTERVIEW_TRIAL_EMPID_CREATED = 90
 
     /** Dữ liệu trạng thái liên quan đến data XXXX **/
 

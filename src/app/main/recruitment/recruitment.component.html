@@ -46,12 +46,12 @@
                                     <th>Đường dẫn hồ sơ</th>
                                     <th>Đường dẫn tại dept</th>
                                     <th>Số hồ sơ</th>
-                                    <th>Người gửi thông báo</th>
+                                    <th>Nhận thử việc</th>
                                     <th>Ngày giờ hết hạn</th>
                                     <th>Đã gửi thông báo</th>
                                     <th>Kết thúc đợt tuyển</th>
                                     <th>Ghi chú</th>
-                                    <th style="min-width: 90px;"></th>
+                                    <th style="min-width: 130px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,6 +78,7 @@
                                     <td>{{item.Note}}</td>
                                     <td>
                                         <a *ngIf="item.FileID" href="javascript:void(0)" class="table-action-btn" (click)="downloadItemFile(item)"><i class="md md-file-download"></i></a>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                                     </td>
@@ -157,7 +158,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Loại tuyển dụng</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <select class="form-control" name="RecruitmentTypeMasterDetailID" [(ngModel)]="entity.RecruitmentTypeMasterDetailID">
-                              <option *ngFor="let x of recruitmentTypes" [value]="x.ID">{{x.Name}}</option>
+                              <option *ngFor="let x of recruitmentTypes" [value]="x.MasterDetailCode">{{x.Name}}</option>
                             </select>
                         </div>
                     </div>

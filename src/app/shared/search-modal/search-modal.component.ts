@@ -8,6 +8,7 @@ import { SystemConstants } from '../../core/common/system.constants';
 
 //declare var $ : any;
 import * as $ from 'jquery';
+import { LoaderService } from '../utils/spinner.service';
 
 @Component({
   selector: 'app-search-modal',
@@ -18,12 +19,12 @@ import * as $ from 'jquery';
 
 export class SearchModalComponent implements OnInit, OnDestroy {
   @ViewChild('childModal') public childModal: ModalDirective;
- // @Input() title: string;
+  // @Input() title: string;
   @Input() searchTableName: string;
   @Input() searchWhereClause: string;
   @Input() searchOrderClause: string;
   @Output() selectedData = new EventEmitter();
-  @Input() entity: any; 
+  @Input() entity: any;
 
   public pageIndexModal: number = 1;
   public pageSizeModal: number = 10;
@@ -33,7 +34,7 @@ export class SearchModalComponent implements OnInit, OnDestroy {
   public datas: any[];
   public selected: any;
   public baseFolder: string = SystemConstants.BASE_API;
-  private _title : string ='';
+  private _title: string = '';
 
   public dateOptions: any = {
     locale: { format: 'YYYY/MM/DD' },
@@ -46,27 +47,29 @@ export class SearchModalComponent implements OnInit, OnDestroy {
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,
     private _utilityService: UtilityService,
-    public _authenService: AuthenService) { }
+    public _authenService: AuthenService,
+    private _loaderService : LoaderService
+  ) { }
 
   ngOnInit() {
 
     //load data cho table doi tuong
-    this.loadDataModal(this.searchTableName.toLowerCase);
+    //this.loadDataModal(this.searchTableName.toLowerCase);
 
   }
 
   // remove self from modal service when directive is destroyed
-    ngOnDestroy(): void {
-        //this.modalService.remove(this.id);
-        //this.element.remove();
-    }
+  ngOnDestroy(): void {
+    //this.modalService.remove(this.id);
+    //this.element.remove();
+  }
 
   //Intercept input property changes with a setter START
   @Input()
-  set title(value:string){
+  set title(value: string) {
     this._title = value;
   }
-  get title() : string {
+  get title(): string {
     return this._title;
   }
   //Intercept input property changes with a setter END
@@ -111,12 +114,15 @@ export class SearchModalComponent implements OnInit, OnDestroy {
   }
 
   loadEmpModal() {
-    this._dataService.get('/api/emp/getallpaging?&keyword=' + this.filterModal + '&page=' + this.pageIndexModal + '&pageSize=' + this.pageSizeModal)
+    //this._loaderService.displayLoader(true);
+    //this._dataService.get('/api/emp/getallpaging?&keyword=' + this.filterModal + '&page=' + this.pageIndexModal + '&pageSize=' + this.pageSizeModal)
+    this._dataService.get('/api/emp/getallpagingfromview?&keyword=' + this.filterModal + '&page=' + this.pageIndexModal + '&pageSize=' + this.pageSizeModal)
       .subscribe((response: any) => {
         this.datas = response.Items;
         this.pageIndexModal = response.PageIndex;
         this.pageSizeModal = response.PageSize;
         this.totalRowModal = response.TotalRows;
+        //this._loaderService.displayLoader(false);
       },
       error => {
         this._notificationService.printErrorMessage('Có lỗi xảy ra khi lấy danh sách nhân viên' + error);
@@ -147,8 +153,8 @@ export class SearchModalComponent implements OnInit, OnDestroy {
     //console.log(this.selected);
     this.entity = this.selected;
     this.selectedData.emit({
-                            value: this.selected
-                        });
+      value: this.selected
+    });
     this.childModal.hide();
   }
 

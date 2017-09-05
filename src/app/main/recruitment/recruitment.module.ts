@@ -14,9 +14,9 @@ import { MdCheckboxModule, MdAutocompleteModule } from '@angular/material';
 import { CalendarModule } from 'primeng/primeng';
 
 const recruitmentRoutes: Routes = [
-  //localhost:4200/main/project
+  //localhost:4200/main/recruiment
   { path: '', redirectTo: 'index', pathMatch: 'full' },
-  //localhost:4200/main/project/index
+  //localhost:4200/main/recruiment/index
   { path: 'index', component: RecruitmentComponent },
   { path: 'index/:id', component: RecruitmentComponent }
 ]

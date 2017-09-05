@@ -107,7 +107,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Loại tuyển dụng</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <select class="form-control" name="RecruitmentTypeMasterDetailID" [(ngModel)]="entity.RecruitmentTypeMasterDetailID">
-                              <option *ngFor="let x of recruitmentTypes" [value]="x.ID">{{x.Name}}</option>
+                              <option *ngFor="let x of recruitmentTypes" [value]="x.MasterDetailCode">{{x.Name}}</option>
                             </select>
                         </div>
                     </div>

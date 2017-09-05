@@ -59,7 +59,7 @@ export class CustomerComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-      });
+      }, error => this._dataService.handleError(error));
   }
 
   /**
@@ -78,26 +78,37 @@ export class CustomerComponent implements OnInit {
       });
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._dataService.get('/api/customer/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this.entity.ContractDate = moment(new Date(this.entity.ContractDate)).format('YYYY/MM/DD');
-
-      });
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
+  
   pageChanged(event: any): void {
     this.pageIndex = event.page;
     this.loadData();
   }
+
   showAddModal() {
     this.entity = {};
     this.modalAddEdit.show();
   }
+
   showEditModal(id: any) {
     this.loadDetail(id);
     this.modalAddEdit.show();
   }
+
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
+    this.modalAddEdit.show();
+  }
+  
   saveChange(form: NgForm) {
     if (form.valid) {
       this.saveData(form);

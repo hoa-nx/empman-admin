@@ -1,13 +1,17 @@
 import {
     Component, Input, Output, OnInit, ViewContainerRef, EventEmitter, ViewChild,
+
+    Directive
+} from '@angular/core';
+
+import {
     trigger,
     state,
     style,
     animate,
     transition,
-    Directive
-} from '@angular/core';
-
+    group
+} from '@angular/animations';
 import { IEmp, ISchedule } from '../../core/interfaces/interfaces';
 import { ItemsService } from '../../shared/utils/items.service';
 import { HighlightDirective } from '../../shared/directives/highlight.directive';
@@ -32,22 +36,22 @@ declare var moment: any;
     moduleId: module.id,
     selector: 'emp-card',
     templateUrl: 'emp-card.component.html',
-     styleUrls: ['./emp-card.component.css'],
+    styleUrls: ['./emp-card.component.css'],
     animations: [
         trigger('flyInOut', [
-            state('in', style({ opacity: 1, transform: 'translateX(0)' })),
-            transition('void => *', [
-                style({
-                    opacity: 0,
-                    transform: 'translateX(-100%)'
-                }),
-                animate('0.5s ease-in')
+            transition(':enter', [
+                style({ transform: 'translateX(-100%)' }),
+                animate(350)
             ]),
-            transition('* => void', [
-                animate('0.2s 10 ease-out', style({
-                    opacity: 0,
-                    transform: 'translateX(100%)'
-                }))
+            transition(':leave', [
+                group([
+                    animate('0.2s ease', style({
+                        transform: 'translate(150px,25px)'
+                    })),
+                    animate('0.5s 0.2s ease', style({
+                        opacity: 0
+                    }))
+                ])
             ])
         ])
     ]
@@ -85,12 +89,12 @@ export class EmpCardComponent implements OnInit {
     public supportedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/gif'];
     /* tslint:enable:no-unused-variable */
 
-    private currentProfileImage: string = 'http://localhost:4200/assets/images/profile-default.png';
-    private imgJobLeave : string ='http://localhost:4200/assets/images/IsJobLeave2.png';
+    private currentProfileImage: string = SystemConstants.BASE_WEB + '/assets/images/profile-default.png';
+    private imgJobLeave: string = SystemConstants.BASE_WEB + '/assets/images/IsJobLeave2.png';
     public dateOptions: any = DateRangePickerConfig.dateOptions;
 
     public uriAvatarPath: string = SystemConstants.BASE_API;
-    public userLogin  : LoggedInUser;
+    public userLogin: LoggedInUser;
 
     constructor(
         private _route: ActivatedRoute,
@@ -100,7 +104,7 @@ export class EmpCardComponent implements OnInit {
         private _dataService: DataService,
         private _uploadService: UploadService,
         private _loaderService: LoaderService,
-        private _authenService : AuthenService) { }
+        private _authenService: AuthenService) { }
 
     ngOnInit() {
         this.userLogin = this._authenService.getLoggedInUser();

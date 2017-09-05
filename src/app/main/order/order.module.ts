@@ -20,21 +20,20 @@ import { TabsetComponent } from 'ngx-bootstrap';
 import { AccordionModule, AutoCompleteModule, MultiSelectModule } from 'primeng/primeng';     //accordion and accordion tab
 import { CalendarModule } from 'primeng/primeng';     //CalendarModule
 import { MenuItem } from 'primeng/primeng';            //api
-import { EstimateComponent } from './estimate.component';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-import { EstimateEditComponent } from './estimate-edit.component';
 import { LoaderService } from '../../shared/utils/spinner.service';
 import { ChipsModule } from 'primeng/primeng';
+import { OrderComponent } from './order.component';
+import { OrderEditComponent } from './order-edit.component';
 
-const estimateRoutes: Routes = [
-  //localhost:4200/main/estimate
+const orderRoutes: Routes = [
+  //localhost:4200/main/order
   { path: '', redirectTo: 'index', pathMatch: 'full' },
-  //localhost:4200/main/estimate/index
-  { path: 'index', component: EstimateComponent },
-  //localhost:4200/main/estimate/edit/1/edit
-  { path: 'edit/:id/:action', component: EstimateEditComponent }
+  //localhost:4200/main/order/index
+  { path: 'index', component: OrderComponent },
+  //localhost:4200/main/order/edit/1/edit
+  { path: 'edit/:id/:action', component: OrderEditComponent }
 ]
-
 
 @NgModule({
   imports: [
@@ -45,7 +44,7 @@ const estimateRoutes: Routes = [
     MdRadioModule,
     ModalModule.forRoot(),
     PaginationModule.forRoot(),
-    RouterModule.forChild(estimateRoutes),
+    RouterModule.forChild(orderRoutes),
     SharedModule,
     MdCheckboxModule,
     MdAutocompleteModule,
@@ -58,7 +57,7 @@ const estimateRoutes: Routes = [
     Ng2FileDropModule,
     ChipsModule
   ],
-  declarations: [EstimateComponent, EstimateEditComponent],
+  declarations: [OrderComponent, OrderEditComponent],
   providers: [DataService, NotificationService, ItemsService, MappingService, SessionService]
 })
-export class EstimateModule { }
+export class OrderModule { }

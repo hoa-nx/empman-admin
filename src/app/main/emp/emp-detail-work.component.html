@@ -1,3 +1,139 @@
-<p>
-  emp-detail-work works!
-</p>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #formData="ngForm" novalidate>
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <!-- <button type="button" class="btn btn-danger" (click)="back()">
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Trở về</button> -->
+                        <button type="button" [disabled]="!formData.form.valid" class="btn btn-default" (click)="saveChange(formData.valid)">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Cập nhật</button>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group m-t-20">
+                        <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày hiệu lực</label>
+                        <br>
+                        <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #StartDate="ngModel" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Ngày hiệu lực"></p-calendar>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <p-pickList [source]="sourceEmps" [target]="targetEmps" sourceHeader="Danh sách nhân viên" targetHeader="Danh sách được chọn" [responsive]="true" filterBy="FullName" dragdrop="true" sourceFilterPlaceholder="Tìm kiếm..." targetFilterPlaceholder="Tìm kiếm..."
+                        [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}" [showSourceControls]="false" [showTargetControls]="false">
+                        <ng-template let-emp pTemplate="item">
+                            <div class="ui-helper-clearfix">
+                                <img src="{{uriAvatarPath + emp.Avatar}}" style="display:inline-block;margin:2px 0 2px 2px" width="48">
+                                <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{emp.FullName}} - {{emp.AccountName}} - {{emp.CurrentDeptID}}- {{emp.CurrentPositionID}}</div>
+                            </div>
+                        </ng-template>
+                    </p-pickList>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <tabset>
+                            <!-- Tab Điều kiện lọc dữ liệu  -->
+                            <tab heading="Cập nhật tổ chức">
+                                <!-- Các loại phụ cấp-->
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Tổ chức</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
+                                        </md-checkbox>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts" [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
+                                        </md-checkbox>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams" [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxPosition($event)" [value]="0" [(ngModel)]="chkPosition" [ngModelOptions]="{standalone: true}">Ngạch bậc
+                                        </md-checkbox>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="positions" [(ngModel)]="selectPositions" [disabled]="chkPosition==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxEmpType($event)" [value]="0" [(ngModel)]="chkEmpType" [ngModelOptions]="{standalone: true}">Loại công việc
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empTypes" [(ngModel)]="selectEmpTypes" [disabled]="chkEmpType==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <!-- Các loại phụ cấp-->
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin phụ cấp</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxBussinessAllowanceLevel($event)" [value]="0" [(ngModel)]="chkBussinessAllowanceLevel" [ngModelOptions]="{standalone: true}">Nghiệp vụ
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bussinessAllowanceLevels" [(ngModel)]="selectBussinessAllowanceLevels" [disabled]="chkBussinessAllowanceLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxJapaneseLevel($event)" [value]="0" [(ngModel)]="chkJapaneseLevel" [ngModelOptions]="{standalone: true}">Tiếng Nhật
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="japaneseLevels" [(ngModel)]="selectJapaneseLevels" [disabled]="chkJapaneseLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxBseLevel($event)" [value]="0" [(ngModel)]="chkBseLevel" [ngModelOptions]="{standalone: true}">Bse
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bseLevels" [(ngModel)]="selectBseLevels" [disabled]="chkBseLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                            </tab>
+
+                        </tabset>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

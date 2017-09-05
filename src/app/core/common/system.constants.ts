@@ -2,8 +2,10 @@ export class SystemConstants {
     public static SESSION_KEY_SEARCH_ITEM_MODEL = "SEARCH_ITEM_MODEL";
 
     public static CURRENT_USER = "CURRENT_USER";
-    //public static BASE_API = "http://localhost:5000"
-    public static BASE_API = "http://localhost:8088"
+    public static BASE_API = "http://localhost:5000"
+    //public static BASE_API = "http://172.16.8.1"
+    public static BASE_WEB = "http://localhost:4200"
+ 
     /**
      * Định dạng ngày là YYYY/MM/DD
      */
@@ -80,3 +82,4 @@ export class AccessRightFolder{
     public static EMP_DATA = "EMP";
     public static PROJECT_DATA = "PROJECT";
 }
+

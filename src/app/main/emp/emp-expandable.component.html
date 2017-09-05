@@ -1,219 +1,67 @@
 <!-- Page-Title -->
 <div class="row">
-  <div class="col-sm-12">
-    <div class="card-box">
-      <form #homeForm="ngForm" novalidate>
-        <div class="btn-group pull-right m-t-15">
-          <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i class="fa fa-cog"></i></span></button>
-          <ul class="dropdown-menu drop-menu-right" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #homeForm="ngForm" novalidate>
+                <div class="btn-group pull-right m-t-0">
+
+                    <button type="button" class="btn btn-primary dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">Hiển thị <span class="m-l-25"><i class="fa fa-group"></i></span></button>
+                    <ul class="dropdown-menu drop-menu-right" role="menu">
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('dept')">Phòng ban</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('team')">Team-nhóm</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('position')">Ngạch -bậc ngạch</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('gender')">Giới tính</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('japanese')">Tiếng nhật</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('bussinessallowance')">PC NV</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('bse')">PC BSE</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('emptype')">Loại công việc</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('keiken')">Thâm niên</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('collect')">Trường ĐH</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('collect')">Thử việc theo năm</a></li>
+                        <li><a href="javascript:void(0)" (click)="loadDataByGroup('collect')">Nghỉ việc theo năm</a></li>
+                        <li class="divider"></li>
+                        <li><a hre f="javascript:void(0)" (click)="loadDataByGroup('collect')">NV KN nhỏ hơn 4 tháng</a></li>
+
+                    </ul>
+                </div>
+
+                <h4 class="page-title">Thống kê số liệu theo {{dataGroupName}} </h4>
+
+                <!-- Tab thống kê nhân viên theo chức vụ-->
+
+                <div class="form-group m-t-15">
+
+                    <p-accordion>
+                        <p-accordionTab multiple="true" lazy=true *ngFor="let group of dataGroups" header="{{group.title}}({{group.count}})⇔{{group.percent|percent:'1.0-0'}}">
+                            <a class="accordion-list-item" item *ngFor="let item of group.items ; trackBy: trackByFn">
+                                <span class="expandable-list-info">
+                                <i class="fa fa-sitemap" aria-hidden="true"></i>{{ item.DeptName }}|{{ item.TeamName }}|{{ item.PositionName }}</span>
+                                <img *ngIf="item.PositionName=='Trial Staff'" width="60px" class="trialstaff-img-overlay" src="{{imgTrialStaff}}">
+                                <div>
+                                    <h4 class="expandable-list-fullname">
+                                        <a [routerLink]="['/main/emp/edit',item.ID,'edit']">{{ item.FullName }}</a>({{item.AccountName}})&nbsp;({{item.PhoneNumber1}})</h4>
+                                    <img alt="user-img" width="60px" class="img-circle" src="{{uriAvatarPath + item.Avatar}}">
+                                    <span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.KeikenFromContractMonths}} tháng</span>
+                                    <span *ngIf="item.ContractDate"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>{{item.ContractDate| date:'yyyy/MM/dd'}}</span>
+
+                                    <span *ngIf="item.JobLeaveDate" class="label label-danger"><i class="fa fa-user-times" aria-hidden="true"></i>{{item.JobLeaveDate| date:'yyyy/MM/dd'}}</span>
+                                    <img *ngIf="item.JobLeaveDate" width="60px" class="jobleave-img-overlay" src="{{imgJobLeave}}">
+
+                                    <span *ngIf="item.JapaneseLevelName!='Không chỉ định'" class="label label-primary">{{item.JapaneseLevelName}}</span>
+                                    <span *ngIf="item.BseAllowanceLevelName!='Không chỉ định'" class="label label-success">{{item.BseAllowanceLevelName}}</span>
+                                    <span *ngIf="item.BusinessAllowanceLevelName!='Không chỉ định'" class="label label-info">{{item.BusinessAllowanceLevelName}}</span>
+                                    <span *ngIf="item.EmpTypeName!='Không chỉ định'" class="label label-inverse">{{item.EmpTypeName}}</span>
+
+                                    <span *ngIf="item.ContractTypeName!='Không chỉ định'" class="label label-inverse">{{item.ContractTypeName}}</span>
+                                    <span *ngIf="item.CollectName!='Không chỉ định'" class="label label-inverse">{{item.CollectName}}</span>
+                                </div>
+                                <hr class="line-list-item">
+                            </a>
+                        </p-accordionTab>
+                    </p-accordion>
+                </div>
+            </form>
         </div>
-
-        <h4 class="page-title">Thống kê số liệu</h4>
-
-        <tabset>
-          <!-- Tab thống kê nhân viên theo từng phòng ban , nhóm , chức vụ-->
-          <tab heading="Tổ chức" id="dept" (select)="loadGroupData($event,['dept','team'])">
-            <div class="form-group">
-
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="card-box">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Nhóm nhân viên theo bộ phận</h3>
-                    </div>
-
-                    <!-- ENPANDABLE LIST START -->
-                    <p-accordion>
-                      <p-accordionTab multiple="true" lazy=true *ngFor="let group of dataDeptGroups" header={{group.title}}({{group.count}})>
-                        <a item *ngFor="let item of group.items ; trackBy: trackByFn">
-                        <span class="expandable-list-info">
-                          <i class="fa fa-sitemap" aria-hidden="true"></i>{{ item.DeptName }}|{{ item.TeamName }}|{{ item.PositionName }}</span>
-                          <img  *ngIf="item.PositionName=='Trial Staff'" width="60px"  class="trialstaff-img-overlay" src="{{imgTrialStaff}}">
-                        <div>
-                          <h4 class="expandable-list-fullname">
-                          <a  [routerLink]="['/main/emp/edit',item.ID,'edit']" >{{ item.FullName }}</a>({{item.AccountName}})&nbsp;({{item.PhoneNumber1}})</h4>
-                          <img alt="user-img" width="60px" class="img-circle" src="{{uriAvatarPath + item.Avatar}}">
-                          <span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.KeikenFromContractMonths}} tháng</span>
-                          <span *ngIf="item.ContractDate"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>{{item.ContractDate| date:'yyyy/MM/dd'}}</span>
-
-                          <span *ngIf="item.JobLeaveDate" class="label label-danger"><i class="fa fa-user-times" aria-hidden="true"></i>{{item.JobLeaveDate| date:'yyyy/MM/dd'}}</span>
-                          <img *ngIf="item.JobLeaveDate" width="60px" class="jobleave-img-overlay" src="{{imgJobLeave}}">
-
-                          <span *ngIf="item.JapaneseLevelName!='Không chỉ định'" class="label label-primary">{{item.JapaneseLevelName}}</span>
-                          <span *ngIf="item.BseAllowanceLevelName!='Không chỉ định'" class="label label-success">{{item.BseAllowanceLevelName}}</span>
-                          <span *ngIf="item.BusinessAllowanceLevelName!='Không chỉ định'" class="label label-info">{{item.BusinessAllowanceLevelName}}</span>
-                          <span *ngIf="item.EmpTypeName!='Không chỉ định'" class="label label-inverse">{{item.EmpTypeName}}</span>
-
-                          <span *ngIf="item.ContractTypeName!='Không chỉ định'" class="label label-inverse">{{item.ContractTypeName}}</span>
-                          <span *ngIf="item.CollectName!='Không chỉ định'" class="label label-inverse">{{item.CollectName}}</span>
-                        </div>
-                        <hr class="line-list-item">
-                        </a>
-                      </p-accordionTab>
-                    </p-accordion>
-                    <!-- ENPANDABLE LIST END -->
-
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="card-box">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Nhóm nhân viên theo team</h3>
-                    </div>
-
-                    <!-- ENPANDABLE LIST START -->
-                    <p-accordion>
-                      <p-accordionTab multiple="true" lazy=true *ngFor="let group of dataTeamGroups" header={{group.title}}({{group.count}})>
-                        <a item *ngFor="let item of group.items ; trackBy: trackByFn">
-                        <span class="expandable-list-info">
-                          <i class="fa fa-sitemap" aria-hidden="true"></i>{{ item.DeptName }}|{{ item.TeamName }}|{{ item.PositionName }}</span>
-                          <img  *ngIf="item.PositionName=='Trial Staff'" width="60px"  class="trialstaff-img-overlay" src="{{imgTrialStaff}}">
-                        <div>
-                          <h4 class="expandable-list-fullname">
-                          <a  [routerLink]="['/main/emp/edit',item.ID,'edit']" >{{ item.FullName }}</a>({{item.AccountName}})&nbsp;({{item.PhoneNumber1}})</h4>
-                          <img alt="user-img" width="60px" class="img-circle" src="{{uriAvatarPath + item.Avatar}}">
-                          <span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.KeikenFromContractMonths}} tháng</span>
-                          <span *ngIf="item.ContractDate"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>{{item.ContractDate| date:'yyyy/MM/dd'}}</span>
-
-                          <span *ngIf="item.JobLeaveDate" class="label label-danger"><i class="fa fa-user-times" aria-hidden="true"></i>{{item.JobLeaveDate| date:'yyyy/MM/dd'}}</span>
-                          <img *ngIf="item.JobLeaveDate" width="60px" class="jobleave-img-overlay" src="{{imgJobLeave}}">
-
-                          <span *ngIf="item.JapaneseLevelName!='Không chỉ định'" class="label label-primary">{{item.JapaneseLevelName}}</span>
-                          <span *ngIf="item.BseAllowanceLevelName!='Không chỉ định'" class="label label-success">{{item.BseAllowanceLevelName}}</span>
-                          <span *ngIf="item.BusinessAllowanceLevelName!='Không chỉ định'" class="label label-info">{{item.BusinessAllowanceLevelName}}</span>
-                          <span *ngIf="item.EmpTypeName!='Không chỉ định'" class="label label-inverse">{{item.EmpTypeName}}</span>
-
-                          <span *ngIf="item.ContractTypeName!='Không chỉ định'" class="label label-inverse">{{item.ContractTypeName}}</span>
-                          <span *ngIf="item.CollectName!='Không chỉ định'" class="label label-inverse">{{item.CollectName}}</span>
-                        </div>
-                        <hr class="line-list-item">
-                        </a>
-                      
-                      </p-accordionTab>
-                    </p-accordion>
-                    <!-- ENPANDABLE LIST END -->
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </tab>
-          <!-- Tab thống kê nhân viên theo từng team-->
-          <tab heading="Tổ">
-            <div class="form-group">
-
-              <div class="panel panel-color panel-primary">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Nhóm nhân viên theo từng team</h3>
-                </div>
-                <!-- <div class="panel-body">
-                  <div class="row">
-                    <div class="col-md-12 col-sm-6 col-xs-12">
-
-                      <jqxTreeGrid [width]="'100%'" [height]="400" [source]="dataAdapter" [pageable]="false" [columnsResize]="true" [altRows]="true"
-                        [icons]="icons" [columns]="columns" [ready]="ready" #TeamTreeGrid>
-                      </jqxTreeGrid>
-                    </div>
-                  </div>
-                </div> -->
-
-              </div>
-
-            </div>
-
-          </tab>
-          <!-- Tab thống kê nhân viên theo chức vụ-->
-          <tab heading="Chức vụ">
-            <div class="form-group">
-              <div class="panel panel-color panel-primary">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Nhóm nhân viên theo chức vụ</h3>
-                </div>
-                <div class="panel-body">
-                  <div class="row">
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </tab>
-          <!-- Tab thống kê nhân viên theo tiếng Nhật-->
-          <tab heading="Tiếng Nhật" id="japanese" (select)="loadGroupData($event,['japanese'])">
-            <div class="form-group">
-              <div class="row">
-
-                <p-accordion>
-                  <p-accordionTab multiple="true" lazy=true  *ngFor="let group of dataJapaneseLevelGroups" header={{group.title}}({{group.count}})>
-                    <a class="accordion-list-item" item *ngFor="let item of group.items ; trackBy: trackByFn">
-                    <span class="expandable-list-info">
-                      <i class="fa fa-sitemap" aria-hidden="true"></i>{{ item.DeptName }}|{{ item.TeamName }}|{{ item.PositionName }}</span>
-                      <img  *ngIf="item.PositionName=='Trial Staff'" width="60px"  class="trialstaff-img-overlay" src="{{imgTrialStaff}}">
-                    <div>
-                      <h4 class="expandable-list-fullname">
-                      <a  [routerLink]="['/main/emp/edit',item.ID,'edit']" >{{ item.FullName }}</a>({{item.AccountName}})&nbsp;({{item.PhoneNumber1}})</h4>
-                      <img alt="user-img" width="60px" class="img-circle" src="{{uriAvatarPath + item.Avatar}}">
-                      <span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.KeikenFromContractMonths}} tháng</span>
-                      <span *ngIf="item.ContractDate"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>{{item.ContractDate| date:'yyyy/MM/dd'}}</span>
-
-                      <span *ngIf="item.JobLeaveDate" class="label label-danger"><i class="fa fa-user-times" aria-hidden="true"></i>{{item.JobLeaveDate| date:'yyyy/MM/dd'}}</span>
-                      <img *ngIf="item.JobLeaveDate" width="60px" class="jobleave-img-overlay" src="{{imgJobLeave}}">
-
-                      <span *ngIf="item.JapaneseLevelName!='Không chỉ định'" class="label label-primary">{{item.JapaneseLevelName}}</span>
-                      <span *ngIf="item.BseAllowanceLevelName!='Không chỉ định'" class="label label-success">{{item.BseAllowanceLevelName}}</span>
-                      <span *ngIf="item.BusinessAllowanceLevelName!='Không chỉ định'" class="label label-info">{{item.BusinessAllowanceLevelName}}</span>
-                      <span *ngIf="item.EmpTypeName!='Không chỉ định'" class="label label-inverse">{{item.EmpTypeName}}</span>
-
-                      <span *ngIf="item.ContractTypeName!='Không chỉ định'" class="label label-inverse">{{item.ContractTypeName}}</span>
-                      <span *ngIf="item.CollectName!='Không chỉ định'" class="label label-inverse">{{item.CollectName}}</span>
-                    </div>
-                    <hr class="line-list-item">
-                    </a>
-                  </p-accordionTab>
-                </p-accordion>
-
-            </div>
-
     </div>
-    </tab>
-
-    <!-- Tab thống kê nhân viên theo tiếng thâm niên-->
-    <tab>
-      <ng-template tabHeading>
-        <i class="glyphicon glyphicon-bell"></i>
-      </ng-template>
-      <div class="form-group">
-
-        <div class="panel panel-color panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Nhóm nhân viên theo thâm niên</h3>
-          </div>
-          <div class="panel-body">
-
-            <div class="row">
-              <div class="col-md-3 col-sm-6 col-xs-12">
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-
-      </div>
-    </tab>
-
-    </tabset>
-
-    </form>
-  </div>
-
-</div>
 </div>

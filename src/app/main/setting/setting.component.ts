@@ -6,7 +6,7 @@ import { AuthenService } from '../../core/services/authen.service';
 import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
 import { MessageContstants } from '../../core/common/message.constants';
 import * as moment from 'moment';
-import { ISearchItemViewModel, IMasterDetailItemViewModel, PaginatedResult, EmpFilterViewModel } from '../../core/interfaces/interfaces';
+import { ISearchItemViewModel, IMasterDetailItemViewModel, PaginatedResult, IEmpFilterViewModel, ISystemValueViewModel } from '../../core/interfaces/interfaces';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { MappingService } from '../../shared/utils/mapping.service';
 //import { jqxGridComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxgrid';
@@ -20,6 +20,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LoggedInUser } from '../../core/domain/loggedin.user';
 import { DateTimeHelper } from '../../shared/utils/datetime-helper';
 import { SharedComponentService } from '../../core/services/sharedcomponent.service';
+import { ItemsService } from '../../shared/utils/items.service';
 
 @Component({
   selector: 'app-setting',
@@ -132,13 +133,14 @@ export class SettingComponent implements OnInit {
   public checkedItems: any[];
   public allMasterDetails: any[];
 
-  public filterViewModel: EmpFilterViewModel;
+  public filterViewModel: IEmpFilterViewModel;
 
   public listEmpItemSorts: Array<string> = ['Phòng ban', 'Team-nhóm', 'Ngạch bậc', 'Mã nhân viên', 'Họ và tên', 'Tên', 'Tài khoản', 'Ngày sinh', 'Ngày vào công ty', 'Ngày thử việc', 'Ngày ký HĐLĐ', 'Giới tính', 'Loại công việc', 'Hệ số đánh giá'];
   public listSelectedItemSorts: Array<string> = [];
 
   public user: LoggedInUser;
   public searchFilterEntity: any;
+  public systemValueViewModel: any = {};
   private sub: any;
   private backUrl: any | '';
   private id: any | 0;
@@ -169,7 +171,8 @@ export class SettingComponent implements OnInit {
     private _router: Router,
     private _sessionService: SessionService,
     private _loaderService: LoaderService,
-    private _sharedComponentService: SharedComponentService
+    private _sharedComponentService: SharedComponentService,
+    private _itemsService: ItemsService
 
   ) {
 
@@ -250,6 +253,10 @@ export class SettingComponent implements OnInit {
     this._dataService.get('/api/setting/detailsearchfilterbyuser')
       .subscribe((response: any) => {
         this.searchFilterEntity = response;
+        console.log(this.searchFilterEntity);
+        console.log(this._itemsService.getSerialized(this.searchFilterEntity.systemValue));
+        this.systemValueViewModel = this._itemsService.getSerialized(this.searchFilterEntity.systemValue);
+        //this.setSystemValueUpdate();
         this.mapFilterToModel();
 
       });
@@ -278,58 +285,58 @@ export class SettingComponent implements OnInit {
     this.selectBseLevels = this.searchFilterEntity.selectBseLevels;
 
     this.chkStartWorkingDate = this.searchFilterEntity.chkStartWorkingDate;
-    if(this.searchFilterEntity.startWorkingDateFrom){
+    if (this.searchFilterEntity.startWorkingDateFrom) {
       this.startWorkingDateFrom = moment(this.searchFilterEntity.startWorkingDateFrom).format('YYYY/MM/DD');
-    }else{
-      this.startWorkingDateFrom =null;
+    } else {
+      this.startWorkingDateFrom = null;
     }
 
-    if(this.searchFilterEntity.startWorkingDateTo){
+    if (this.searchFilterEntity.startWorkingDateTo) {
       this.startWorkingDateTo = moment(this.searchFilterEntity.startWorkingDateTo).format('YYYY/MM/DD');
-    }else{
-      this.startWorkingDateTo =null;
+    } else {
+      this.startWorkingDateTo = null;
     }
-    
+
     this.chkContractDate = this.searchFilterEntity.chkContractDate;
-    if(this.searchFilterEntity.contractDateFrom){
+    if (this.searchFilterEntity.contractDateFrom) {
       this.contractDateFrom = moment(this.searchFilterEntity.contractDateFrom).format('YYYY/MM/DD');
-    }else{
+    } else {
       this.contractDateFrom = null;
     }
-    
-    if(this.searchFilterEntity.contractDateTo){
+
+    if (this.searchFilterEntity.contractDateTo) {
       this.contractDateTo = moment(this.searchFilterEntity.contractDateTo).format('YYYY/MM/DD');
-    }else{
-      this.contractDateTo =null;
+    } else {
+      this.contractDateTo = null;
     }
 
     this.chkTrialDate = this.searchFilterEntity.chkTrialDate;
-    
-    if(this.searchFilterEntity.trialDateFrom){
+
+    if (this.searchFilterEntity.trialDateFrom) {
       this.trialDateFrom = moment(this.searchFilterEntity.trialDateFrom).format('YYYY/MM/DD');
-    }else{
-      this.trialDateFrom =null;
+    } else {
+      this.trialDateFrom = null;
     }
 
-    if(this.searchFilterEntity.trialDateTo){
+    if (this.searchFilterEntity.trialDateTo) {
       this.trialDateTo = moment(this.searchFilterEntity.trialDateTo).format('YYYY/MM/DD');
-    }else{
-      this.trialDateTo =null;
+    } else {
+      this.trialDateTo = null;
     }
-    
+
     this.chkJobLeaveDate = this.searchFilterEntity.chkJobLeaveDate;
-    if(this.searchFilterEntity.jobLeaveDateFrom){
+    if (this.searchFilterEntity.jobLeaveDateFrom) {
       this.jobLeaveDateFrom = moment(this.searchFilterEntity.jobLeaveDateFrom).format('YYYY/MM/DD');
-    }else{
+    } else {
       this.jobLeaveDateFrom = null;
     }
 
-    if(this.searchFilterEntity.jobLeaveDateTo){
+    if (this.searchFilterEntity.jobLeaveDateTo) {
       this.jobLeaveDateTo = moment(this.searchFilterEntity.jobLeaveDateTo).format('YYYY/MM/DD');
-    }else{
+    } else {
       this.jobLeaveDateTo = null;
     }
-   
+
     this.chkExperence = this.searchFilterEntity.chkExperence;
 
     this.chkLearning = this.searchFilterEntity.chkLearning;
@@ -340,16 +347,17 @@ export class SettingComponent implements OnInit {
 
     //luu dieu kien search 
     //luu trinh tu sap xep
-    if(this.searchFilterEntity.sort){
+    if (this.searchFilterEntity.sort) {
       this.listSelectedItemSorts = this.searchFilterEntity.sort;
     }
-    
+
     //check null
-    if(this.listSelectedItemSorts){
+    if (this.listSelectedItemSorts) {
       let initItemSorts = this.listEmpItemSorts.filter(x => !this.listSelectedItemSorts.includes(x));
       this.listEmpItemSorts = initItemSorts;
     }
-    
+    //system value
+    this.setSystemValueUpdate();
   }
 
   initSearchFilterModel() {
@@ -458,8 +466,11 @@ export class SettingComponent implements OnInit {
 
       //luu trinh tu sap xep
       this.filterViewModel.sort = this.listSelectedItemSorts;
-
+      //thong tin setting chung
+      this.getSystemValueUpdate();
+      this.filterViewModel.systemValue = this.systemValueViewModel ;
       console.log(this.filterViewModel);
+
       this._dataService.put('/api/setting/updateempfilter', JSON.stringify(this.filterViewModel))
         .subscribe((response: any) => {
           this.reLoadDataEmp();
@@ -470,6 +481,38 @@ export class SettingComponent implements OnInit {
 
   }
 
+  private getSystemValueUpdate() {
+    this.systemValueViewModel = {};
+    this.systemValueViewModel.Code = this.entity.Code;
+    this.systemValueViewModel.Name = this.entity.Name;
+    this.systemValueViewModel.ShortName = this.entity.ShortName;    
+    this.systemValueViewModel.ProcessingYear = this.entity.ProcessingYear;
+    this.systemValueViewModel.ExpMonth = this.entity.ExpMonth;
+    this.systemValueViewModel.MailAccountName = this.entity.MailAccountName;
+    this.systemValueViewModel.MailAccountPassword = this.entity.MailAccountPassword;
+    this.systemValueViewModel.MailAccountHalt = this.entity.MailAccountHalt;
+    this.systemValueViewModel.IsShowSalaryValue = this.entity.IsShowSalaryValue;
+    this.systemValueViewModel.IsShowMoneyValue = this.entity.IsShowMoneyValue;
+    this.systemValueViewModel.SidT = this.entity.SidT;
+    this.systemValueViewModel.TokT = this.entity.TokT;
+  }
+
+  private setSystemValueUpdate() {
+    this.entity.Code= this.systemValueViewModel.Code ;
+    this.entity.Name = this.systemValueViewModel.Name;
+    this.entity.ShortName =this.systemValueViewModel.ShortName ;    
+    this.entity.ProcessingYear = this.systemValueViewModel.ProcessingYear ;
+    this.entity.ExpMonth =this.systemValueViewModel.ExpMonth  ;
+    this.entity.MailAccountName =this.systemValueViewModel.MailAccountName  ;
+    this.entity.MailAccountPassword = this.systemValueViewModel.MailAccountPassword ;
+    this.entity.MailAccountHalt =this.systemValueViewModel.MailAccountHalt ;
+    this.entity.IsShowSalaryValue =this.systemValueViewModel.IsShowSalaryValue  ;
+    this.entity.IsShowMoneyValue = this.systemValueViewModel.IsShowMoneyValue ;
+    this.entity.SidT =this.systemValueViewModel.SidT ;
+    this.entity.TokT =this.systemValueViewModel.TokT ;
+  }
+
+  
   selectDataTypeChange(event) {
     if (event.value == 3) {
       this.chkJobLeaveDate = false;
@@ -544,8 +587,8 @@ export class SettingComponent implements OnInit {
 
   }
 
-  changeCheckboxJobLeaveDate(event){
-    
+  changeCheckboxJobLeaveDate(event) {
+
   }
 
   addToSortItems($event: any) {
@@ -575,8 +618,8 @@ export class SettingComponent implements OnInit {
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
         // send message to subscribers via observable subject
-        this.sendValueToTopMenu.empCount = this.totalRow.toString();
         if (this.emps.length > 0) {
+          this.sendValueToTopMenu.empCount = this.emps[0].TotalRecords.toString();
           this.sendValueToTopMenu.empContractedCount = this.emps[0].ContractedCount.toString();
           this.sendValueToTopMenu.empTrialCount = this.emps[0].TrialCount.toString();
           this.sendValueToTopMenu.empOtherCount = this.emps[0].OtherCount.toString();

@@ -95,14 +95,16 @@ export class PositionComponent implements OnInit {
     this.search();
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._loaderService.displayLoader(true);
     this._dataService.get('/api/position/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this._loaderService.displayLoader(false);
-
-      });
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -116,6 +118,12 @@ export class PositionComponent implements OnInit {
     this.loadDetail(id);
     this.modalAddEdit.show();
   }
+
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
+    this.modalAddEdit.show();
+  }
+
   saveChange(form: NgForm) {
     if (form.valid) {
       this.saveData(form);

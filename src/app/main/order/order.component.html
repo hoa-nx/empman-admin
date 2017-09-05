@@ -2,9 +2,9 @@
     <div class="col-sm-12">
         <div class="card-box">
             <div class="row">
-                <form #recruitmentStaffForm="ngForm" novalidate>
+                <form #orderForm="ngForm" novalidate>
                     <div class="col-lg-12">
-                        <h4 class="m-t-0 header-title"><b>Danh sách báo giá</b></h4>
+                        <h4 class="m-t-0 header-title"><b>Danh sách đơn hàng</b></h4>
 
                         <!-- Header -->
                         <div class="row">
@@ -22,7 +22,7 @@
                                 <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
                                 <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
                                 <!-- <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="showAddModal()" class="btn btn-info" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm</button> -->
-                                <a [routerLink]="['../../estimate/edit',0,'new']" class="btn btn-default waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
+                                <a [routerLink]="['../../order/edit',0,'new']" class="btn btn-default waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
                             </div>
 
                         </div>
@@ -42,52 +42,44 @@
                                         <th>Mã báo giá</th>
                                         <th>Tên báo giá</th>
                                         <th>Tên KH </th>
-                                        <th>Kỳ hạn gửi</th>
-                                        <th>Người báo giá</th>
-                                        <th>Dự toán KH</th>
-                                        <th>Công TK</th>
-                                        <th>Công LT</th>
-                                        <th>Công UT</th>
-                                        <th>Công test KH</th>
-                                        <th>Tổng báo giá</th>
-                                        <th>Kết quả</th>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Tên đơn hàng</th>
+                                        <th>MM đặt hàng</th>
+                                        <th>Kỳ hạn start</th>
+                                        <th>Kỳ hạn end</th>
+                                        <th>Ngày giao hàng cuối</th>
+                                        <th>Trạng thái</th>
                                         <th>Ghi chú</th>
                                         <th style="min-width: 160px;"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of estimates">
+                                    <tr *ngFor="let item of orderReceiveds">
                                         <td>
                                           <md-checkbox [value]="0" [(ngModel)]="item.Checked" [ngModelOptions]="{standalone: true}">
                                           </md-checkbox>
                                         </td>
                                         <td>
-                                          <a [routerLink]="['/main/estimate/edit',item.ID,'edit']">{{item.ID}}</a>
+                                          <a [routerLink]="['/main/order/edit',item.ID,'edit']">{{item.EstimateID}}</a>
+                                        </td>
+                                        <td>{{item.EstimateName}}</td>
+                                        <td>{{item.EstimateCustomerName}}</td>
+                                        <td>
+                                          <a [routerLink]="['/main/order/edit',item.ID,'edit']">{{item.ID}}</a>
                                         </td>
                                         <td>{{item.Name}}</td>
-                                        <td>{{item.Customer.ShortName}}</td>
-                                        <td>{{item.ScheduleSendDate| date:'yyyy/MM/dd HH:mm'}}
-                                        </td>
+                                        <td>{{item.TotalOrderMM}}</td>
+                                        <td>{{item.SchedulePojectStartDate| date:'yyyy/MM/dd'}}</td>
+                                        <td>{{item.SchedulePojectEndDate| date:'yyyy/MM/dd'}}</td>
+                                        <td>{{item.CustomerKiboLastDeliveryDate| date:'yyyy/MM/dd'}}</td>
                                         <td>
-                                            {{item.EstimateEmpName}}
+                                            Đang đối ứng
                                         </td>
-
-                                        <td>{{item.CustomerYosanMM| currency:'MM':true:'1.0-0'}}</td>
-                                        <td>{{item.EstimateDetailMM}}</td>
-                                        <td>{{item.EstimateDevMM}}</td>
-                                        <td>{{item.EstimateUtMM}}</td>
-                                        <td>{{item.EstimateCombineTestMM}}</td>
-                                        <td>{{item.TotalMM}}</td>
-                                        <td>
-                                            <span *ngIf="item.EstimateResultMasterDetailID==100" class="tag label label-success">{{item.EstimateResultName}}</span>
-                                            <span *ngIf="item.EstimateResultMasterDetailID!=100" class="tag label label-danger">{{item.EstimateResultName}}</span>
-                                        </td>
-
                                         <td>{{item.Note}}</td>
                                         <td>
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="fileUpload.click()" title="Upload các file liên quan"><i class="fa fa-upload"></i></a>
-                                            <a href="javascript:void(0)" class="table-action-btn"[routerLink]="['../../estimate/edit',item.ID,'edit']"  title="Cập nhật thông tin báo giá"><i class="md md-edit"></i></a>
-                                            <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close" title="Xóa báo giá"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn"[routerLink]="['../../order/edit',item.ID,'edit']"  title="Cập nhật thông tin nhận đơn hàng"><i class="md md-edit"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close" title="Xóa đơn hàng"></i></a>
 
 
                                         </td>
@@ -99,13 +91,13 @@
                         <!-- paging -->
                         <div class="col-md-12">
 
-                            <div *ngIf="estimates && estimates.length == 0" class="col-md-12">
+                            <div *ngIf="orderReceiveds && orderReceiveds.length == 0" class="col-md-12">
                                 <div class="alert alert-info">
                                     <strong>Thông báo!</strong> Hiện tại chưa có dữ liệu nào ứng với loại đã chọn
                                 </div>
 
                             </div>
-                            <div *ngIf="estimates && estimates.length > 0" class="col-md-12">
+                            <div *ngIf="orderReceiveds && orderReceiveds.length > 0" class="col-md-12">
                                 <pagination [boundaryLinks]="true" [ngModelOptions]="{standalone: true}" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
                             </div>
                         </div>

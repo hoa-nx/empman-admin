@@ -1,192 +1,188 @@
 <div class="topbar">
 
-  <!-- LOGO -->
-  <div class="topbar-left">
-    <div class="text-center">
-      <a href="javascript:void(0);" (click)="gotoHome()" class="logo"><i class="icon-magnet icon-c-logo"></i><span>EMP<i class="md md-album"></i>{{user.username}}</span></a>
-      <!-- Image Logo here -->
-      <!--<a href="index.html" class="logo">-->
-      <!--<i class="icon-c-logo"> <img src="assets/images/logo_sm.png" height="42"/> </i>-->
-      <!--<span><img src="assets/images/logo_light.png" height="20"/></span>-->
-      <!--</a>-->
+    <!-- LOGO -->
+    <div class="topbar-left">
+        <div class="text-center">
+            <a href="javascript:void(0);" (click)="gotoHome()" class="logo"><i class="icon-magnet icon-c-logo"></i><span>EMP<i class="md md-album"></i>{{user.username}}</span></a>
+            <!-- Image Logo here -->
+            <!--<a href="index.html" class="logo">-->
+            <!--<i class="icon-c-logo"> <img src="assets/images/logo_sm.png" height="42"/> </i>-->
+            <!--<span><img src="assets/images/logo_light.png" height="20"/></span>-->
+            <!--</a>-->
+        </div>
     </div>
-  </div>
 
-  <!-- Button mobile view to collapse sidebar menu -->
-  <div class="navbar navbar-default" role="navigation">
-    <div class="container">
-      <div class="">
-        <div class="pull-left">
-          <button class="button-menu-mobile open-left waves-effect waves-light">
+    <!-- Button mobile view to collapse sidebar menu -->
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="">
+                <div class="pull-left">
+                    <button class="button-menu-mobile open-left waves-effect waves-light">
                                     <i class="md md-menu"></i>
                                 </button>
-          <span class="clearfix"></span>
-        </div>
+                    <span class="clearfix"></span>
+                </div>
 
-        <div role="search" class="navbar-left app-search pull-left hidden-xs">
-          <input type="text" name="filter" placeholder="Tìm nhân viên..." (keyup.enter)="searchEmp($event)" class="form-control">
-        </div>
-        <div class="navbar-left app-search pull-left searchtags" #searchtags>
-          
+                <div role="search" class="navbar-left app-search pull-left hidden-xs">
+                    <input type="text" name="filter" placeholder="Tìm nhân viên..." (keyup.enter)="searchEmp($event)" class="form-control">
+                </div>
+                <div class="navbar-left app-search pull-left searchtags" #searchtags>
 
-        </div>
-        
-        <ul class="nav navbar-nav navbar-right pull-right">
-          <li class="dropdown top-menu-item-xs">
-            <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
-                                        <i class="icon-user"></i> <span class="badge badge-xs badge-inverse">{{empCount}}</span>
-                                    </a>
-            <ul class="dropdown-menu dropdown-menu-lg">
-              <li class="notifi-title"><span class="label label-default pull-right"></span>Chi tiết</li>
-              <li class="list-group slimscroll-noti notification-list">
 
-                <!-- list item-->
-                <a *ngIf="empContractedCount!=0"  href="javascript:void(0);" (click)="toogleEmpContractedListDisplay = !toogleEmpContractedListDisplay" class="list-group-item">
-                  <span >
-                    <span class="tag label label-primary" *ngIf="!toogleEmpContractedListDisplay" >Hiển thị</span>
-                    <span class="tag label label-danger" *ngIf="toogleEmpContractedListDisplay" >Ẩn</span>
-                  </span>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right pull-right">
+                    <li class="dropdown top-menu-item-xs">
+                        <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
+                            <i class="icon-user"></i> <span class="badge badge-xs badge-inverse">{{empCount}}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg">
+                            <li class="notifi-title"><span class="label label-default pull-right"></span>Chi tiết</li>
+                            <li class="list-group slimscroll-noti notification-list">
+
+                                <!-- list item-->
+                                <a *ngIf="empContractedCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedcount')" class="list-group-item">
                   Số LTV chính thức đang làm việc
                   <span class="badge badge-primary">{{empContractedCount}}</span>
                 </a>
-                <!-- list item-->
-                <a  *ngIf="empContractedJobLeavedCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empContractedJobLeavedCount!=0" href="javascript:void(0);" class="list-group-item">
                   Số LTV chính thức đã nghỉ
                   <span class="badge badge-primary">{{empContractedJobLeavedCount}}</span>
                 </a>
-                <!-- list item-->
-                <a  *ngIf="empContractedJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empContractedJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedjobleavedinprocessingyearcount')" class="list-group-item">
                   Số LTV chính thức nghỉ việc năm {{processingYear}}
                   <span class="badge badge-danger">{{empContractedJobLeavedInProcessingYearCount}}</span>
                 </a>
-                <!-- list item-->
-                <a  *ngIf="empTrialJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empTrialJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialjobleavedinprocessingyearcount')" class="list-group-item">
                   LTV thử việc không nhận chính thức năm {{processingYear}}
                   <span class="badge badge-warning">{{empTrialJobLeavedInProcessingYearCount}}</span>
                 </a>
 
-                <!-- list item-->
-                <a  *ngIf="empContractedLTNMonthCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empContractedLTNMonthCount!=0" href="javascript:void(0);" class="list-group-item">
                   Số LTV chính thức nhỏ hơn {{expMonth}} tháng
                   <span class="badge">{{empContractedLTNMonthCount}}</span>
                 </a>
 
-                <!-- list item-->
-                <a *ngIf="empOnsiteCount!=0"  href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empOnsiteCount!=0" href="javascript:void(0);" class="list-group-item">
                   LTV onsite dài hạn
                   <span class="badge badge-success">{{empOnsiteCount}}</span>
                 </a>
 
-                <!-- list item-->
-                <a  *ngIf="empOtherCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empOtherCount!=0" href="javascript:void(0);" class="list-group-item">
                   NV tổng vụ , qui trình
                   <span class="badge badge-pink">{{empOtherCount}}</span>
                 </a>
 
-                <!-- list item-->
-                <a  *ngIf="empTransCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empTransCount!=0" href="javascript:void(0);" class="list-group-item">
                   NV Phiên dịch
                   <span class="badge badge-purple">{{empTransCount}}</span>
                 </a>
-                <!-- list item-->
-                <a  *ngIf="empTrialJobLeavedCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <!-- list item-->
+                                <a *ngIf="empTrialJobLeavedCount!=0" href="javascript:void(0);" class="list-group-item">
                   LTV thử việc đã nghỉ(không nhận/xin nghỉ)
                   <span class="badge badge-warning">{{empTrialJobLeavedCount}}</span>
                 </a>
-                
 
-                <!-- list item-->
-                <a  *ngIf="empTrialCount!=0" href="javascript:void(0);" class="list-group-item">
+
+                                <!-- list item-->
+                                <a *ngIf="empTrialCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialcount')" class="list-group-item">
                   LTV đang thử việc
                   <span class="badge badge-warning">{{empTrialCount}}</span>
                 </a>
 
-            </ul>
-            </li>
+                        </ul>
+                        </li>
 
-            <li class="dropdown top-menu-item-xs">
-              <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
-                                        <i class="icon-bell"></i> <span class="badge badge-xs badge-danger">0</span>
+                        <li class="dropdown top-menu-item-xs">
+                            <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
+                                <i class="icon-bell"></i> <span class="badge badge-xs badge-danger">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-lg">
+                                <li class="notifi-title"><span class="label label-default pull-right">3 mới</span>Thông báo</li>
+                                <li class="list-group slimscroll-noti notification-list">
+                                    <!-- list item-->
+                                    <a href="javascript:void(0);" class="list-group-item">
+                                        <div class="media">
+                                            <div class="pull-left p-r-10">
+                                                <em class="fa fa-diamond noti-primary"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">Đánh giá hợp đồng</h5>
+                                                <p class="m-0">
+                                                    <small>Đánh giá kết quả thử việc</small>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </a>
-              <ul class="dropdown-menu dropdown-menu-lg">
-                <li class="notifi-title"><span class="label label-default pull-right">3 mới</span>Thông báo</li>
-                <li class="list-group slimscroll-noti notification-list">
-                  <!-- list item-->
-                  <a href="javascript:void(0);" class="list-group-item">
-                    <div class="media">
-                      <div class="pull-left p-r-10">
-                        <em class="fa fa-diamond noti-primary"></em>
-                      </div>
-                      <div class="media-body">
-                        <h5 class="media-heading">Đánh giá hợp đồng</h5>
-                        <p class="m-0">
-                          <small>Đánh giá kết quả thử việc</small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
 
-                  <!-- list item-->
-                  <a href="javascript:void(0);" class="list-group-item">
-                    <div class="media">
-                      <div class="pull-left p-r-10">
-                        <em class="fa fa-cog noti-warning"></em>
-                      </div>
-                      <div class="media-body">
-                        <h5 class="media-heading">Danh sách nhân viên có ngạch không phù hợp</h5>
-                        <p class="m-0">
-                          <small>Danh sách nhân viên có ngạch không phù hợp</small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
+                                    <!-- list item-->
+                                    <a href="javascript:void(0);" class="list-group-item">
+                                        <div class="media">
+                                            <div class="pull-left p-r-10">
+                                                <em class="fa fa-cog noti-warning"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">Danh sách nhân viên có ngạch không phù hợp</h5>
+                                                <p class="m-0">
+                                                    <small>Danh sách nhân viên có ngạch không phù hợp</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
 
-                  <!-- list item-->
-                  <a href="javascript:void(0);" class="list-group-item">
-                    <div class="media">
-                      <div class="pull-left p-r-10">
-                        <em class="fa fa-bell-o noti-custom"></em>
-                      </div>
-                      <div class="media-body">
-                        <h5 class="media-heading">Sinh nhật</h5>
-                        <p class="m-0">
-                          <small>Hôm nay sinh nhật của <span class="text-primary font-600">2</span> nhân viên</small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
+                                    <!-- list item-->
+                                    <a href="javascript:void(0);" class="list-group-item">
+                                        <div class="media">
+                                            <div class="pull-left p-r-10">
+                                                <em class="fa fa-bell-o noti-custom"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">Sinh nhật</h5>
+                                                <p class="m-0">
+                                                    <small>Hôm nay sinh nhật của <span class="text-primary font-600">2</span> nhân viên</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
 
-                  <!-- list item-->
-                  <a href="javascript:void(0);" class="list-group-item">
-                    <div class="media">
-                      <div class="pull-left p-r-10">
-                        <em class="fa fa-user-plus noti-pink"></em>
-                      </div>
-                      <div class="media-body">
-                        <h5 class="media-heading">Nghỉ việc trong tháng</h5>
-                        <p class="m-0">
-                          <small>Các nhân viên nghỉ việc</small>
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-              </ul>
-              </li>
-              <li class="hidden-xs">
-                <a  routerLink="/main/setting/index" routerLinkActive="active"><i class="icon-settings"></i></a>
-              </li>
-              <li class="dropdown top-menu-item-xs">
-                <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true"><img [src]="baseFolder + user.avatar" alt="user-img" class="img-circle"> </a>
-                <ul class="dropdown-menu">
-                  <li><a href="javascript:void(0)"><i class="ti-user m-r-10 text-custom"></i> Tiểu sử</a></li>
-                  <li><a href="javascript:void(0)"><i class="ti-settings m-r-10 text-custom"></i> Cấu hình</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#" (click)="logout()"><i class="ti-power-off m-r-10 text-danger"></i> Đăng xuất</a></li>
+                                    <!-- list item-->
+                                    <a href="javascript:void(0);" class="list-group-item">
+                                        <div class="media">
+                                            <div class="pull-left p-r-10">
+                                                <em class="fa fa-user-plus noti-pink"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">Nghỉ việc trong tháng</h5>
+                                                <p class="m-0">
+                                                    <small>Các nhân viên nghỉ việc</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                            </ul>
+                            </li>
+                            <li class="hidden-xs">
+                                <a routerLink="/main/setting/index" routerLinkActive="active"><i class="icon-settings"></i></a>
+                            </li>
+                            <li class="dropdown top-menu-item-xs">
+                                <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true"><img [src]="baseFolder + user.avatar" alt="user-img" class="img-circle"> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0)"><i class="ti-user m-r-10 text-custom"></i> Tiểu sử</a></li>
+                                    <li><a href="javascript:void(0)"><i class="ti-settings m-r-10 text-custom"></i> Cấu hình</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#" (click)="logout()"><i class="ti-power-off m-r-10 text-danger"></i> Đăng xuất</a></li>
+                                </ul>
+                            </li>
                 </ul>
-              </li>
-        </ul>
-      </div>
-      <!--/.nav-collapse -->
+            </div>
+            <!--/.nav-collapse -->
+        </div>
     </div>
-  </div>
 </div>

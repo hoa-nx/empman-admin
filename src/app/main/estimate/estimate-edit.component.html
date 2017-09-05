@@ -1,0 +1,407 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #editDataForm="ngForm" *ngIf="entity" (keydown.enter)="$event.preventDefault();">
+                <div class="row">
+                    <div class="col-md-10">
+                        <button type="button" class="btn btn-danger" (click)="back()">
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Trở về</button>
+                        <button type="button" [disabled]="!editDataForm.form.valid" class="btn btn-default" (click)="saveChange(editDataForm.valid)">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>{{actionParam === 'edit' ? "Cập nhật" : "Đăng ký"}}</button>
+                    </div>
+
+                </div>
+
+                <hr/>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="hidden" #no="ngModel" [(ngModel)]="entity.No" name="no">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Khách hàng</label>
+                            <select class="form-control focusedInput" name="CustomerID" [(ngModel)]="entity.CustomerID">
+                                <option *ngFor="let x of customers" [value]="x.ID">{{x.Name}}</option></select>
+                            <input type="hidden" [(ngModel)]="entity.CustomerID" name="CustomerID" class="form-control" />
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Mã báo giá</label>
+                            <input type="text" #ID="ngModel" [(ngModel)]="entity.ID" required maxlength="64" name="ID" class="form-control focusedInput"
+                                placeholder="Mã báo giá">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tên báo giá</label>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.Name" name="Name" #Name="ngModel" placeholder="Tên báo giá"
+                                required/>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="control-label"><i class="fa fa-user" aria-hidden="true"></i>Tên viết tắt</label>
+                            <input type="text" class="form-control focusedInput" [(ngModel)]="entity.ShortName" name="ShortName" #ShortName="ngModel" placeholder="Tên viết tắt"
+                                />
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+
+                        <!-- <div class="col-md-4 col-sm-6 col-xs-12">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Công ty</label>
+
+                            <select class="form-control focusedInput" name="CurrentCompanyID" [(ngModel)]="entity.CurrentCompanyID">
+                                                <option *ngFor="let x of companys" [value]="x.ID">{{x.Name}}</option>
+                                                </select>
+                            <input type="hidden" [(ngModel)]="entity.CurrentCompanyID" name="CurrentCompanyID" class="form-control" />
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Bộ phận hiện tại</label>
+
+                            <select class="form-control focusedInput" name="CurrentDeptID" [(ngModel)]="entity.CurrentDeptID">
+                                                <option *ngFor="let x of depts" [value]="x.ID">{{x.Name}}</option>
+                                                </select>
+                            <input type="hidden" [(ngModel)]="entity.CurrentDeptID" name="CurrentDeptID" class="form-control" />
+                        </div> -->
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Loại báo giá</label>
+    
+                                <select class="form-control focusedInput" name="EstimateTypeMasterDetailID" [(ngModel)]="entity.EstimateTypeMasterDetailID" required>
+                                <option *ngFor="let x of estimateTypes" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                </select>
+                                <input type="hidden" [(ngModel)]="entity.EstimateTypeMasterID" name="EstimateTypeMasterID" class="form-control" />
+                                <input type="hidden" [(ngModel)]="entity.EstimateTypeMasterDetailID" name="EstimateTypeMasterDetailID" class="form-control" />
+                            </div>
+    
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Người phụ trách báo giá</label>
+                            <select class="form-control focusedInput" name="EstimateEmpID" [(ngModel)]="entity.EstimateEmpID">
+                                                <option *ngFor="let x of emps" [value]="x.ID">{{x.Name}}</option>
+                                                </select>
+                            <input type="hidden" [(ngModel)]="entity.EstimateEmpID" name="EstimateEmpID" class="form-control" />
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <label class="control-label"><i class="fa fa-text-width" aria-hidden="true"></i>Người phụ trách giao dịch</label>
+                            <select class="form-control focusedInput" name="TransEmpID" [(ngModel)]="entity.TransEmpID">
+                                                <option *ngFor="let x of emps" [value]="x.ID">{{x.Name}}</option>
+                                                </select>
+                            <input type="hidden" [(ngModel)]="entity.TransEmpID" name="TransEmpID" class="form-control" />
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <tabset>
+                            <!-- Thông tin báo giá-->
+                            <tab heading="Cơ bản">
+                                <div class="row">
+
+                                    <div class="col-lg-6">
+                                        <div class="card-box">
+                                            <h5 class="text-primary text-uppercase m-t-0 m-b-20"><b>Thông tin kỳ hạn và dự toán</b></h5>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Dự toán Khách hàng(MM)</label>
+                                                <input type="number" #CustomerYosanMM="ngModel" [(ngModel)]="entity.CustomerYosanMM" name="CustomerYosanMM" class="form-control focusedInput" placeholder="Dự toán của khách hàng(MM)">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày khách hàng yêu cầu báo giá</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true"  [(ngModel)]="entity.CustomerRequestDate" name="CustomerRequestDate"  #CustomerRequestDate="ngModel" 
+                                                (onSelect)="selectedCustomerRequestDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày khách hàng yêu cầu báo giá"
+                                                ></p-calendar>
+                                                
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Nguyện vọng gửi báo giá của KH</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true"  [showTime]="true" [(ngModel)]="entity.CustomerKiboSendDate" name="CustomerKiboSendDate"  #CustomerKiboSendDate="ngModel" 
+                                                (onSelect)="selectedCustomerKiboSendDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày KH mong muốn gửi lại báo giá"
+                                                ></p-calendar>
+
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày dự định start dự án</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.SchedulePojectStartDate" name="SchedulePojectStartDate"  #SchedulePojectStartDate="ngModel" 
+                                                (onSelect)="selectedSchedulePojectStartDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày dự định start"
+                                                ></p-calendar>
+
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày dự định kết thúc dự án</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.SchedulePojectEndDate" name="SchedulePojectEndDate"  #SchedulePojectEndDate="ngModel" 
+                                                (onSelect)="selectedSchedulePojectEndDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày dự định kết thúc"
+                                                ></p-calendar>
+
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày dự định giao hàng sau cùng</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.CustomerKiboLastDeliveryDate" name="CustomerKiboLastDeliveryDate"  #CustomerKiboLastDeliveryDate="ngModel" 
+                                                (onSelect)="selectedCustomerKiboLastDeliveryDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày dự định giao hàng sau cùng"
+                                                ></p-calendar>
+
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày leader gửi báo giá</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true"  [showTime]="true" [(ngModel)]="entity.EstimateEmpReportDate" name="EstimateEmpReportDate"  #EstimateEmpReportDate="ngModel" 
+                                                (onSelect)="selectedEstimateEmpReportDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày leader gửi báo giá"
+                                                ></p-calendar>
+                                            </div>
+
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày công ty dự định gửi báo giá</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.ScheduleSendDate" name="ScheduleSendDate"  #ScheduleSendDate="ngModel" 
+                                                (onSelect)="selectedScheduleSendDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày công ty dự định gửi báo giá"
+                                                ></p-calendar>
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày công ty gửi báo giá lần cuối</label>
+                                                <br>
+                                                <p-calendar   [showIcon]="true" [(ngModel)]="entity.ActualSendLastDate" name="ActualSendLastDate"  #ActualSendLastDate="ngModel" 
+                                                (onSelect)="selectedActualSendLastDate($event)"  dateFormat="yy/mm/dd"  
+                                                [monthNavigator]="true" [yearNavigator]="true"  yearRange="1950:2100"
+                                                 class="focusedInput"  
+                                                 placeholder="Ngày công ty gửi báo giá lần cuối"
+                                                ></p-calendar>
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Hệ điều hành</label>
+                                                <br>
+                                                <p-chips #OSLists="ngModel" [(ngModel)]="entity.OSLists" name="OSLists"></p-chips> 
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngôn ngữ lập trình</label>
+                                                <br>
+                                                <p-chips #LanguageLists="ngModel" [(ngModel)]="entity.LanguageLists" name="LanguageLists"></p-chips> 
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Các tool khác</label>
+                                                <br>
+                                                    <p-chips #OtherSoftLists="ngModel" [(ngModel)]="entity.OtherSoftLists" name="OtherSoftLists"></p-chips> 
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số tháng bảo hành</label>
+                                                <br>
+                                                <input type="number" #WarrantyMonths="ngModel" [(ngModel)]="entity.WarrantyMonths" name="WarrantyMonths"
+                                                    class="form-control focusedInput" placeholder="Số tháng bảo hành">
+                                            </div>
+                                        </div>
+                                    </div>    
+                                    <div class="col-lg-6">
+                                        <div class="card-box">
+
+                                            <h5 class="text-primary text-uppercase m-t-0 m-b-20"><b>Số công báo giá</b></h5>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công lấy yêu cầu(MM)</label>
+                                                <input type="number" #EstimateRequireMM="ngModel" [(ngModel)]="entity.EstimateRequireMM" name="EstimateRequireMM"
+                                                    class="form-control focusedInput" placeholder="Số công lấy yêu cầu">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công thiết kế cơ bản(MM)</label>
+                                                <input type="number" #EstimateBasicMM="ngModel" [(ngModel)]="entity.EstimateBasicMM" name="EstimateBasicMM"
+                                                    class="form-control focusedInput" placeholder="Số công thiết kế cơ bản">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công thiết kế chi tiết(MM)</label>
+                                                <input type="number" #EstimateDetailMM="ngModel" [(ngModel)]="entity.EstimateDetailMM" name="EstimateDetailMM"
+                                                    class="form-control focusedInput" placeholder="Số công thiết kế chi tiết">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công lập trình(MM)</label>
+                                                <input type="number" #EstimateDevMM="ngModel" [(ngModel)]="entity.EstimateDevMM" name="EstimateDevMM"
+                                                    class="form-control focusedInput" placeholder="Số công lập trình">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công unit test(MM)</label>
+                                                <input type="number" #EstimateUtMM="ngModel" [(ngModel)]="entity.EstimateUtMM" name="EstimateUtMM"
+                                                    class="form-control focusedInput" placeholder="Số công unit test">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công test kết hợp(MM)</label>
+                                                <input type="number" #EstimateCombineTestMM="ngModel" [(ngModel)]="entity.EstimateCombineTestMM" name="EstimateCombineTestMM"
+                                                    class="form-control focusedInput" placeholder="Số công test kết hợp">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công system test(MM)</label>
+                                                <input type="number" #EstimateSystemTestMM="ngModel" [(ngModel)]="entity.EstimateSystemTestMM" name="EstimateSystemTestMM"
+                                                    class="form-control focusedInput" placeholder="Số công system test">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công user test(MM)</label>
+                                                <input type="number" #EstimateUserTestMM="ngModel" [(ngModel)]="entity.EstimateUserTestMM" name="EstimateUserTestMM"
+                                                    class="form-control focusedInput" placeholder="Số công user test">
+                                            </div>
+                                            
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công dịch(MM)</label>
+                                                <input type="number" #EstimateTransMM="ngModel" [(ngModel)]="entity.EstimateTransMM" name="EstimateTransMM"
+                                                    class="form-control focusedInput" placeholder="Số công dịch">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Số công quản lý(MM)</label>
+                                                <input type="number" #EstimateManMM="ngModel" [(ngModel)]="entity.EstimateManMM" name="EstimateManMM"
+                                                    class="form-control focusedInput" placeholder="Số công quản lý">
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Tổng công báo giá (MM)</label>
+                                                <input type="number" #TotalMM="ngModel" [(ngModel)]="entity.TotalMM" name="TotalMM"
+                                                    class="form-control focusedInput" placeholder="Tổng công báo giá ">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-12">
+                                        <div class="card-box">
+
+                                            <h5 class="text-primary text-uppercase m-t-0 m-b-20"><b>Nội dung - Kết quả báo giá</b></h5>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Nội dung giao dịch</label>
+                                                <textarea class="form-control" #EstimateContent="ngModel" [(ngModel)]="entity.EstimateContent" name="EstimateContent" wrap="soft"></textarea>
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Trạng thái & kết quả báo giá</label>
+                                                <select class="form-control focusedInput" name="EstimateResultMasterDetailID" [(ngModel)]="entity.EstimateResultMasterDetailID">
+                                                <option *ngFor="let x of estimateResults" [value]="x.MasterDetailCode">{{x.Name}}</option>
+                                                </select>
+                                                <input type="hidden" [(ngModel)]="entity.EstimateResultMasterDetailID" name="EstimateResultMasterDetailID" class="form-control"
+                                                />
+                                            </div>
+
+                                            <div class="form-group m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Chi chú</label>
+                                                <textarea class="form-control" #Note="ngModel" [(ngModel)]="entity.Note" name="Note" #Note="ngModel" wrap="soft"></textarea>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            </tab>
+
+                            <!-- Tab file đính kèm-->
+                            <tab heading="File">
+                                <div class="row">
+                                    <div class="row">
+                                        <label>Chọn file báo giá</label>
+                                        <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.xls, *.xlsx,*.doc,*.docx , *.pdf </p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 col-sm-6 col-xs-12">
+                                            <input type="file" required #filePath name="filePath" class="form-control">
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <button class="btn btn-link" (click)="uploadFile()"><i class="fa fa-upload"></i></button>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <!-- List -->
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mails m-0 table table-actions-bar">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="downloadMultiFile()"><i class="fa fa-download"></i></a>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="deleteMultiFile()"><i class="fa fa-trash"></i></a>
+                                                    </th>
+                                                    <th>Tên file</th>
+                                                    <th>Ngày tạo</th>
+                                                    <th>Người tạo</th>
+                                                    <th>Ghi chú</th>
+                                                    <th style="min-width: 90px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of fileStorages">
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <input type="checkbox" [(ngModel)]="item.Checked" [name]="item.ID" [ngModelOptions]="{standalone: true}">
+                                                            <label></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{item.FileName}}</td>
+                                                    <td>{{item.CreatedDate}}</td>
+                                                    <td>{{item.CreatedBy}}</td>
+                                                    <td>{{item.Note}}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="downloadItemFile(item.ID)"><i class="md md-file-download"></i></a>
+                                                        <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItemFile(item.ID)"><i class="md md-close"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- List end-->
+
+                                </div>
+
+                            </tab>
+
+                        </tabset>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

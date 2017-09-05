@@ -28,6 +28,7 @@ export class EmpListComponent implements OnInit {
     public pageDisplay: number = 10;
     public totalRow: number;
     public filter: string = '';
+    public filterByType: string = '';
     public emps: any[];
     public empOriginals: any[]; //danh sach nhan vien day du luc dau search duoc
     public loading = true;

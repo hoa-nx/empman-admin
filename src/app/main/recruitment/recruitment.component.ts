@@ -15,6 +15,7 @@ import { NgForm } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoggedInUser } from '../../core/domain/loggedin.user';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MasterKbnEnum } from '../../core/common/shared.enum';
 
 declare var moment: any;
 
@@ -148,15 +149,17 @@ export class RecruitmentComponent implements OnInit {
     this.search();
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._loaderService.displayLoader(true);
     this._dataService.get('/api/recruitment/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this.formatDateDisplay();
         this._loaderService.displayLoader(false);
-
-      });
+        if(isCopy){
+          this.entity.No = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -169,6 +172,11 @@ export class RecruitmentComponent implements OnInit {
   showEditModal(id: any) {
     this.loadDetail(id);
     this.modalAddEdit.show();
+  }
+
+  showCopyModal(id: any) {
+      this.loadDetail(id, true);
+      this.modalAddEdit.show();
   }
   saveChange(form: NgForm) {
     if (form.valid) {
@@ -190,6 +198,7 @@ export class RecruitmentComponent implements OnInit {
     }
   }
   private saveData(form: NgForm) {
+    this.setMasterKbnId();
     if (this.entity.No == undefined) {
       this._dataService.post('/api/recruitment/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
@@ -209,14 +218,20 @@ export class RecruitmentComponent implements OnInit {
         }, error => this._dataService.handleError(error));
     }
   }
+
+  private setMasterKbnId(){
+      this.entity.RecruitmentTypeMasterID  = MasterKbnEnum.RecruitmentType;
+  }
+
   deleteItem(id: any) {
     this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
+
   deleteItemConfirm(id: any) {
     this._dataService.delete('/api/recruitment/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.search();
-    });
+    }, error => this._dataService.handleError(error));
   }
 
   public deleteMulti() {
@@ -296,5 +311,7 @@ export class RecruitmentComponent implements OnInit {
           });
       });
   }
+
+
 
 }

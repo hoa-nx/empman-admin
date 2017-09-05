@@ -118,7 +118,6 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                 var futureMonth = moment(this.entity.ReportYearMonth).add(1, 'M');
                 var futureMonthEnd = moment(futureMonth).endOf('month');
                 this.entity.ReportYearMonth = DateTimeHelper.getNextYearMonth(this.entity.ReportYearMonth);
-                this.setDateRangeValueDefault();
                 //kiểm tra xem đã có dữ liệu hay chưa?
                 this.loadRevenueDetailByMultiJoken().subscribe((response: any[]) => {
                     if (response.length > 0) {
@@ -129,6 +128,7 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
                     } else {
                         this.entity.ID = 0;
                     }
+                    this.setDateRangeValueDefault();
 
                 }, error => this._dataService.handleError(error));
 
@@ -508,12 +508,16 @@ export class RevenueEditComponent implements OnInit, OnDestroy {
 
                 this.entity.OrderPrice = this.customerUnitPrice.OrderPrice | 0;
 
+                //setting đơn vị tính theo đơn giá 
+                this.entity.OrderUnitMasterID = this.customerUnitPrice.OrderUnitMasterID;
+                this.entity.OrderUnitMasterDetailID = this.customerUnitPrice.OrderUnitMasterDetailID;
                 //truong hop tu dong tinh toan lai cac item so tien
                 if (isAutoRecal) {
                     this.calRelationOrderItem();
                     this.calRelationInMonthItem();
                     this.calRelationNextMonthItem();
                 }
+
             }
         }
     }

@@ -96,12 +96,14 @@ export class DeptComponent implements OnInit {
     this.search();
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._dataService.get('/api/dept/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
-
-      });
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
 
   pageChanged(event: any): void {
@@ -114,6 +116,10 @@ export class DeptComponent implements OnInit {
   }
   showEditModal(id: any) {
     this.loadDetail(id);
+    this.modalAddEdit.show();
+  }
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
     this.modalAddEdit.show();
   }
   saveChange(form: NgForm) {
@@ -148,7 +154,7 @@ export class DeptComponent implements OnInit {
     this._dataService.delete('/api/dept/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.search();
-    });
+    }, error => this._dataService.handleError(error));
   }
 
   public deleteMulti() {

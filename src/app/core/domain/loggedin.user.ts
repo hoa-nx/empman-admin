@@ -10,9 +10,10 @@ export class LoggedInUser {
         companyid: any,
         deptid: any,
         teamid: any,
-        empid: any
-    ) 
-    {
+        empid: any,
+        processingyear: any,
+        systemconfigs : any
+    ) {
         this.access_token = access_token;
         this.fullName = fullName;
         this.username = username;
@@ -24,6 +25,8 @@ export class LoggedInUser {
         this.roles = roles;
         this.permissions = permissions;
         this.empid = empid;
+        this.processingyear = processingyear;
+        this.systemconfigs = systemconfigs;
     }
 
     public id: string;
@@ -38,4 +41,7 @@ export class LoggedInUser {
     public permissions: any;
     public roles: any;
     public empid: any;
+    public processingyear: any;
+    public systemconfigs: any;
+
 }

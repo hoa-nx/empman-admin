@@ -50,7 +50,7 @@
                                     <th>Manager</th>
                                     <th>Vice manager</th>
                                     <th>Mail group</th>
-                                    <th style="min-width: 90px;"></th>
+                                    <th style="min-width: 130px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,6 +74,7 @@
                                     <td *ngIf="item.ViceManager1ID==null"></td>
                                     <td>{{item.MailGroup}}</td>
                                     <td>
+                                        <a *ngIf="_authenService.hasPermission('MASTER_DATA','update')" href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
                                         <a *ngIf="_authenService.hasPermission('MASTER_DATA','update')" href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
                                         <a *ngIf="_authenService.hasPermission('MASTER_DATA','delete')" href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                                     </td>

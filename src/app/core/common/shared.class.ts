@@ -49,3 +49,50 @@ export class InterviewResult
     ];
      
  }
+
+ /**
+ * Danh sách các hệ điều hành
+ * 
+ */
+
+ export class OperationSystem{
+    public static OperationSystemLists : any[] = [
+        {"id": "Chưa xác định" , "name" : "Chưa xác định"},
+        {"id": "Windows 7" , "name" : "Windows 7"},
+        {"id": "Windows 8.1" , "name" : "Windows 8.1"},
+        {"id": "Windows 10" , "name" : "Windows 10"},
+        {"id": "Windows" , "name" : "Windows"},
+        {"id": "Linux" , "name" : "Linux"},
+        {"id": "Unix" , "name" : "Unix"},
+        {"id": "Mac" , "name" : "Mac"}
+    ];
+ }
+
+
+ /**
+ * Danh sách các ngôn ngữ lập trình
+ * 
+ */
+
+ export class ProgrammingLanguage{
+    public static LanguageLists : any[] = [
+        {"id": "Chưa xác định" , "name" : "Chưa xác định"},
+        {"id": "C" , "name" : "C"},
+        {"id": "C++" , "name" : "C++"},
+        {"id": "C#" , "name" : "C#"},
+        {"id": "COBOL" , "name" : "COBOL"},
+        {"id": "JAVA" , "name" : "JAVA"},
+        {"id": "Objective-C" , "name" : "Objective-C"},
+        {"id": "Swift" , "name" : "Swift"},
+        {"id": "VB6" , "name" : "VB6"},
+        {"id": "VB2003" , "name" : "VB2003"},
+        {"id": "VB2005" , "name" : "VB2005"},
+        {"id": "VB2008" , "name" : "VB2008"},
+        {"id": "VB2010" , "name" : "VB2010"},
+        {"id": "VB2012" , "name" : "VB2012"},
+        {"id": "VB2013" , "name" : "VB2013"},
+        {"id": "VB2015" , "name" : "VB2015"},
+        {"id": "PYTHON" , "name" : "PYTHON"},
+        {"id": "PHP" , "name" : "PHP"}
+    ];
+ }

@@ -70,14 +70,16 @@ export class MasterComponent implements OnInit {
     this.search();
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._loaderService.displayLoader(true);
     this._dataService.get('/api/master/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this._loaderService.displayLoader(false);
-
-      });
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -87,6 +89,12 @@ export class MasterComponent implements OnInit {
     this.entity = {};
     this.modalAddEdit.show();
   }
+
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
+    this.modalAddEdit.show();
+  }
+  
   showEditModal(id: any) {
     this.loadDetail(id);
     this.modalAddEdit.show();
@@ -123,7 +131,7 @@ export class MasterComponent implements OnInit {
     this._dataService.delete('/api/master/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.search();
-    });
+    }, error => this._dataService.handleError(error));
   }
 
   public deleteMulti() {

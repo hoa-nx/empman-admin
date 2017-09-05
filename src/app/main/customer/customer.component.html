@@ -38,7 +38,7 @@
                                     <th>% PD</th>
                                     <th>Đơn giá mặc định</th>
                                     <th>Ghi chú</th>
-                                    <th style="min-width: 90px;"></th>
+                                    <th style="min-width: 130px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,6 +59,7 @@
                                     <td>{{item.Note}}</td>
 
                                     <td>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                                     </td>
@@ -144,7 +145,8 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày kết sổ</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <p-calendar [showIcon]="true" [(ngModel)]="entity.Sime" name="Sime" #Sime="ngModel" (onSelect)="selectedContractDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2100" class="focusedInput" placeholder="Ngày kết sổ"></p-calendar>
+                            <input type="number" #Sime="ngModel" [(ngModel)]="entity.Sime" maxlength="2" name="Sime" class="form-control focusedInput" placeholder="Ngày kết sổ">
+                            
                         </div>
 
                     </div>

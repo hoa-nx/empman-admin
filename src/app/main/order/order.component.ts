@@ -26,11 +26,11 @@ import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'ang
 import { element } from 'protractor';
 
 @Component({
-  selector: 'app-estimate',
-  templateUrl: './estimate.component.html',
-  styleUrls: ['./estimate.component.css']
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.css']
 })
-export class EstimateComponent  implements OnInit, OnDestroy {
+export class OrderComponent implements OnInit, OnDestroy {
 
   public baseFolder: string = SystemConstants.BASE_API;
   public entity: any;
@@ -40,7 +40,7 @@ export class EstimateComponent  implements OnInit, OnDestroy {
   public pageDisplay: number = 10;
   public filterKeyword: string = '';
   public filterCustomerID: any[] = [];
-  public estimates: any[];
+  public orderReceiveds: any[];
   public checkedItems: any[];
   public emps: any[];
   public depts: any[];
@@ -54,8 +54,9 @@ export class EstimateComponent  implements OnInit, OnDestroy {
   public searchModel: any = {};
   public approvedStatus = ApprovedStatusEnum;
   public dataStatus = DataStatusEnum;
-  public estimateResults : any[];
-  public customers : any[];
+  public estimateResults: any[];
+  public estimates: any[];
+  public customers: any[];
 
   // Settings configuration
   //https://github.com/softsimon/angular-2-dropdown-multiselect
@@ -133,7 +134,7 @@ export class EstimateComponent  implements OnInit, OnDestroy {
 
     this.getEmpCodeNameList();
 
- 
+
   }
 
   ngOnDestroy() {
@@ -150,6 +151,7 @@ export class EstimateComponent  implements OnInit, OnDestroy {
     uri.push('/api/dept/getall');
     uri.push('/api/team/getall');
     uri.push('/api/emp/getall');
+    uri.push('/api/estimate/getall');
 
     return this._dataService.getMulti(uri);
   }
@@ -163,6 +165,7 @@ export class EstimateComponent  implements OnInit, OnDestroy {
         this.depts = response[2];                    //dept
         this.teams = response[3];                    //team
         this.emps = response[4];                     //staff
+        this.estimates = response[5];                     //estimate
 
         this.primeModelCustomers = MappingService.mapIdNameToPrimeMultiSelectModel(this.customers);
 
@@ -182,27 +185,26 @@ export class EstimateComponent  implements OnInit, OnDestroy {
     //this.searchModel.BoolItems = [this.nextMonthInclude];
     this._loaderService.displayLoader(true);
     //this._dataService.get('/api/estimate/getallpaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword + '&filterRecruitmentID=' + this.filterRecruitmentID)
-    this._dataService.post('/api/estimate/getallpaging', JSON.stringify(this.searchModel))
+    this._dataService.post('/api/orderreceived/getallpaging', JSON.stringify(this.searchModel))
       .subscribe((response: any) => {
-        this.estimates = response.Items;
+        this.orderReceiveds = response.Items;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-        this.addNameToEntity();
+        this.AddNameToEntity();
         this._loaderService.displayLoader(false);
       }, error => this._dataService.handleError(error));
   }
 
-  private addNameToEntity(){
-    this.estimates.forEach(element=>{
-      console.log(element.EstimateResultMasterDetailID);
-      if(element.EstimateResultMasterDetailID !=undefined || element.EstimateResultMasterDetailID!=null){
-        element.EstimateResultName = this.estimateResults.find(x=> x.MasterDetailCode==element.EstimateResultMasterDetailID).Name;
+  private AddNameToEntity() {
+    this.orderReceiveds.forEach(element => {
+      element.EstimateName = this.estimates.find(x => x.ID == element.EstimateID).Name;
+
+      let customerID = this.estimates.find(x => x.ID == element.EstimateID).CustomerID;
+      if (customerID >=0) {
+        element.EstimateCustomerName = this.customers.find(x => x.ID == customerID).Name;;
       }
-      if(element.EstimateEmpID!=undefined || element.EstimateEmpID!=null){
-        element.EstimateEmpName = this.emps.find(x=> x.ID==element.EstimateEmpID).FullName;
-      }
-      
+
     });
   }
   public reset() {
@@ -213,7 +215,7 @@ export class EstimateComponent  implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this._loaderService.displayLoader(true);
-    this._dataService.get('/api/estimate/detail/' + id)
+    this._dataService.get('/api/orderreceived/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this._loaderService.displayLoader(false);
@@ -224,26 +226,26 @@ export class EstimateComponent  implements OnInit, OnDestroy {
     this.pageIndex = event.page;
     this.search();
   }
-  
+
   deleteItem(id: any) {
     this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
   deleteItemConfirm(id: any) {
-    this._dataService.delete('/api/estimate/delete', 'id', id).subscribe((response: Response) => {
+    this._dataService.delete('/api/orderreceived/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.search();
     }, error => this._dataService.handleError(error));
   }
 
   public deleteMulti() {
-    this.checkedItems = this.estimates.filter(x => x.Checked);
+    this.checkedItems = this.orderReceiveds.filter(x => x.Checked);
     var checkedIds = [];
     for (var i = 0; i < this.checkedItems.length; ++i)
       checkedIds.push(this.checkedItems[i]["ID"]);
 
     if (checkedIds.length > 0) {
       this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
-        this._dataService.delete('/api/estimate/deletemulti', 'checkedItems', JSON.stringify(checkedIds)).subscribe((response: any) => {
+        this._dataService.delete('/api/orderreceived/deletemulti', 'checkedItems', JSON.stringify(checkedIds)).subscribe((response: any) => {
           this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
           this.search();
         }, error => this._dataService.handleError(error));
@@ -252,21 +254,6 @@ export class EstimateComponent  implements OnInit, OnDestroy {
 
   }
 
-  public selectedInterviewDate(value: any) {
-    this.entity.InterviewDate = moment(value).format('YYYY/MM/DD HH:mm');
-  }
-
-  public selectedWorkingConditionTalkDate(value: any) {
-    this.entity.WorkingConditionTalkDate = moment(value).format('YYYY/MM/DD');
-  }
-
-  public selectedTrialStartDate(value: any) {
-    this.entity.TrialStartDate = moment(value).format('YYYY/MM/DD');
-  }
-
-  public selectedResourceDeptMailNotificationDate(value: any) {
-    this.entity.ResourceDeptMailNotificationDate = moment(value).format('YYYY/MM/DD');
-  }
 
   public changeCheckboxIsFinished(event: any) {
 
@@ -348,56 +335,5 @@ export class EstimateComponent  implements OnInit, OnDestroy {
       });
     });
   }
-
-  public createOrder(item: any) {
-    //check xem đã đặt hàng chưa
-    if (item.EstimateResultMasterDetailID== 100 ) {
-      //tao thong tin cua order  de cap nhat 
-      let data: any = {};
-      data.No = null;
-      data.ID = item.ID;
-      data.Name = item.Name;
-      data.ShortName = item.ShortName;
-      data.EstimateID = item.ID;
-      data.TotalOrderMM = item.TotalMM;
-      data.SchedulePojectStartDate = item.SchedulePojectStartDate;
-      data.SchedulePojectEndDate = item.SchedulePojectEndDate;
-      data.CustomerKiboLastDeliveryDate = item.CustomerKiboLastDeliveryDate;
-      data.OrderRequireMM = item.EstimateRequireMM;
-      data.OrderBasicMM = item.EstimateBasicMM;
-      data.OrderDetailMM = item.EstimateDetailMM;
-      data.OrderDevMM = item.EstimateDevMM;
-      data.OrderTransMM = item.EstimateTransMM;
-      data.OrderManMM = item.EstimateManMM;
-      data.OrderUtMM = item.EstimateUtMM;
-      data.OrderCombineTestMM = item.EstimateCombineTestMM;
-      data.OrderSystemTestMM = item.EstimateSystemTestMM;
-      data.OrderUserTestMM = item.EstimateUserTestMM;
-      data.OS = item.OS;
-      data.Language = item.Language;
-      data.OtherSofts = item.OtherSofts;
-      data.WarrantyMonths = item.WarrantyMonths;
-      data.WarrantyStartDate = item.WarrantyStartDate;
-      data.Note = item.Note;
-
-      this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_CREATE_EMP_FROM_RECRUITMENT_MSG, () => {
-        // tao nhan vien 
-        this._dataService.post('/api/orderreceived/add', JSON.stringify(data))
-          .subscribe((response: any) => {
-            //cap nhat lai thong tin 
-            if (response.ID) {
-              item.OrderReceivedID = response.ID;
-              this._dataService.put('/api/estimate/update', JSON.stringify(item))
-                .subscribe((response: any) => {
-                  this.search();
-
-                  this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
-                }, error => this._dataService.handleError(error));
-            }
-          }, error => this._dataService.handleError(error));
-      });
-    }
-  }
-
 
 }

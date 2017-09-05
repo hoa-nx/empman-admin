@@ -25,12 +25,14 @@
 
                 <div class="panel panel-color panel-primary">
                   <div class="panel-heading">
-                    <h3 class="panel-title">Doanh số đạt được cho đến hiện tại(Bao gồm onsite dài hạn) --Đơn vị MM</h3>
+                    <h3 class="panel-title">Doanh số đạt được {{processingYear}} cho đến hiện tại(Bao gồm onsite dài hạn) --Đơn vị MM</h3>
                   </div>
                   <div class="panel-body">
                     <div class="form-group">
                       <div class="row">
                         <div class="col-md-4">
+                          <span class="tag label label-primary">Mục tiêu</span>
+                          <br>
                           <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM lập trình : {{devTargetMMTotal}}</label>
                             <br>                          
                           <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM quản lý : {{manTargetMMTotal}}</label>
@@ -50,6 +52,8 @@
                         </div>
 
                         <div class="col-md-4">
+                            <span class="tag label label-success">Thực tích</span>
+                            <br>
                             <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số lập trình : {{devRevenueMMTotal}}</label>
                             <br>
                             <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số quản lý: {{manRevenueMMTotal}}</label>
@@ -116,6 +120,48 @@
 
                   </div>
                 </div>
+
+                <div class="panel panel-color panel-success">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">So sánh với năm {{prevYear}}</h3>
+                  </div>
+                  <div class="panel-body">
+                    <!--<div class="row">
+                      <div class="input-group">
+                        
+                          <md-checkbox (change)="changeCheckbox($event)" [value]="0" [(ngModel)]="transInclude" [ngModelOptions]="{standalone: true}">Bao gồm cả phiên dịch</md-checkbox>
+                          <md-checkbox (change)="changeCheckbox($event)" [value]="1" [(ngModel)]="onsiteInclude" [ngModelOptions]="{standalone: true}">Bao gồm cả onsire dài hạn</md-checkbox>
+                        
+                      </div>
+                    </div>-->
+
+
+                    <div class="row">
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <jqxChart #tab1PrevYearRevenueCompareChart [width]="'100%'" [height]="500" [title]="'So sánh doanh số năm trước và năm tài chính'" [description]="'Bao gồm doanh số lập trình, quản lý,onsite dài hạn'"
+                          [showLegend]="true" [enableAnimations]="true" [padding]="padding" [titlePadding]="titlePadding" [source]="revenuePrevYearRevenueCompareDataByType"
+                          [xAxis]="xAxis" [valueAxis]="valueAxis" [seriesGroups]="seriesPrevYearRevenueCompareGroups"
+                          (onClick)="chartEvent($event)" (onToggle)="chartEvent($event)"
+                          (mouseleave)="chartEvent($event)" (mouseenter)="chartEvent($event)" 
+                          
+                          [showBorderLine]="false"
+                          >
+                        </jqxChart>
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-group">
+                        <button type="button" class="btn btn-primary" (click)="btnPrintPrevYearCompareChartClick()">
+                        <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
+                        
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+
               </div>
             </tab>
             <!-- Tab thống kê nhân viên-->

@@ -1,97 +1,93 @@
 <div class="row">
-  <div class="col-sm-12">
-    <div class="card-box">
-      <form #formData="ngForm" novalidate>
+    <div class="col-sm-12">
+        <div class="card-box">
+            <form #formData="ngForm" novalidate>
 
-        <div class="row">
-          <div class="col-md-10">
-            <!-- <button type="button" class="btn btn-danger" (click)="back()">
+                <div class="row">
+                    <div class="col-md-10">
+                        <!-- <button type="button" class="btn btn-danger" (click)="back()">
                     <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>Trở về</button> -->
-            <button type="button" [disabled]="!formData.form.valid" class="btn btn-default" (click)="saveChange(formData.valid)">
+                        <button type="button" [disabled]="!formData.form.valid" class="btn btn-default" (click)="saveChange(formData.valid)">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Cập nhật</button>
-          </div>
+                    </div>
 
-        </div>
-
-
-        <div class="form-group">
-          <div class="row">
-            <tabset>
-              <!-- Tab Điều kiện lọc dữ liệu  -->
-              <tab heading="Điều kiện lọc dữ liệu">
-                <!-- Các loại phụ cấp-->
-                <div class="row">
-                  <h5 class="m-t-0 m-b-20 header-title"><b>Đối tượng tìm kiếm</b></h5>
-                </div>
-                <div class="row form-group m-b-20">
-                  <div class="col-md-12 col-sm-6 col-xs-12">
-                    <md-radio-group [(ngModel)]="selectDataTypes" [ngModelOptions]="{standalone: true}" (change)="selectDataTypeChange($event)">
-                      <md-radio-button value="1">Chỉ nghỉ việc</md-radio-button>
-                      <!-- <md-radio-button value="2">Bao gồm nhân viên trong kỳ</md-radio-button> -->
-                      <md-radio-button value="3">Đang làm việc</md-radio-button>
-                      <md-radio-button value="4">Nghỉ việc sắp tới</md-radio-button>
-                      <md-radio-button value="99">Tất cả</md-radio-button>
-                    </md-radio-group>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <h5 class="m-t-0 m-b-20 header-title"><b>Tổ chức - công việc</b></h5>
-                </div>
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
-                    </md-checkbox>
-
-                  </div>
-
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts"
-                      [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
-                  </div>
-                </div>
-
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
-                    </md-checkbox>
-
-                  </div>
-
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams"
-                      [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
-                  </div>
                 </div>
 
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxPosition($event)" [value]="0" [(ngModel)]="chkPosition" [ngModelOptions]="{standalone: true}">Ngạch bậc
-                    </md-checkbox>
+                <div class="form-group">
+                    <div class="row">
+                        <tabset>
+                            <!-- Tab Điều kiện lọc dữ liệu  -->
+                            <tab heading="Điều kiện lọc dữ liệu">
+                                <!-- Các loại phụ cấp-->
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Đối tượng tìm kiếm</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-12 col-sm-6 col-xs-12">
+                                        <md-radio-group [(ngModel)]="selectDataTypes" [ngModelOptions]="{standalone: true}" (change)="selectDataTypeChange($event)">
+                                            <md-radio-button value="1">Chỉ nghỉ việc</md-radio-button>
+                                            <md-radio-button value="2">Chỉ NV kỳ này trở đi</md-radio-button>
+                                            <md-radio-button value="3">Đang làm việc</md-radio-button>
+                                            <md-radio-button value="4">Nghỉ việc sắp tới</md-radio-button>
+                                            <md-radio-button value="99">Tất cả</md-radio-button>
+                                        </md-radio-group>
+                                    </div>
+                                </div>
 
-                  </div>
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Tổ chức - công việc</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
+                                        </md-checkbox>
 
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="positions"
-                      [(ngModel)]="selectPositions" [disabled]="chkPosition==false"></ss-multiselect-dropdown>
-                  </div>
-                </div>
+                                    </div>
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxEmpType($event)" [value]="0" [(ngModel)]="chkEmpType" [ngModelOptions]="{standalone: true}">Loại công việc
-                    </md-checkbox>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts" [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
 
-                  </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
+                                        </md-checkbox>
 
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empTypes"
-                      [(ngModel)]="selectEmpTypes" [disabled]="chkEmpType==false"></ss-multiselect-dropdown>
-                  </div>
-                </div>
+                                    </div>
 
-                <!--                 <div class="row form-group m-b-20">
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams" [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxPosition($event)" [value]="0" [(ngModel)]="chkPosition" [ngModelOptions]="{standalone: true}">Ngạch bậc
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="positions" [(ngModel)]="selectPositions" [disabled]="chkPosition==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxEmpType($event)" [value]="0" [(ngModel)]="chkEmpType" [ngModelOptions]="{standalone: true}">Loại công việc
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empTypes" [(ngModel)]="selectEmpTypes" [disabled]="chkEmpType==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <!--                 <div class="row form-group m-b-20">
                   <div class="col-md-2 col-sm-6 col-xs-12">
                     <md-checkbox (change)="changeCheckboxStartWorkingDate($event)" [value]="0" [(ngModel)]="chkStartWorkingDate" [ngModelOptions]="{standalone: true }">Ngày vào cty</md-checkbox>
 
@@ -130,14 +126,14 @@
 
                 </div> -->
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxStartWorkingDate($event)" [value]="0" [(ngModel)]="chkTrialDate" [ngModelOptions]="{standalone: true}">Ngày thử việc</md-checkbox>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxStartWorkingDate($event)" [value]="0" [(ngModel)]="chkTrialDate" [ngModelOptions]="{standalone: true}">Ngày thử việc</md-checkbox>
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <!-- <md-input-container>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <!-- <md-input-container>
                       <input mdInput [disabled]="chkTrialDate==false" [ngModel]="trialDateFrom | date:'yyyy/MM/dd'" [ngModelOptions]="{standalone: true}"
                         placeholder="Ngày vào thử việc">
                       <input mdInput [mdDatepicker]="pickertrialDateFrom" [hidden]='true' [(ngModel)]="trialDateFrom" [ngModelOptions]="{standalone: true}"
@@ -147,14 +143,13 @@
                     <md-datepicker #pickertrialDateFrom></md-datepicker> -->
 
 
-                    <input type="text" [disabled]="chkTrialDate==false" [ngModelOptions]="{standalone: true}" title="Ngày thử việc" daterangepicker
-                      (selected)="selectedTrialDateFrom($event)" [options]="dateOptions" [(ngModel)]="trialDateFrom" name="trialDateFrom"
-                      class="form-control" placeholder="Ngày thử việc" />
+                                        <input type="text" [disabled]="chkTrialDate==false" [ngModelOptions]="{standalone: true}" title="Ngày thử việc" daterangepicker (selected)="selectedTrialDateFrom($event)" [options]="dateOptions" [(ngModel)]="trialDateFrom" name="trialDateFrom" class="form-control"
+                                            placeholder="Ngày thử việc" />
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <!-- <md-input-container>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <!-- <md-input-container>
                       <input mdInput [disabled]="chkTrialDate==false" [ngModel]="trialDateTo | date:'yyyy/MM/dd'" [ngModelOptions]="{standalone: true}"
                         placeholder="Ngày vào thử việc">
                       <input mdInput [mdDatepicker]="pickertrialDateTo" [hidden]='true' [(ngModel)]="trialDateTo" [ngModelOptions]="{standalone: true}"
@@ -163,22 +158,21 @@
                     </md-input-container>
                     <md-datepicker #pickertrialDateTo></md-datepicker> -->
 
-                    <input type="text" [disabled]="chkTrialDate==false" [ngModelOptions]="{standalone: true}" title="Ngày thử việc" daterangepicker
-                      (selected)="selectedTrialDateTo($event)" [options]="dateOptions" [(ngModel)]="trialDateTo" name="trialDateTo"
-                      class="form-control" placeholder="Ngày thử việc" />
-                  </div>
+                                        <input type="text" [disabled]="chkTrialDate==false" [ngModelOptions]="{standalone: true}" title="Ngày thử việc" daterangepicker (selected)="selectedTrialDateTo($event)" [options]="dateOptions" [(ngModel)]="trialDateTo" name="trialDateTo" class="form-control"
+                                            placeholder="Ngày thử việc" />
+                                    </div>
 
-                </div>
+                                </div>
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxStartWorkingDate($event)" [value]="0" [(ngModel)]="chkContractDate" [ngModelOptions]="{standalone: true}">Ngày ký HĐ</md-checkbox>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxStartWorkingDate($event)" [value]="0" [(ngModel)]="chkContractDate" [ngModelOptions]="{standalone: true}">Ngày ký HĐ</md-checkbox>
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
 
-                    <!-- <md-input-container>
+                                        <!-- <md-input-container>
                       <input mdInput [disabled]="chkContractDate==false" [ngModel]="contractDateFrom | date:'yyyy/MM/dd'" [ngModelOptions]="{standalone: true}"
                         placeholder="Ngày ký HĐ">
                       <input mdInput [mdDatepicker]="pickercontractDateFrom" [hidden]='true' [(ngModel)]="contractDateFrom" [ngModelOptions]="{standalone: true}"
@@ -187,14 +181,13 @@
                     </md-input-container>
                     <md-datepicker #pickercontractDateFrom></md-datepicker> -->
 
-                    <input type="text" [disabled]="chkContractDate==false" [ngModelOptions]="{standalone: true}" title="Ngày HĐ" daterangepicker
-                      (selected)="selectedContractDateFrom($event)" [options]="dateOptions" [(ngModel)]="contractDateFrom"
-                      name="contractDateFrom" class="form-control" placeholder="Ngày HĐ" />
+                                        <input type="text" [disabled]="chkContractDate==false" [ngModelOptions]="{standalone: true}" title="Ngày HĐ" daterangepicker (selected)="selectedContractDateFrom($event)" [options]="dateOptions" [(ngModel)]="contractDateFrom" name="contractDateFrom" class="form-control"
+                                            placeholder="Ngày HĐ" />
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <!--                     <md-input-container>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <!--                     <md-input-container>
                       <input mdInput [disabled]="chkContractDate==false" [ngModel]="contractDateTo | date:'yyyy/MM/dd'" [ngModelOptions]="{standalone: true}"
                         placeholder="Ngày ký HĐ">
                       <input mdInput [mdDatepicker]="pickercontractDateTo" [hidden]='true' [(ngModel)]="contractDateTo" [ngModelOptions]="{standalone: true}"
@@ -202,231 +195,231 @@
                       <button mdSuffix [mdDatepickerToggle]="pickercontractDateTo" [disabled]="chkContractDate==false"></button>
                     </md-input-container>
                     <md-datepicker #pickercontractDateTo></md-datepicker> -->
-                    <input type="text" [disabled]="chkContractDate==false" [ngModelOptions]="{standalone: true}" title="Ngày HĐ" daterangepicker
-                      (selected)="selectedContractDateTo($event)" [options]="dateOptions" [(ngModel)]="contractDateTo" name="contractDateTo"
-                      class="form-control" placeholder="Ngày HĐ" />
+                                        <input type="text" [disabled]="chkContractDate==false" [ngModelOptions]="{standalone: true}" title="Ngày HĐ" daterangepicker (selected)="selectedContractDateTo($event)" [options]="dateOptions" [(ngModel)]="contractDateTo" name="contractDateTo" class="form-control"
+                                            placeholder="Ngày HĐ" />
 
-                  </div>
+                                    </div>
 
-                </div>
+                                </div>
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxJobLeaveDate($event)" [disabled]="selectDataTypes==3" [value]="0" [(ngModel)]="chkJobLeaveDate"
-                      [ngModelOptions]="{standalone: true }">Ngày nghỉ việc</md-checkbox>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxJobLeaveDate($event)" [disabled]="selectDataTypes==3" [value]="0" [(ngModel)]="chkJobLeaveDate" [ngModelOptions]="{standalone: true }">Ngày nghỉ việc</md-checkbox>
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <input type="text" [disabled]="chkJobLeaveDate==false" [ngModelOptions]="{standalone: true}" title="Ngày nghỉ việc" daterangepicker
-                      (selected)="selectedJobLeaveDateFrom($event)" [options]="dateOptions" [(ngModel)]="jobLeaveDateFrom"
-                      name="jobLeaveDateFrom" class="form-control" placeholder="Ngày nghỉ việc" />
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <input type="text" [disabled]="chkJobLeaveDate==false" [ngModelOptions]="{standalone: true}" title="Ngày nghỉ việc" daterangepicker (selected)="selectedJobLeaveDateFrom($event)" [options]="dateOptions" [(ngModel)]="jobLeaveDateFrom" name="jobLeaveDateFrom"
+                                            class="form-control" placeholder="Ngày nghỉ việc" />
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <input type="text" [disabled]="chkJobLeaveDate==false" [ngModelOptions]="{standalone: true}" title="Ngày nghỉ việc" daterangepicker
-                      (selected)="selectedJobLeaveDateTo($event)" [options]="dateOptions" [(ngModel)]="jobLeaveDateTo" name="jobLeaveDateTo"
-                      class="form-control" placeholder="Ngày nghỉ việc" />
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <input type="text" [disabled]="chkJobLeaveDate==false" [ngModelOptions]="{standalone: true}" title="Ngày nghỉ việc" daterangepicker (selected)="selectedJobLeaveDateTo($event)" [options]="dateOptions" [(ngModel)]="jobLeaveDateTo" name="jobLeaveDateTo"
+                                            class="form-control" placeholder="Ngày nghỉ việc" />
 
-                  </div>
+                                    </div>
 
-                </div>
-                <!-- -->
-                <div class="row">
-                  <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin khác</b></h5>
-                </div>
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkLearning" [ngModelOptions]="{standalone: true}">Chỉ NV học việc
-                    </md-checkbox>
-                  </div>
+                                </div>
+                                <!-- -->
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin khác</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkLearning" [ngModelOptions]="{standalone: true}">Chỉ NV học việc
+                                        </md-checkbox>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkTrainingInclude" [ngModelOptions]="{standalone: true}">Chỉ NV thử việc
-                    </md-checkbox>
-                  </div>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkTrainingInclude" [ngModelOptions]="{standalone: true}">Chỉ NV thử việc
+                                        </md-checkbox>
+                                    </div>
 
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkExperence" [ngModelOptions]="{standalone: true}">Chỉ NV có qui đổi KN
-                    </md-checkbox>
-                  </div>
-                </div>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkExperence" [ngModelOptions]="{standalone: true}">Chỉ NV có qui đổi KN
+                                        </md-checkbox>
+                                    </div>
+                                </div>
 
 
-                <!-- Các loại phụ cấp-->
-                <div class="row">
-                  <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin phụ cấp</b></h5>
-                </div>
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxBussinessAllowanceLevel($event)" [value]="0" [(ngModel)]="chkBussinessAllowanceLevel"
-                      [ngModelOptions]="{standalone: true}">Nghiệp vụ
-                    </md-checkbox>
+                                <!-- Các loại phụ cấp-->
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin phụ cấp</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxBussinessAllowanceLevel($event)" [value]="0" [(ngModel)]="chkBussinessAllowanceLevel" [ngModelOptions]="{standalone: true}">Nghiệp vụ
+                                        </md-checkbox>
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bussinessAllowanceLevels"
-                      [(ngModel)]="selectBussinessAllowanceLevels" [disabled]="chkBussinessAllowanceLevel==false"></ss-multiselect-dropdown>
-                  </div>
-                </div>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bussinessAllowanceLevels" [(ngModel)]="selectBussinessAllowanceLevels" [disabled]="chkBussinessAllowanceLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxJapaneseLevel($event)" [value]="0" [(ngModel)]="chkJapaneseLevel" [ngModelOptions]="{standalone: true}">Tiếng Nhật
-                    </md-checkbox>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxJapaneseLevel($event)" [value]="0" [(ngModel)]="chkJapaneseLevel" [ngModelOptions]="{standalone: true}">Tiếng Nhật
+                                        </md-checkbox>
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="japaneseLevels"
-                      [(ngModel)]="selectJapaneseLevels" [disabled]="chkJapaneseLevel==false"></ss-multiselect-dropdown>
-                  </div>
-                </div>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="japaneseLevels" [(ngModel)]="selectJapaneseLevels" [disabled]="chkJapaneseLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
 
-                <div class="row form-group m-b-20">
-                  <div class="col-md-2 col-sm-6 col-xs-12">
-                    <md-checkbox (change)="changeCheckboxBseLevel($event)" [value]="0" [(ngModel)]="chkBseLevel" [ngModelOptions]="{standalone: true}">Bse
-                    </md-checkbox>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxBseLevel($event)" [value]="0" [(ngModel)]="chkBseLevel" [ngModelOptions]="{standalone: true}">Bse
+                                        </md-checkbox>
 
-                  </div>
+                                    </div>
 
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bseLevels"
-                      [(ngModel)]="selectBseLevels" [disabled]="chkBseLevel==false"></ss-multiselect-dropdown>
-                  </div>
-                </div>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bseLevels" [(ngModel)]="selectBseLevels" [disabled]="chkBseLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
 
 
-              </tab>
+                            </tab>
 
-              <!-- Tab trình tự sort-->
-              <tab heading="Trình tự sort">
-                <div class="row">
-                  <h5 class="m-t-0 header-title"><b>Chỉ định trình tự sắp xếp</b></h5>
-                </div>
+                            <!-- Tab trình tự sort-->
+                            <tab heading="Trình tự sort">
+                                <div class="row">
+                                    <h5 class="m-t-0 header-title"><b>Chỉ định trình tự sắp xếp</b></h5>
+                                </div>
 
-                <div class="row">
+                                <div class="row">
 
-                  <div class="row">
+                                    <div class="row">
 
-                    <div class="col-sm-3">
-                      <div class="panel panel-warning">
-                        <div class="panel-heading">
-                          Chọn hạng mục sắp xếp
-                        </div>
-                        <div class="panel-body" dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="listEmpItemSorts">
-                          <ul class="list-group">
-                            <li *ngFor="let item of listEmpItemSorts; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">{{item}}</li>
-                          </ul>
-                        </div>
-                      </div>
+                                        <div class="col-sm-3">
+                                            <div class="panel panel-warning">
+                                                <div class="panel-heading">
+                                                    Chọn hạng mục sắp xếp
+                                                </div>
+                                                <div class="panel-body" dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="listEmpItemSorts">
+                                                    <ul class="list-group">
+                                                        <li *ngFor="let item of listEmpItemSorts; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">{{item}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="panel panel-success">
+                                                <div class="panel-heading">
+                                                    Trình tự sắp xếp
+                                                </div>
+                                                <div class="panel-body" [allowDrop]="true" dnd-droppable dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="listSelectedItemSorts" (onDropSuccess)="addToSortItems($event)">
+                                                    <ul class="list-group">
+                                                        <li *ngFor="let item of listSelectedItemSorts; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">{{item}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </tab>
+
+                            <!-- Tab thông tin chung-->
+                            <tab heading="Thông tin chung">
+                                <div class="row">
+                                    <h5 class="m-t-0 header-title"><b>Thông tin chung của hệ thống</b></h5>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="row">
+
+                                        <div class="col-lg-6">
+                                            <div class="card-box">
+                                                <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Cấu hình gửi mail</b></h5>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Account dùng để gửi mail</label>
+                                                    <input type="text" #MailAccountName="ngModel" [(ngModel)]="entity.MailAccountName" name="MailAccountName" class="form-control focusedInput" placeholder="Account dùng để gửi mail">
+                                                </div>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Mật khẩu Email</label>
+                                                    <input type="password" #MailAccountPassword="ngModel" [(ngModel)]="entity.MailAccountPassword" name="MailAccountPassword" class="form-control focusedInput" placeholder="Mật khẩu Email">
+                                                </div>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Chuỗi ký tự dùng cho mã hóa</label>
+                                                    <input type="text" #MailAccountHalt="ngModel" [(ngModel)]="entity.MailAccountHalt" name="MailAccountHalt" class="form-control focusedInput" placeholder="Chuỗi ký tự dùng cho mã hóa">
+                                                </div>
+                                            </div>
+
+                                            <div class="card-box">
+                                                <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Cấu hình gửi tin nhắn</b></h5>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Account SID</label>
+                                                    <input type="text" #SidT="ngModel" [(ngModel)]="entity.SidT" name="SidT" class="form-control focusedInput" placeholder="Account dùng để gửi tin nhắn">
+                                                </div>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Token</label>
+                                                    <input type="text" #TokT="ngModel" [(ngModel)]="entity.TokT" name="TokT" class="form-control focusedInput" placeholder="Token..">
+                                                </div>
+                                            </div>
+
+                                            <div class="card-box">
+
+                                                <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Cấu hình hiển thị - thống kê</b></h5>
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Hiển thị tiền , giá</label>
+                                                    <md-radio-group name="IsShowMoneyValue" [(ngModel)]="entity.IsShowMoneyValue" class="form-control  no-border">
+                                                        <md-radio-button (change)="selectIsShowMoneyValue($event)" [value]="1" [checked]="entity.IsShowMoneyValue===true">Hiển thị</md-radio-button>
+                                                        <md-radio-button (change)="selectIsShowMoneyValue($event)" [value]="0" [checked]="entity.IsShowMoneyValue===false">Không hiển thị</md-radio-button>
+                                                    </md-radio-group>
+                                                </div>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Hiển thị lương</label>
+                                                    <md-radio-group name="IsShowSalaryValue" [(ngModel)]="entity.IsShowSalaryValue" class="form-control  no-border">
+                                                        <md-radio-button (change)="selectIsShowSalaryValue($event)" [value]="1" [checked]="entity.IsShowSalaryValue===true">Hiển thị</md-radio-button>
+                                                        <md-radio-button (change)="selectIsShowSalaryValue($event)" [value]="0" [checked]="entity.IsShowSalaryValue===false">Mã hóa</md-radio-button>
+                                                    </md-radio-group>
+                                                </div>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Năm xử lý</label>
+                                                    <input type="text" title="Năm xử lý" #ProcessingYear="ngModel" daterangepicker (selected)="selectedProcessingYear($event)" [options]="dateOptions" [(ngModel)]="entity.ProcessingYear" name="ProcessingYear" class="form-control" placeholder="Năm xử lý" />
+                                                </div>
+
+                                                <div class="form-group m-b-20">
+                                                    <label class="control-label"><i class="fa" aria-hidden="true"></i>Số tháng thâm niên không tính vào doanh số</label>
+                                                    <input type="number" #ExpMonth="ngModel" [(ngModel)]="entity.ExpMonth" name="ExpMonth" class="form-control focusedInput" placeholder="Số tháng thâm niên không tính vào doanh số">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </div>
+
+                            </tab>
+
+                        </tabset>
+
                     </div>
-                    <div class="col-sm-3">
-                      <div class="panel panel-success">
-                        <div class="panel-heading">
-                          Trình tự sắp xếp
-                        </div>
-                        <div class="panel-body" [allowDrop]="true" dnd-droppable dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="listSelectedItemSorts"
-                          (onDropSuccess)="addToSortItems($event)">
-                          <ul class="list-group">
-                            <li *ngFor="let item of listSelectedItemSorts; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">{{item}}</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-
                 </div>
 
-              </tab>
-
-              <!-- Tab thông tin chung-->
-              <tab heading="Thông tin chung">
-                <div class="row">
-                  <h5 class="m-t-0 header-title"><b>Thông tin chung của hệ thống</b></h5>
-                </div>
-
-                <div class="row">
-
-                  <div class="row">
-
-                    <div class="col-lg-6">
-                      <div class="card-box">
-                        <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Cấu hình gửi mail</b></h5>
-
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Account dùng để gửi mail</label>
-                          <input type="text" #MailAccountName="ngModel" [(ngModel)]="entity.MailAccountName" name="MailAccountName" class="form-control focusedInput"
-                            placeholder="Account dùng để gửi mail">
-                        </div>
-
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Mật khẩu Email</label>
-                          <input type="password" #MailAccountPassword="ngModel" [(ngModel)]="entity.MailAccountPassword" name="MailAccountPassword" class="form-control focusedInput"
-                            placeholder="Mật khẩu Email">
-                        </div>
-
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Chuỗi ký tự dùng cho mã hóa</label>
-                          <input type="text" #MailAccountHalt="ngModel" [(ngModel)]="entity.MailAccountHalt" name="MailAccountHalt" class="form-control focusedInput"
-                            placeholder="Chuỗi ký tự dùng cho mã hóa">
-                        </div>
-                      </div>
-
-                      <div class="card-box">
-
-                        <h5 class="text-muted text-uppercase m-t-0 m-b-20"><b>Cấu hình hiển thị - thống kê</b></h5>
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Hiển thị tiền , giá</label>
-                          <md-radio-group name="IsShowMoneyValue" [(ngModel)]="entity.IsShowMoneyValue" class="form-control  no-border">
-                            <md-radio-button (change)="selectIsShowMoneyValue($event)" [value]="1" [checked]="entity.IsShowMoneyValue===true">Hiển thị</md-radio-button>
-                            <md-radio-button (change)="selectIsShowMoneyValue($event)" [value]="0" [checked]="entity.IsShowMoneyValue===false">Không hiển thị</md-radio-button>
-                          </md-radio-group>
-                        </div>
-
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Hiển thị lương</label>
-                          <md-radio-group name="IsShowSalaryValue" [(ngModel)]="entity.IsShowSalaryValue" class="form-control  no-border">
-                            <md-radio-button (change)="selectIsShowSalaryValue($event)" [value]="1" [checked]="entity.IsShowSalaryValue===true">Hiển thị</md-radio-button>
-                            <md-radio-button (change)="selectIsShowSalaryValue($event)" [value]="0" [checked]="entity.IsShowSalaryValue===false">Mã hóa</md-radio-button>
-                          </md-radio-group>
-                        </div>
-
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Năm xử lý</label>
-                          <input type="text" title="Năm xử lý" #ProcessingYear="ngModel" daterangepicker (selected)="selectedProcessingYear($event)" [options]="dateOptions"
-                            [(ngModel)]="entity.ProcessingYear" name="ProcessingYear" class="form-control" placeholder="Năm xử lý" />
-                        </div>
-
-                        <div class="form-group m-b-20">
-                          <label class="control-label"><i class="fa" aria-hidden="true"></i>Số tháng thâm niên không tính vào doanh số</label>
-                          <input type="number" #ExpMonth="ngModel" [(ngModel)]="entity.ExpMonth" name="ExpMonth" class="form-control focusedInput"
-                            placeholder="Số tháng thâm niên không tính vào doanh số">
-                        </div>
-
-                      </div>
-
-                    </div>
-
-
-
-                  </div>
-
-
-                </div>
-
-              </tab>
-
-            </tabset>
-
-          </div>
+            </form>
         </div>
-
-      </form>
     </div>
-  </div>
 </div>

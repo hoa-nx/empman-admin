@@ -11,7 +11,7 @@ import { MobileHideDirective } from '../../shared/directives/mobile-hide.directi
 import { ItemsService } from '../../shared/utils/items.service';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { Ng2FileDropModule } from 'ng2-file-drop';
-import { MdRadioModule } from '@angular/material';
+import { MdRadioModule, MdDatepickerModule, MdNativeDateModule, MdInputModule } from '@angular/material';
 import { MdCheckboxModule } from '@angular/material';
 import { MdAutocompleteModule } from '@angular/material';
 import { SharedModule } from '../../shared/module/shared.module';
@@ -35,25 +35,32 @@ import { TabsetComponent } from 'ngx-bootstrap';
 import { AccordionModule } from 'primeng/primeng';     //accordion and accordion tab
 import { CalendarModule } from 'primeng/primeng';     //CalendarModule
 import { MenuItem } from 'primeng/primeng';            //api
+import { PickListModule } from 'primeng/primeng';
+import { DndModule } from 'ng2-dnd';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 const empRoutes: Routes = [
   //localhost:4200/main/emp
   { path: '', redirectTo: 'index', pathMatch: 'full' },
   { path: 'card-list', redirectTo: 'card-list', pathMatch: 'full' },
   { path: 'emp-expandable', redirectTo: 'emp-expandable', pathMatch: 'full' },
+  { path: 'work', redirectTo: 'work', pathMatch: 'full' },
   //localhost:4200/main/emp/index
   { path: 'index', component: EmpComponent },
   { path: 'card-list', component: EmpListComponent },
   { path: 'card-list/:filter', component: EmpListComponent },
   { path: 'emp-expandable', component: EmpExpandableComponent },
+  { path: 'emp-expandable/:group', component: EmpExpandableComponent },
   //{ path: ':id/emp-basic', component: EmpBasicComponent}
-  { path: 'edit/:id/:action', component: EmpBasicComponent }
+  { path: 'edit/:id/:action', component: EmpBasicComponent },
+  { path: 'work', component: EmpDetailWorkComponent }
 
 ]
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    MultiselectDropdownModule,
     Daterangepicker,
     Ng2FileDropModule,
     MdRadioModule,
@@ -65,7 +72,15 @@ const empRoutes: Routes = [
     MdAutocompleteModule,
     TabsModule.forRoot(),
     AccordionModule,
-    CalendarModule
+    CalendarModule,
+    PickListModule,
+    MdCheckboxModule,
+    MdDatepickerModule,
+    MdNativeDateModule,
+    MdAutocompleteModule,
+    MdInputModule,
+    MdRadioModule,
+    DndModule.forRoot()
   ],
   declarations: [
     MobileHideDirective,

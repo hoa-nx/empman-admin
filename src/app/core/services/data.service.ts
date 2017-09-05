@@ -142,6 +142,10 @@ export class DataService {
       this._notificationService.printErrorMessage(MessageContstants.FORBIDDEN);
       this._utilityService.navigateToLogin();
     }
+    else if (error.status == 0){ 
+      this._notificationService.printErrorMessage(MessageContstants.SYSTEM_ERROR_MSG);
+      //this._utilityService.navigateToLogin();
+    }
     else {
       let errMsg = JSON.parse(error._body).Message;
       this._notificationService.printErrorMessage(errMsg);

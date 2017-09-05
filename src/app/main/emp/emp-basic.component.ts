@@ -100,7 +100,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public supportedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/gif'];
   /* tslint:enable:no-unused-variable */
 
-  private currentProfileImage: string = 'http://localhost:4200/assets/images/profile-default.png';
+  private currentProfileImage: string = SystemConstants.BASE_WEB + '/assets/images/profile-default.png';
   public uriAvatarPath: string = SystemConstants.BASE_API;
   public trialResults: any[];
   public jobLeaveReasons : any[];
@@ -543,7 +543,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
         this._loaderService.displayLoader(true);
 
         let postData: any = {
-          EmpID: this.entity.ID
+          relatedKey: this.entity.ID
         };
         this._uploadService.postWithFile('/api/upload/upload?type=emp', postData, fi.files).then((data: any) => {
           this.loadDataFile();
@@ -583,16 +583,17 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
         this._sanitizer.bypassSecurityTrustUrl(fileURL);
         window.open(fileURL);
       }); */
-    let fileType: string = this.fileStorages.find(i => i.ID == id).ContentType;
-    this._dataService.downloadFile('/api/filestorage/getfileusebacbyid/' + id, fileType)
+    let file: any = this.fileStorages.find(i => i.ID == id);
+
+    this._dataService.downloadFile('/api/filestorage/getfileusebacbyid/' + id, file.ContentType)
       .subscribe((response: any) => {
         //ok download open file 
-        if (fileType == 'application/pdf') {
+        if (file.ContentType == 'application/pdf') {
           var fileURL = URL.createObjectURL(response);
           this._sanitizer.bypassSecurityTrustUrl(fileURL);
           window.open(fileURL);
         } else {
-          saveAs(response);
+          saveAs(response , file.FileName);
         }
 
       });

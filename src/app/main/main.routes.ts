@@ -33,6 +33,8 @@ export const mainRoutes: Routes = [
             { path: 'position', loadChildren: './position/position.module#PositionModule' },
             //localhost:4200/main/estimate
             { path: 'estimate', loadChildren: './estimate/estimate.module#EstimateModule' },
+            //localhost:4200/main/order
+            { path: 'order', loadChildren: './order/order.module#OrderModule' },
             //localhost:4200/main/order-received
             //{ path: 'order-received', loadChildren: './order-received/order-received.module#OrderReceivedModule' },
             //localhost:4200/main/project

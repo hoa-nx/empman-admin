@@ -793,7 +793,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
         } else if (args.innerHTML == 'Copy và tạo mới') {
             this._router.navigate(['../main/revenue/edit', dataRecord.ID, 'copy']);
         } else if (args.innerHTML == 'Tạo doanh số kỳ sau') {
-            if ((dataRecord.NextMonthMM | 0) != 0) {
+            if ((dataRecord.NextMonthMM) != 0) {
                 this._router.navigate(['../main/revenue/edit', dataRecord.ID, 'nextmonth']);
             }
         }
@@ -910,7 +910,7 @@ export class RevenueGridComponent implements OnInit, AfterViewInit {
                 this._loaderService.displayLoader(false);
             },
             error => {
-                this._notificationService.printErrorMessage(MessageContstants.CALL_API_ERROR);
+                 error => this._dataService.handleError(error)
             });
 
     }

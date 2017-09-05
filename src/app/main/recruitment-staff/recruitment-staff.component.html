@@ -83,12 +83,14 @@
                         </span>
                                             </a>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_UNRIGISTER" class="tag label label-warning">Không đăng ký</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER" class="tag label label-info">Chưa có lịch pv</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_WAITING" class="tag label label-info">Chờ phỏng vấn</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RESULT_WAITING" class="tag label label-purple">Chờ kết quả phỏng vấn</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RESULT_NG" class="tag label label-purple">PV NG hoặc không vào</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_CONDITION_WORKING_TALK_WAITING" class="tag label label-primary">Chờ nói DKLV</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_CONDITION_WORKING_TALK_FEEDBACK" class="tag label label-inverse">Chờ feedback sau DKLV</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL_WAITING" class="tag label label-pink">Chờ vào thử việc</span>
-                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL" class="tag label label-success">Đã vào thử việc</span>
+                                            <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL||item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL_EMPID_CREATED" class="tag label label-success">Đã vào thử việc</span>
                                             <span *ngIf="item.CurrentStatus==99" class="tag label label-danger">Không xác định</span>
                                         </td>
                                         <td>{{item.CompanyCvNo}}</td>
@@ -101,7 +103,7 @@
                                         <td>
                                             <span *ngIf="item.InterviewResult==interviewResults[1].id || item.InterviewResult==interviewResults[3].id" class="tag label label-danger">{{item.InterviewResult}}</span>
                                             <span *ngIf="item.InterviewResult==interviewResults[2].id" class="tag label label-success">{{item.InterviewResult}}</span>
-                                            <span *ngIf="item.InterviewResult==interviewResults[4].id" class="tag label label-pink">{{item.InterviewResult}}(Dept {{item.DeptReceived}})</span>
+                                            <span *ngIf="item.InterviewResult==interviewResults[4].id" class="tag label label-pink">Dept {{item.DeptReceived}} nhận</span>
                                             <span *ngIf="item.InterviewResult==interviewResults[5].id" class="tag label label-warning">{{item.InterviewResult}}</span>
                                             <span *ngIf="item.InterviewResult==interviewResults[6].id" class="tag label label-purple">{{item.InterviewResult}}</span>
                                         </td>
@@ -119,10 +121,13 @@
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="showInterviewStaffModal(item)" title="Danh sách các nhân viên đăng ký phỏng vấn"><i class="fa fa-users"></i></a>
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="fileUpload.click()" title="Upload các file liên quan"><i class="fa fa-upload"></i></a>
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)" title="Cập nhật thông tin ứng viên"><i class="md md-edit"></i></a>
+                                            <a *ngIf ="!item.SystemEmpID && item.TrialStartDate" href="javascript:void(0)" class="table-action-btn" (click)="createEmp(item)" title="Tạo thông tin nhân viên vào thử việc"><i class="fa fa-user-plus"></i></a>
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close" title="Xóa ứng viên"></i></a>
 
 
-                                            <button *ngIf="item.AttachmentFileLists[0]" type="button" class="btn btn-dropbox dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Tải file <span class="m-l-5"><i class="fa fa-download"></i></span></button>
+                                            <div class="btn-group">
+                                            <a *ngIf="item.AttachmentFileLists[0]" href="javascript:void(0)" class="table-action-btn"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-download"></i></a>
+                                            
                                             <ul class="dropdown-menu drop-menu-right" role="menu">
                                                 <li *ngFor="let file of item.AttachmentFileLists">
                                                     <div class="form-group">
@@ -131,7 +136,7 @@
                                                     </div>
                                                 </li>
                                             </ul>
-
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -148,7 +153,7 @@
 
                             </div>
                             <div *ngIf="recruitmentStaffs && recruitmentStaffs.length > 0" class="col-md-12">
-                                <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                                <pagination [boundaryLinks]="true" [ngModelOptions]="{standalone: true}" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
                             </div>
                         </div>
                         <!-- paging end-->
@@ -280,6 +285,12 @@
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <p-calendar [showIcon]="true" [(ngModel)]="entity.ResourceDeptMailNotificationDate" name="ResourceDeptMailNotificationDate" #ResourceDeptMailNotificationDate="ngModel" (onSelect)="selectedResourceDeptMailNotificationDate($event)" dateFormat="yy/mm/dd"
                                 [monthNavigator]="true" [yearNavigator]="true" yearRange="2017:2100" class="focusedInput" placeholder="Ngày báo nhân sự/IT"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã nhân viên</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #SystemEmpID="ngModel" [(ngModel)]="entity.SystemEmpID" name="SystemEmpID" maxlength="10" class="form-control focusedInput" placeholder="Mã nhân viên">
                         </div>
                     </div>
                     <div class="form-group">

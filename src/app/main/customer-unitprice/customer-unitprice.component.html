@@ -33,7 +33,7 @@
                                     <th>Đơn vị tính</th>
                                     <th>Đơn giá</th>
                                     <th>Ghi chú</th>
-                                    <th style="min-width: 90px;"></th>
+                                    <th style="min-width: 130px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +49,7 @@
                                     <td>{{item.Note}}</td>
 
                                     <td>
+                                        <a href="javascript:void(0)" class="table-action-btn" (click)="showCopyModal(item.ID)"><i class="md md-content-copy"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="showEditModal(item.ID)"><i class="md md-edit"></i></a>
                                         <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close"></i></a>
                                     </td>

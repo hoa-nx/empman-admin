@@ -9,7 +9,7 @@ export class OnReturnDirective {
         this.el = this._el;
     }
     @HostListener('keydown', ['$event']) onKeyDown(e) {
-        if ((e.which == 13 || e.keyCode == 13)) {
+        /* if ((e.which == 13 || e.keyCode == 13)) {
             e.preventDefault();
             if (e.srcElement.parentNode.parentNode.nextElementSibling) {
                 //let elementToFocus = e.srcElement.parentNode.parentNode.nextElementSibling.getElementsByClassName('form-control');
@@ -20,6 +20,27 @@ export class OnReturnDirective {
                 //console.log('close keyboard');
             }
             return;
+        } */
+        if ((e.which == 13 || e.keyCode == 13)) {
+            e.preventDefault();
+            let control: any;
+            control = e.srcElement.nextElementSibling;
+            while (true) {
+                if (control) {
+                    if ((!control.hidden) &&
+                        (control.nodeName == 'INPUT' ||
+                            control.nodeName == 'SELECT'
+                        )) {
+                        control.focus();
+                        return;
+                    } else {
+                        control = control.nextElementSibling;
+                    }
+                }else{
+                    return;
+                }
+            }
+
         }
     }
 }

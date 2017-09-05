@@ -60,7 +60,7 @@ export class CustomerUnitpriceComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-      });
+      }, error => this._dataService.handleError(error));
   }
 
   /**
@@ -81,14 +81,18 @@ export class CustomerUnitpriceComponent implements OnInit {
       });
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._dataService.get('/api/customerunitprice/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         this.entity.StartDate = moment(new Date(this.entity.StartDate)).format('YYYY/MM/DD');
         this.entity.EndDate = moment(new Date(this.entity.EndDate)).format('YYYY/MM/DD');
-      });
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
+      }, error => this._dataService.handleError(error));
   }
+    
   pageChanged(event: any): void {
     this.pageIndex = event.page;
     this.loadData();
@@ -99,6 +103,10 @@ export class CustomerUnitpriceComponent implements OnInit {
   }
   showEditModal(id: any) {
     this.loadDetail(id);
+    this.modalAddEdit.show();
+  }
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
     this.modalAddEdit.show();
   }
   saveChange(form: NgForm) {

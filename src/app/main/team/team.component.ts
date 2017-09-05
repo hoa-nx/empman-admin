@@ -88,11 +88,13 @@ export class TeamComponent implements OnInit {
     this.search();
   }
 
-  loadDetail(id: any) {
+  loadDetail(id: any, isCopy : boolean=false) {
     this._dataService.get('/api/team/detail/' + id)
       .subscribe((response: any) => {
         this.entity = response;
-
+        if(isCopy){
+          this.entity.ID = undefined;
+        }
       });
   }
 
@@ -106,6 +108,10 @@ export class TeamComponent implements OnInit {
   }
   showEditModal(id: any) {
     this.loadDetail(id);
+    this.modalAddEdit.show();
+  }
+  showCopyModal(id: any) {
+    this.loadDetail(id, true);
     this.modalAddEdit.show();
   }
   saveChange(form: NgForm) {

@@ -61,7 +61,7 @@ export class ExchangeRateComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-      });
+      }, error => this._dataService.handleError(error));
   }
 
   loadDetail(id: any , isCopy : boolean=false) {
@@ -72,9 +72,9 @@ export class ExchangeRateComponent implements OnInit {
         this.entity.EndDate = moment(new Date(this.entity.EndDate)).format('YYYY/MM/DD');
         if(isCopy){
           this.entity.ID = 0;
-          this.entity.No = 0;
+          this.entity.No = undefined;
         }
-      });
+      }, error => this._dataService.handleError(error));
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -127,7 +127,7 @@ export class ExchangeRateComponent implements OnInit {
     this._dataService.delete('/api/exchangerate/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
       this.loadData();
-    });
+    }, error => this._dataService.handleError(error));
   }
   
   public selectedStartDate(value: any) {

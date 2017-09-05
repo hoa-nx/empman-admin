@@ -525,7 +525,70 @@ export interface ISearchItemViewModel {
     IsApproved?: boolean;
 }
 
-export interface EmpFilterViewModel {
+export interface ISystemValueViewModel {
+    ID?: any;
+
+    Code?: any;
+    /// <summary>
+    /// Tên cấu hình
+    /// </summary>
+
+    Name?: any;
+
+    /// <summary>
+    /// Tên tăt
+    /// </summary>
+    ShortName?: any;
+    /// <summary>
+    /// Năm xử lý dữ liệu
+    /// </summary>
+    ProcessingYear?: any;
+
+    /// <summary>
+    /// Số tháng thâm niên không tính vào doanh số
+    /// </summary>
+    ExpMonth?: any;
+
+    /// <summary>
+    /// khoản dùng để gửi mail
+    /// </summary>
+    MailAccountName?: any;
+
+    /// <summary>
+    /// Mật khẩu đã mã hóa
+    /// </summary>
+    MailAccountPassword?: any;
+
+    /// <summary>
+    /// Chuỗi ký tự dùng cho mã hóa
+    /// </summary>
+    MailAccountHalt?: any;
+
+    /// <summary>
+    /// Chuỗi json dùng để chứa trình tự sort 
+    /// </summary>
+    EmpOrderBy?: any;
+
+    /// <summary>
+    /// Có thấy được mức lương không 
+    /// </summary>
+    IsShowSalaryValue?: any;
+
+    /// <summary>
+    /// Có thấy được các số tiền / đơn giá tại doanh số  không 
+    /// </summary>
+    IsShowMoneyValue?: any;
+    /// <summary>
+    /// SID
+    /// </summary>
+    SidT?: any;
+    /// <summary>
+    /// TOKEN
+    /// </summary>
+    TokT?: any;
+}
+
+export interface IEmpFilterViewModel {
     chkDept?: boolean;
 
     selectDepts?: any[];
@@ -587,4 +650,8 @@ export interface EmpFilterViewModel {
     selectDataTypes?: any;
 
     sort?: any[];
+
+    systemValue?: ISystemValueViewModel;
+
 }
+

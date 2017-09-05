@@ -5,33 +5,36 @@
     padding-top: 5px;
     box-sizing: border-box;
 } */
-.accordion-list-item{
-    display: block;
 
+.accordion-list-item {
+    display: block;
 }
 
 .panel-color .panel-title {
     color: #0275d8;
 }
 
-
-.jobleave-img-overlay{
-    position:relative;
+.jobleave-img-overlay {
+    position: relative;
     top: 0px;
     left: 0px;
     z-index: 200;
 }
 
-.trialstaff-img-overlay{
-    position:relative;
+.trialstaff-img-overlay {
+    position: relative;
     z-index: 200;
 }
-.card-box{
+
+.card-box {
     padding: 5px;
 }
 
-.line-list-item{
+.card-box-expandable {
+    height: -webkit-fill-available;
+}
+
+.line-list-item {
     width: 95%;
-    border: 1px solid lightslategray;    
-    
+    border: 1px solid lightslategray;
 }

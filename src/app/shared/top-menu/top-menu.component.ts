@@ -58,6 +58,10 @@ export class TopMenuComponent implements OnInit, OnDestroy {
   public emps: any[];
   public tagName: any = '';
 
+  public sendValueToExpandable: any = {
+    group : ''
+  }
+
   tags: any[] = [
     { title: 'Default' },
     { title: 'Primary', color: 'primary', pill: true, removable: true, value: 'Some great value' },
@@ -124,7 +128,7 @@ export class TopMenuComponent implements OnInit, OnDestroy {
     //goi toi man hinh list va truyen di tri filter
     this.filter = data.target.value || '';
 
-    this._router.navigateByUrl("/main/emp/card-list/" + this.filter, { skipLocationChange: true });
+    this._router.navigateByUrl("/main/emp/card-list/" + this.filter, { skipLocationChange: false });
   }
 
   gotoSetting() {
@@ -139,8 +143,9 @@ export class TopMenuComponent implements OnInit, OnDestroy {
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
         // send message to subscribers via observable subject
-        this.empCount = this.totalRow.toString();
+
         if (this.emps.length > 0) {
+          this.empCount = this.emps[0].TotalRecords.toString();
           this.empContractedCount = this.emps[0].ContractedCount.toString();
           this.empTrialCount = this.emps[0].TrialCount.toString();
           this.empOtherCount = this.emps[0].OtherCount.toString();
@@ -179,5 +184,15 @@ export class TopMenuComponent implements OnInit, OnDestroy {
 
   }
 
+  displayEmpByType(data: any) {
+    //goi toi man hinh list va truyen di tri filter
+    //this._router.navigateByUrl("/main/emp/emp-expandable/" + data, { skipLocationChange: true });
+
+    // send message to subscribers via observable 
+    this.sendValueToExpandable.group = data;
+    this._sharedComponentService.publishValue(this.sendValueToExpandable);
+    //this._router.navigateByUrl("/main/emp/emp-expandable");
+    console.log(this.sendValueToExpandable);
+  }
 
 }

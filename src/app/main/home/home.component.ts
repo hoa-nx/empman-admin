@@ -1,5 +1,5 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import { Component, OnInit, ViewEncapsulation, ViewChild, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, AfterViewInit, AfterViewChecked, ViewContainerRef, NgZone } from '@angular/core';
 import { jqxKnobComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxknob';
 import { jqxNumberInputComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxnumberinput';
 import { DataService } from '../../core/services/data.service';
@@ -14,6 +14,10 @@ import { SystemConstants, DateRangePickerConfig } from '../../core/common/system
 import { MappingService } from '../../shared/utils/mapping.service';
 import { jqxChartComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxchart';
 import { element } from 'protractor';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoggedInUser } from '../../core/domain/loggedin.user';
+import { LoaderService } from '../../shared/utils/spinner.service';
+import * as moment from 'moment';
 
 declare var $: any;
 
@@ -47,6 +51,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   @ViewChild('myKnobOne') myKnobOne: jqxKnobComponent;
   @ViewChild('tab1RevenueChart') tab1RevenueChart: jqxChartComponent;
+  @ViewChild('tab1PrevYearRevenueCompareChart') tab1PrevYearRevenueCompareChart: jqxChartComponent;
 
   public revenueValue: number;
 
@@ -349,6 +354,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       document.close();
       newWindow.print();
       newWindow.close();
+
     }
     catch (error) {
     }
@@ -358,11 +364,213 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
    * Phần chart của từng loại doanh thu --END 
    */
 
-  constructor(private _dataService: DataService,
+   /**
+    * Phan so sanh doanh thu voi nam truoc --START
+    */
+    revenuePrevYearRevenueCompareDataByType: any[];
+    seriesPrevYearRevenueCompareGroups: any[] =
+  [   
+
+    //phan nam truoc 
+    {
+      type: 'stackedcolumn',
+      toolTipFormatFunction: this.toolTipCustomFormatFn,
+      columnsGapPercent: 50,
+      seriesGapPercent: 0,
+      series: [
+        {
+          dataField: 'InMonthDevMM_Prev',
+          displayText: 'Lập trình năm trước',
+          color: "#25A0DA" ,
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 20 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0) {
+              return "";
+            } else {
+              return +(value).toFixed(2);
+            }
+          }
+        },
+        /*{ dataField: 'InMonthTransMM_Prev', 
+              displayText: 'Phiên dịch năm trước' ,
+              color: "#309B46" ,
+              labels: {
+                  visible: true,
+                  verticalAlignment: 'top',
+                  offset: { x: 0, y: 10 }
+              },
+              formatFunction: (value: any) => {
+                  if(value===0) {
+                    return "";
+                  }else{
+                      return +(value).toFixed(2);
+                  }
+              }
+        },*/
+        {
+          dataField: 'InMonthManagementMM_Prev',
+          displayText: 'Quản lý năm trước',
+          color: "#8EBC00" ,
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 5 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0) {
+              return "";
+            } else {
+              return +(value).toFixed(2);
+            }
+          }
+        },
+        {
+          dataField: 'InMonthOnsiteMM_Prev',
+          displayText: 'Onsite năm trước',
+          color: "#FF7515" ,
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 5 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0) {
+              return "";
+            } else {
+              return +(value).toFixed(2);
+            }
+          }
+        }
+      ]
+    }
+    ,
+    //phan nam hien tai
+    {
+      type: 'stackedcolumn',
+      toolTipFormatFunction: this.toolTipCustomFormatFn,
+      columnsGapPercent: 50,
+      seriesGapPercent: 0,
+      series: [
+        {
+          dataField: 'InMonthDevMM',
+          displayText: 'Lập trình',
+          color: "#25A0DA" ,
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 20 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0) {
+              return "";
+            } else {
+              return +(value).toFixed(2);
+            }
+          }
+        },
+        /*{ dataField: 'InMonthTransMM', 
+              displayText: 'Phiên dịch' ,
+              color: "#309B46" ,
+              labels: {
+                  visible: true,
+                  verticalAlignment: 'top',
+                  offset: { x: 0, y: 10 }
+              },
+              formatFunction: (value: any) => {
+                  if(value===0) {
+                    return "";
+                  }else{
+                      return +(value).toFixed(2);
+                  }
+              }
+        },*/
+        {
+          dataField: 'InMonthManagementMM',
+          displayText: 'Quản lý',
+          color: "#8EBC00" ,
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 5 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0) {
+              return "";
+            } else {
+              return +(value).toFixed(2);
+            }
+          }
+        },
+        {
+          dataField: 'InMonthOnsiteMM',
+          displayText: 'Onsite',
+          color: "#FF7515" ,
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 5 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0) {
+              return "";
+            } else {
+              return +(value).toFixed(2);
+            }
+          }
+        }
+      ]
+    }
+
+  ];
+
+  btnPrintPrevYearCompareChartClick(): void {
+    let content = this.tab1PrevYearRevenueCompareChart.host[0].outerHTML;
+    let newWindow = window.open('', '', 'width=800, height=500'),
+      document = newWindow.document.open(),
+      pageContent =
+        '<!DOCTYPE html>' +
+        '<html>' +
+        '<head>' +
+        '<meta charset="utf-8" />' +
+        '<title>So sánh doanh số với năm trước </title>' +
+        '</head>' +
+        '<body>' + content + '</body></html>';
+    try {
+      document.write(pageContent);
+      document.close();
+      newWindow.print();
+      newWindow.close();
+
+    }
+    catch (error) {
+    }
+  }
+
+
+
+  public searchParams : any ={};
+  public processingYear: any;
+  public prevYear : any;
+  public user: LoggedInUser;
+  public sub: any;
+  public paramId: any;
+  public paramAction: any;
+
+  constructor(private _route: ActivatedRoute,
+    private _router: Router,
+    private _dataService: DataService,
     private _notificationService: NotificationService,
     private _utilityService: UtilityService,
     private _uploadService: UploadService,
     public _authenService: AuthenService,
+    private viewContainerRef: ViewContainerRef,
+    private zone: NgZone,
+    private _loaderService: LoaderService,
+    //    private _renderer: Renderer,
     private _sanitizer: DomSanitizer
   ) {
 
@@ -372,6 +580,19 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.user = this._authenService.getLoggedInUser();
+    this.processingYear = this.user.processingyear;
+    this.prevYear = this.processingYear -1 ;
+    //get params
+    this.sub = this._route
+      .params
+      .subscribe(params => {
+        this.paramId = params['id'];
+        this.paramAction = params['action'];
+      });
+
+    moment.locale("jp");
+    let currentDate: string = moment().format("YYYY/MM/DD");
     this.getCurrentMMData();
 
   }
@@ -394,6 +615,9 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     knobOneContainer.appendChild(inputDiv);*/
     this.getRevenueDataByType();
 
+    this.getPrevYearRevenueCompareDataByType();
+
+    
   }
 
   getCurrentMMData() {
@@ -422,12 +646,41 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   getRevenueDataByType() {
-    this._dataService.get('/api/statistic/getmmbytypeandyearmonth?&year=2017&isUnpivotColumnToRows=false')
+    //this.searchParams.Keyword = this.filterKeyword;
+    //this.searchModel.DateTimeItems = this.revenueSelectedYearMonths;
+    //this.searchParams.StringItems = this.filterRecruitmentID;
+    //this.searchParams.Page = this.pageIndex;
+    //this.searchParams.PageSize = this.pageSize;
+    this.searchParams.NumberItems = [this.processingYear];
+    this.searchParams.BoolItems = [false];
+
+
+    //this._dataService.get('/api/statistic/getmmbytypeandyearmonth?&years=' + JSON.stringify(years) +'&isUnpivotColumnToRows=false')
+    this._dataService.post('/api/statistic/getmmbytypeandyearmonth', JSON.stringify(this.searchParams))
       .subscribe((response: any) => {
         this.revenueDataByType = response;
         this.totalComputal();
       });
   }
+
+    getPrevYearRevenueCompareDataByType() {
+    //this.searchParams.Keyword = this.filterKeyword;
+    //this.searchModel.DateTimeItems = this.revenueSelectedYearMonths;
+    //this.searchParams.StringItems = this.filterRecruitmentID;
+    //this.searchParams.Page = this.pageIndex;
+    //this.searchParams.PageSize = this.pageSize;
+    this.searchParams.NumberItems = [this.prevYear,this.processingYear];
+    //this.searchParams.BoolItems = [false];
+
+
+    //this._dataService.get('/api/statistic/getmmbytypeandyearmonth?&years=' + JSON.stringify(years) +'&isUnpivotColumnToRows=false')
+    this._dataService.post('/api/statistic/getmmbytypeandyearmonthcompare', JSON.stringify(this.searchParams))
+      .subscribe((response: any) => {
+        this.revenuePrevYearRevenueCompareDataByType = response;
+        
+      });
+  }
+
 
   changeCheckbox(event) {
 

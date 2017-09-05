@@ -9,7 +9,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../core/services/session.service';
 import { MessageContstants } from '../../core/common/message.constants';
 import { SystemConstants } from '../../core/common/system.constants';
-
+import { PercentPipe } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
+import { SharedComponentService } from '../../core/services/sharedcomponent.service';
 declare var $: any;
 @Component({
     selector: 'emp-expandable',
@@ -38,11 +40,15 @@ export class EmpExpandableComponent implements OnInit {
     public dataContractTypeGroups: any[];
     public dataGenderGroups: any[];
     public dataBussinessAllowanceGroups: any[];
-    public selectedTab : any;
+    public selectedTab: any;
+    public dataGroups: any[];
+    public sub: any;
+    public paramGroup: any;
+    public dataGroupName: any;
+    private subscriber: Subscription;
 
-
-    public imgJobLeave : string ='http://localhost:4200/assets/images/danghiviec.png';
-    public imgTrialStaff : string ='http://localhost:4200/assets/images/thuviec.png';
+    public imgJobLeave: string = SystemConstants.BASE_WEB + '/assets/images/danghiviec.png';
+    public imgTrialStaff: string = SystemConstants.BASE_WEB + '/assets/images/thuviec.png';
 
     source: any =
     {
@@ -126,11 +132,26 @@ export class EmpExpandableComponent implements OnInit {
         private _route: ActivatedRoute,
         private _router: Router,
         private _sessionService: SessionService,
-        private _loaderService: LoaderService) { }
+        private _loaderService: LoaderService,
+        private _sharedComponentService : SharedComponentService) { }
 
     ngOnInit() {
-        this.loadDataByGroup('dept');
-        this.loadDataByGroup('team');
+
+        //get params
+        this.sub = this._route
+            .params
+            .subscribe(params => {
+                //this.paramGroup = params['group'];
+            });
+
+        //subscribe
+        this.subscriber = this._sharedComponentService.text$.subscribe(data => {
+            console.log(data);
+            this.paramGroup = data.group;
+            this.loadDataByGroup(this.paramGroup);
+        });
+       
+        //this.loadDataByGroup('team');
         //this.loadDataByGroup('position');
         //this.loadDataByGroup('japanese');
         //this.loadDataByGroup('bussinessallowance');
@@ -168,49 +189,64 @@ export class EmpExpandableComponent implements OnInit {
      * Lấy dữ liệu nhan vien
      */
     loadDataByGroup(group: any) {
+        this.dataGroupName = '';
+        this.dataGroups = [];
+        if (group == undefined || group == '') return;
         this._loaderService.displayLoader(true);
         this._dataService.get('/api/emp/getlistbycommongroup?group=' + group)
             .subscribe((response: any) => {
-                switch(group){
+                this.dataGroups = response;
+                switch (group) {
+
                     case 'dept':
                         this.dataDeptGroups = response;
-                    break;
+                        this.dataGroupName = "Bộ phận";
+                        break;
 
                     case 'team':
                         this.dataTeamGroups = response;
-                    break;
+                        this.dataGroupName = "Team-Nhóm";
+                        break;
 
                     case 'position':
                         this.dataPositionGroups = response;
-                    break;
+                        this.dataGroupName = "Ngạch-Bậc";
+                        break;
 
                     case 'japanese':
                         this.dataJapaneseLevelGroups = response;
-                    break;
-                    
+                        this.dataGroupName = "Tiếng Nhật";
+                        break;
+
                     case 'bussinessallowance':
                         this.dataBussinessAllowanceGroups = response;
-                    break;
-                    
+                        this.dataGroupName = "PC Nghiệp Vụ";
+                        break;
+
                     case 'bse':
                         this.dataBseGroups = response;
-                    break;
-                    
+                        this.dataGroupName = "PC BSE";
+                        break;
+
                     case 'keiken':
                         this.dataKeikenGroups = response;
-                    break;
-                    
+                        this.dataGroupName = "Thâm niên";
+                        break;
+
                     case 'gender':
                         this.dataGenderGroups = response;
-                    break;
-                    
+                        this.dataGroupName = "Giới tính";
+                        break;
+
                     case 'emptype':
                         this.dataEmpTypeGroups = response;
-                    break;
+                        this.dataGroupName = "Loại công việc";
+                        break;
 
                     case 'collect':
                         this.dataCollectGroups = response;
-                    break;
+                        this.dataGroupName = "Trường ĐH";
+                        break;
 
                 }
                 this._loaderService.displayLoader(false);
@@ -218,7 +254,7 @@ export class EmpExpandableComponent implements OnInit {
             error => {
                 this._notificationService.printErrorMessage(MessageContstants.CALL_API_ERROR);
             });
-        
+
     }
 
     bindDataToTeamTreeGrid(): void {
@@ -232,19 +268,19 @@ export class EmpExpandableComponent implements OnInit {
     clearDataOnTeamTreeGrid(): void {
         this.teamTreeGrid.clear();
     }
-  
+
     trackByFn(index, item) {
         return index;
     }
 
-    public loadGroupData(event : any ,group: any[]): void {
-        
-        if(this.selectedTab != event.id){
+    public loadGroupData(event: any, group: any[]): void {
+
+        if (this.selectedTab != event.id) {
             group.forEach(element => {
-                this.loadDataByGroup(element);    
+                this.loadDataByGroup(element);
             });
-            
-            this.selectedTab = event.id ;
+
+            this.selectedTab = event.id;
         }
     }
 
