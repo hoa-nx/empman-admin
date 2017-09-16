@@ -189,10 +189,11 @@ export class TopMenuComponent implements OnInit, OnDestroy {
     //this._router.navigateByUrl("/main/emp/emp-expandable/" + data, { skipLocationChange: true });
 
     // send message to subscribers via observable 
+    this._router.navigateByUrl("/main/emp/emp-expandable");
     this.sendValueToExpandable.group = data;
-    this._sharedComponentService.publishValue(this.sendValueToExpandable);
-    //this._router.navigateByUrl("/main/emp/emp-expandable");
-    console.log(this.sendValueToExpandable);
+    this._sharedComponentService.publishValueToEmpExpandable(this.sendValueToExpandable);
+    
+    //console.log(this.sendValueToExpandable);
   }
 
 }

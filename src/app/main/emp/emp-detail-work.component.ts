@@ -82,6 +82,15 @@ export class EmpDetailWorkComponent implements OnInit {
   public bussinessAllowanceLevels: any[] = [];
   public selectBussinessAllowanceLevels: any[] = [];
 
+  public chkRoomWithInternetAllowanceLevel: boolean = false;
+  public roomWithInternetAllowanceLevels: any[] = [];
+  public selectRoomWithInternetAllowanceLevels: any[] = [];
+
+
+  public chkRoomNoInternetAllowanceLevel: boolean = false;
+  public roomNoInternetAllowanceLevels: any[] = [];
+  public selectRoomNoInternetAllowanceLevels: any[] = [];
+
   public chkBseLevel: boolean = false;
   public bseLevels: any[] = [];
   public selectBseLevels: any[] = [];
@@ -101,6 +110,10 @@ export class EmpDetailWorkComponent implements OnInit {
   public chkContractType: boolean = false;
   public contractTypes: any[] = [];
   public selectContractTypes: any[] = [];
+
+  public chkWorkEmpType: boolean = false;
+  public workEmpTypes: any[] = [];
+  public selectWorkEmpTypes: any[] = [];
 
   public entity: any = {};
   public baseFolder: string = SystemConstants.BASE_API;
@@ -190,7 +203,7 @@ export class EmpDetailWorkComponent implements OnInit {
         this.educationLevels = MappingService.mapMasterDetailToDropdownModel(this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.EducationLevel));
         this.collects = MappingService.mapMasterDetailToDropdownModel(this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.CollectNameList));
         this.contractTypes = MappingService.mapMasterDetailToDropdownModel(this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.ContractType));
-
+        this.workEmpTypes = MappingService.mapMasterDetailToDropdownModel(this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.WorkEmpType));
         //nhom mau 
         //this.bloodGroups = BloodGroup.BloodGroups;
 
@@ -201,9 +214,131 @@ export class EmpDetailWorkComponent implements OnInit {
       });
   }
 
-  public selectedStartDate(value: any) {
-    this.entity.StartDate = moment(value.start).format('YYYY/MM/DD');
+  public saveChange(val) {
+    this.setMasterKbnId();
+    let hasItemUpdate : boolean = false;
+
+    if (val) {
+      this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_REGISTER_MSG, () => {
+
+        this.entity.CompanyID = this.user.companyid;
+
+        if (this.chkDept) {
+          this.entity.DeptID = this.selectDepts[0];
+          hasItemUpdate = true;
+        }
+
+        if (this.chkTeam) {
+          this.entity.TeamID = this.selectTeams[0];
+          hasItemUpdate = true;
+        }
+
+        if (this.chkPosition) {
+          this.entity.PositionID = this.selectPositions[0];
+          hasItemUpdate = true;
+        }
+        /*
+        this.entity.CompanyID2 = this.user.companyid;
+        
+        if(this.chkDept){
+          this.entity.DeptID2 = this.selectDepts[0];
+          hasItemUpdate = true;
+        }
+
+        if(this.chkTeam){
+          this.entity.TeamID2 = this.selectTeams[0];
+          hasItemUpdate = true;
+        }
+
+        if(this.chkPosition){
+          this.entity.PositionID2 = this.selectPositions[0];
+          hasItemUpdate = true;
+        }
+        */
+        if (this.chkWorkEmpType) {
+          this.entity.WorkEmpTypeMasterDetailID = this.selectWorkEmpTypes[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkEmpType) {
+          this.entity.EmpTypeMasterDetailID = this.selectEmpTypes[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkJapaneseLevel) {
+          this.entity.JapaneseLevelMasterDetailID = this.selectJapaneseLevels[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkBussinessAllowanceLevel) {
+          this.entity.BusinessAllowanceLevelMasterDetailID = this.selectBussinessAllowanceLevels[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkRoomWithInternetAllowanceLevel) {
+          this.entity.RoomWithInternetAllowanceLevelMasterDetailID = this.selectRoomWithInternetAllowanceLevels[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkRoomNoInternetAllowanceLevel) {
+          this.entity.RoomNoInternetAllowanceLevelMasterDetailID = this.selectRoomNoInternetAllowanceLevels[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkBseLevel) {
+          this.entity.BseAllowanceLevelMasterDetailID = this.selectBseLevels[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkCollects) {
+          this.entity.CollectMasterDetailID = this.selectCollects[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkEducationLevel) {
+          this.entity.EducationLevelMasterDetailID = this.selectEducationLevels[0];
+          hasItemUpdate = true;
+        }
+        if (this.chkContractType) {
+          this.entity.ContractTypeMasterDetailID = this.selectContractTypes[0];
+          hasItemUpdate = true;
+        }
+
+        this.entity.ListEmpID = this.targetEmps.map(x => x.ID);
+        if(this.targetEmps.length==0){
+          hasItemUpdate = false;
+        }
+
+        if(hasItemUpdate==false){
+          this._notificationService.printAlertDialog(MessageContstants.ALERT_NOT_HAS_ITEM_UPDATE_MSG,()=>{});
+          return;
+        }
+
+        this._dataService.put('/api/empdetailwork/add', JSON.stringify(this.entity))
+          .subscribe((response: any) => {
+            this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
+          }, error => this._dataService.handleError(error));
+      });
+
+    }
+
   }
+
+  private setMasterKbnId() {
+    this.entity.WorkEmpTypeMasterID = MasterKbnEnum.WorkEmpType;
+    this.entity.EmpTypeMasterID = MasterKbnEnum.EmpType;
+    this.entity.ContractTypeMasterID = MasterKbnEnum.ContractType;
+    this.entity.JapaneseLevelMasterID = MasterKbnEnum.JapaneseLevel;
+    this.entity.BusinessAllowanceLevelMasterID = MasterKbnEnum.BusinessAllowanceLevel;
+    this.entity.RoomWithInternetAllowanceLevelMasterID = MasterKbnEnum.RoomWithInternetAllowanceLevel;
+    this.entity.RoomNoInternetAllowanceLevelMasterID = MasterKbnEnum.RoomNoInternetAllowanceLevel;
+    this.entity.BseAllowanceLevelMasterID = MasterKbnEnum.BseAllowanceLevel;
+    this.entity.CollectMasterID = MasterKbnEnum.CollectNameList;
+    this.entity.EducationLevelMasterID = MasterKbnEnum.EducationLevel;
+
+  }
+
+  public selectedStartDate(value: any) {
+    this.entity.StartDate = moment(value).format('YYYY/MM/DD');
+  }
+
+  
+  public selectedEndDate(value: any) {
+    this.entity.EndDate = moment(value).format('YYYY/MM/DD');
+  }
+
 
   changeCheckboxDept(event) {
 
@@ -234,6 +369,9 @@ export class EmpDetailWorkComponent implements OnInit {
 
   }
 
+  changeCheckboxWorkEmpTypes() {
+
+  }
 
   back() {
     this._router.navigateByUrl(this.backUrl);

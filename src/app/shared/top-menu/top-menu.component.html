@@ -46,7 +46,7 @@
                   <span class="badge badge-primary">{{empContractedCount}}</span>
                 </a>
                                 <!-- list item-->
-                                <a *ngIf="empContractedJobLeavedCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <a *ngIf="empContractedJobLeavedCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedjobleavedcount')"  class="list-group-item">
                   Số LTV chính thức đã nghỉ
                   <span class="badge badge-primary">{{empContractedJobLeavedCount}}</span>
                 </a>
@@ -62,7 +62,7 @@
                 </a>
 
                                 <!-- list item-->
-                                <a *ngIf="empContractedLTNMonthCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <a *ngIf="empContractedLTNMonthCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('contractedltnmonthcount')"  class="list-group-item">
                   Số LTV chính thức nhỏ hơn {{expMonth}} tháng
                   <span class="badge">{{empContractedLTNMonthCount}}</span>
                 </a>
@@ -74,22 +74,16 @@
                 </a>
 
                                 <!-- list item-->
-                                <a *ngIf="empOtherCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <a *ngIf="empOtherCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('othercount')" class="list-group-item">
                   NV tổng vụ , qui trình
                   <span class="badge badge-pink">{{empOtherCount}}</span>
                 </a>
 
                                 <!-- list item-->
-                                <a *ngIf="empTransCount!=0" href="javascript:void(0);" class="list-group-item">
+                                <a *ngIf="empTransCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('transcount')"  class="list-group-item">
                   NV Phiên dịch
                   <span class="badge badge-purple">{{empTransCount}}</span>
                 </a>
-                                <!-- list item-->
-                                <a *ngIf="empTrialJobLeavedCount!=0" href="javascript:void(0);" class="list-group-item">
-                  LTV thử việc đã nghỉ(không nhận/xin nghỉ)
-                  <span class="badge badge-warning">{{empTrialJobLeavedCount}}</span>
-                </a>
-
 
                                 <!-- list item-->
                                 <a *ngIf="empTrialCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialcount')" class="list-group-item">

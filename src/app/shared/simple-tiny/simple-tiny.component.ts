@@ -1,5 +1,6 @@
 import { Component, OnDestroy, AfterViewInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
+declare var tinymce : any;
 @Component({
   selector: 'app-simple-tiny',
   templateUrl: './simple-tiny.component.html',

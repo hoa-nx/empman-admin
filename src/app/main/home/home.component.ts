@@ -48,10 +48,18 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   dataStatistic: any;
   targetData: any[];
+  StartDate : any;
+  EndDate : any;
 
   @ViewChild('myKnobOne') myKnobOne: jqxKnobComponent;
+  //tinh hinh nam hien tai
   @ViewChild('tab1RevenueChart') tab1RevenueChart: jqxChartComponent;
+  //so sanh voi nam truoc 
   @ViewChild('tab1PrevYearRevenueCompareChart') tab1PrevYearRevenueCompareChart: jqxChartComponent;
+  //chart theo tung khach hang
+  @ViewChild('tab1CurrentYearRevenueByCustomerCompareChart') tab1CurrentYearRevenueByCustomerCompareChart: jqxChartComponent;
+  //chart so nhan su theo tung nam thang chon tren man hinh
+  @ViewChild('tab2EmpListByMonthlyChart') tab2EmpListByMonthlyChart: jqxChartComponent;
 
   public revenueValue: number;
 
@@ -191,7 +199,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           dataField: 'InMonthSumIncludeOnsiteMM',
           displayText: 'Tổng MM-PD',
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
               return +(value).toFixed(2);
@@ -254,7 +262,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             offset: { x: 0, y: 20 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
               return +(value).toFixed(2);
@@ -269,7 +277,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   offset: { x: 0, y: 10 }
               },
               formatFunction: (value: any) => {
-                  if(value===0) {
+                  if(value===0 || value==undefined) {
                     return "";
                   }else{
                       return +(value).toFixed(2);
@@ -285,7 +293,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             offset: { x: 0, y: 5 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
               return +(value).toFixed(2);
@@ -301,7 +309,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             offset: { x: 0, y: 5 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
               return +(value).toFixed(2);
@@ -364,12 +372,12 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
    * Phần chart của từng loại doanh thu --END 
    */
 
-   /**
-    * Phan so sanh doanh thu voi nam truoc --START
-    */
-    revenuePrevYearRevenueCompareDataByType: any[];
-    seriesPrevYearRevenueCompareGroups: any[] =
-  [   
+  /**
+   * Phan so sanh doanh thu voi nam truoc --START
+   */
+  revenuePrevYearRevenueCompareDataByType: any[];
+  seriesPrevYearRevenueCompareGroups: any[] =
+  [
 
     //phan nam truoc 
     {
@@ -381,17 +389,17 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         {
           dataField: 'InMonthDevMM_Prev',
           displayText: 'Lập trình năm trước',
-          color: "#25A0DA" ,
+          color: "#25A0DA",
           labels: {
             visible: true,
             verticalAlignment: 'top',
             offset: { x: 0, y: 20 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
-              return +(value).toFixed(2);
+              return +(value).toFixed(1);
             }
           }
         },
@@ -404,7 +412,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   offset: { x: 0, y: 10 }
               },
               formatFunction: (value: any) => {
-                  if(value===0) {
+                  if(value===0 || value==undefined) {
                     return "";
                   }else{
                       return +(value).toFixed(2);
@@ -414,34 +422,34 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         {
           dataField: 'InMonthManagementMM_Prev',
           displayText: 'Quản lý năm trước',
-          color: "#8EBC00" ,
+          color: "#8EBC00",
           labels: {
             visible: true,
             verticalAlignment: 'top',
             offset: { x: 0, y: 5 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
-              return +(value).toFixed(2);
+              return +(value).toFixed(1);
             }
           }
         },
         {
           dataField: 'InMonthOnsiteMM_Prev',
           displayText: 'Onsite năm trước',
-          color: "#FF7515" ,
+          color: "#FF7515",
           labels: {
             visible: true,
             verticalAlignment: 'top',
-            offset: { x: 0, y: 5 }
+            offset: { x: 0, y: 0 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
-              return +(value).toFixed(2);
+              return +(value).toFixed(1);
             }
           }
         }
@@ -458,17 +466,17 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         {
           dataField: 'InMonthDevMM',
           displayText: 'Lập trình',
-          color: "#25A0DA" ,
+          color: "#25A0DA",
           labels: {
             visible: true,
             verticalAlignment: 'top',
-            offset: { x: 0, y: 20 }
+            offset: { x: 0, y: 10 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
-              return +(value).toFixed(2);
+              return +(value).toFixed(1);
             }
           }
         },
@@ -481,7 +489,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   offset: { x: 0, y: 10 }
               },
               formatFunction: (value: any) => {
-                  if(value===0) {
+                  if(value===0 || value==undefined) {
                     return "";
                   }else{
                       return +(value).toFixed(2);
@@ -491,34 +499,34 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         {
           dataField: 'InMonthManagementMM',
           displayText: 'Quản lý',
-          color: "#8EBC00" ,
+          color: "#8EBC00",
           labels: {
             visible: true,
             verticalAlignment: 'top',
             offset: { x: 0, y: 5 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
-              return +(value).toFixed(2);
+              return +(value).toFixed(1);
             }
           }
         },
         {
           dataField: 'InMonthOnsiteMM',
           displayText: 'Onsite',
-          color: "#FF7515" ,
+          color: "#FF7515",
           labels: {
             visible: true,
             verticalAlignment: 'top',
-            offset: { x: 0, y: 5 }
+            offset: { x: 0, y: 0 }
           },
           formatFunction: (value: any) => {
-            if (value === 0) {
+            if (value === 0 || value==undefined) {
               return "";
             } else {
-              return +(value).toFixed(2);
+              return +(value).toFixed(1);
             }
           }
         }
@@ -550,11 +558,561 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
   }
 
+  /** So sanh doanh so so voi nam truoc END */
+
+  /**
+   * Phần chart của từng loại doanh thu tung khach hang --START
+   */
+  revenueCurrentYearRevenueByCustomerCompareDataByType: any[];
+
+  //padding: any = { left: 5, top: 5, right: 5, bottom: 5 };
+
+  //titlePadding: any = { left: 90, top: 0, right: 0, bottom: 10 };
+
+  xAxisByCustomer: any =
+  {
+    dataField: 'CustomerName',
+    unitInterval: 1,
+    axisSize: 'auto',
+    tickMarks: {
+      visible: true,
+      interval: 1,
+      color: '#BCBCBC'
+    },
+    gridLines: {
+      visible: true,
+      interval: 1,
+      color: '#BCBCBC'
+    }
+  };
+
+  valueAxisByCustomer: any =
+  {
+    unitInterval: 5,
+    minValue: 0,
+    maxValue: 150,
+    title: { text: 'Số MM' },
+    labels: { horizontalAlignment: 'right' },
+    tickMarks: { color: '#BCBCBC' }
+  };
+
+  fnLabelsClassByCustomer: any = (value: any, itemIndex: any, serie: any, group: any) => {
+    if (value > 100)
+      return 'redLabel';
+    return 'greenLabel';
+  };
+
+  fnLabelsBorderColorByCustomer: any = (value: any, itemIndex: any, serie: any, group: any) => {
+    if (value > 100)
+      return '#FF0000';
+    return 'dodgerblue';
+  };
+
+  fnFormatLabelByCustomer: any = (value: any, itemIndex: any, serie: any, group: any) => {
+    return value;
+  };
+
+  toolTipCustomFormatFnByCustomer = (value: any, itemIndex: any, serie: any, group: any, categoryValue: any, categoryAxis: any): string => {
+    let dataItem = this.revenueCurrentYearRevenueByCustomerCompareDataByType[itemIndex];
+
+    return '';
+
+  };
+
+  seriesGroupsByCustomer: any[] =
+  [
+
+    {
+      type: 'line',
+      valueAxis:
+      {
+        unitInterval: 5,
+        visible: true,
+        minValue: 0,
+        maxValue: 150,
+        position: 'right',
+        title: { text: 'Tổng MM - PD' },
+        gridLines: { visible: false }/*,
+                  labels: {
+                      horizontalAlignment: 'left',
+                      formatSettings: { sufix: '%' }
+                  }*/
+      },
+      series:
+      [
+        {
+          linesUnselectMode: 'click',
+          dataField: 'InMonthSumIncludeOnsiteMM',
+          displayText: 'Tổng MM-PD',
+          formatFunction: (value: any) => {
+            if (value === 0 || value==undefined) {
+              return "";
+            } else {
+              return +(value).toFixed(1);
+            }
+          },
+          labels:
+          {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: -20 },
+            'class': this.fnLabelsClass,
+            backgroundColor: 'white',
+            padding: { left: 5, right: 5, top: 1, bottom: 1 },
+            borderColor: this.fnLabelsBorderColor,
+            backgroundOpacity: 0.7,
+            borderOpacity: 0.7
+          }
+        }
+      ],
+      bands: [
+        {
+          minValue: 100, maxValue: 100, fillColor: 'red', lineWidth: 2, dashStyle: '2,2'
+        }
+      ]/*,
+              annotations: [
+                  {
+                      type: 'rect',
+                      yValue: 100,
+                      xValue: 12,
+                      offset: { x: -45, y: -25 },
+                      width: 90,
+                      height: 20,
+                      fillColor: '#EFEFEF',
+                      lineColor: 'red',
+                      text: {
+                          value: 'Trị mục tiêu',
+                          offset: {
+                              x: 2,
+                              y: 2
+                          },
+                          'class': 'redLabel',
+                          angle: 0
+                      }
+                  }
+              ],*/
+    },
+
+    {
+      type: 'stackedcolumn',
+      toolTipFormatFunction: this.toolTipCustomFormatFnByCustomer,
+      columnsGapPercent: 50,
+      seriesGapPercent: 0,
+      series: [
+        {
+          dataField: 'InMonthDevMM',
+          displayText: 'Lập trình',
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 20 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0 || value==undefined) {
+              return "";
+            } else {
+              return +(value).toFixed(1);
+            }
+          }
+        },
+        /*{ dataField: 'InMonthTransMM', 
+              displayText: 'Phiên dịch' ,
+              labels: {
+                  visible: true,
+                  verticalAlignment: 'top',
+                  offset: { x: 0, y: 10 }
+              },
+              formatFunction: (value: any) => {
+                  if(value===0 || value==undefined) {
+                    return "";
+                  }else{
+                      return +(value).toFixed(1);
+                  }
+              }
+        },*/
+        {
+          dataField: 'InMonthManagementMM',
+          displayText: 'Quản lý',
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 0 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0 || value==undefined) {
+              return "";
+            } else {
+              return +(value).toFixed(1);
+            }
+          }
+        },
+        {
+          dataField: 'InMonthOnsiteMM',
+          displayText: 'Onsite',
+          labels: {
+            visible: true,
+            verticalAlignment: 'top',
+            offset: { x: 0, y: 5 }
+          },
+          formatFunction: (value: any) => {
+            if (value === 0 || value==undefined) {
+              return "";
+            } else {
+              return +(value).toFixed(1);
+            }
+          }
+        }
+      ]
+    }
+  ];
+
+  chartEventByCustomer(event: any): any {
+    let eventData;
+    if (event) {
+      /*if (event.args) {
+          if (event.type == 'toggle') {
+              eventData = '<div><b>Last Event: </b>' + event.type + '<b>, Serie DataField: </b>' + event.args.serie.dataField + '<b>, visible: </b>' + event.args.state + '</div>';
+              return;
+          }
+          eventData = '<div><b>Last Event: </b>' + event.type + '<b>, Serie DataField: </b>' + event.args.serie.dataField + '<b>, Value: </b>' + event.args.elementValue + '</div>';
+      } else {
+          eventData = '<div><b>Last Event: </b>' + event.type + '';
+      }*/
+    }
+  }
+
+  //hiển thị hay không hiển thị chart số MM phiên dịch
+  TransCheckedOnChangeByCustomer(event: any) {
+    this.tab1CurrentYearRevenueByCustomerCompareChart.seriesGroups()[1].series[0].greyScale = !event.args.checked;
+    this.tab1CurrentYearRevenueByCustomerCompareChart.refresh();
+  };
+
+  pngButtonOnClickByCustomer() {
+    this.tab1CurrentYearRevenueByCustomerCompareChart.saveAsPNG('Doanh so.png', 'http://www.jqwidgets.com/export_server/export.php');
+  };
+
+  btnPrintChartClickByCustomer(): void {
+    let content = this.tab1CurrentYearRevenueByCustomerCompareChart.host[0].outerHTML;
+    let newWindow = window.open('', '', 'width=800, height=500'),
+      document = newWindow.document.open(),
+      pageContent =
+        '<!DOCTYPE html>' +
+        '<html>' +
+        '<head>' +
+        '<meta charset="utf-8" />' +
+        '<title>Doanh số theo từng khách hàng năm ' + this.processingYear + ' </title>' +
+        '</head>' +
+        '<body>' + content + '</body></html>';
+    try {
+      document.write(pageContent);
+      document.close();
+      newWindow.print();
+      newWindow.close();
+
+    }
+    catch (error) {
+    }
+  }
+
+  /**
+   *  Phần chart của từng loại doanh thu tung khach hang  --END 
+   */
 
 
-  public searchParams : any ={};
+   /**
+   * Phần chart thong ke nhan su theo tung nam thang --START
+   */
+  empListByMonthly: any[];
+  
+    //padding: any = { left: 5, top: 5, right: 5, bottom: 5 };
+  
+    //titlePadding: any = { left: 90, top: 0, right: 0, bottom: 10 };
+  
+    xAxisByEmpListByMonthly: any =
+    {
+      dataField: 'YM',
+      unitInterval: 1,
+      axisSize: 'auto',
+      tickMarks: {
+        visible: true,
+        interval: 1,
+        color: '#BCBCBC'
+      },
+      gridLines: {
+        visible: true,
+        interval: 1,
+        color: '#BCBCBC'
+      }
+    };
+  
+    valueAxisByEmpListByMonthly: any =
+    {
+      unitInterval: 5,
+      minValue: 0,
+      maxValue: 150,
+      title: { text: 'Số nhân viên' },
+      labels: { horizontalAlignment: 'right' },
+      tickMarks: { color: '#BCBCBC' }
+    };
+  
+    fnLabelsClassByEmpListByMonthly: any = (value: any, itemIndex: any, serie: any, group: any) => {
+      if (value > 100)
+        return 'redLabel';
+      return 'greenLabel';
+    };
+  
+    fnLabelsBorderColorByEmpListByMonthly: any = (value: any, itemIndex: any, serie: any, group: any) => {
+      if (value > 100)
+        return '#FF0000';
+      return 'dodgerblue';
+    };
+  
+    fnFormatLabelByEmpListByMonthly: any = (value: any, itemIndex: any, serie: any, group: any) => {
+      return value;
+    };
+  
+    toolTipCustomFormatFnByEmpListByMonthly = (value: any, itemIndex: any, serie: any, group: any, categoryValue: any, categoryAxis: any): string => {
+      let dataItem = this.empListByMonthly[itemIndex];
+  
+      return '';
+  
+    };
+  
+    seriesGroupsByEmpListByMonthly: any[] =
+    [
+  
+      {
+        type: 'line',
+        valueAxis:
+        {
+          unitInterval: 5,
+          visible: true,
+          minValue: 0,
+          maxValue: 150,
+          position: 'right',
+          title: { text: 'Tổng NV đang làm việc' },
+          gridLines: { visible: false }/*,
+                    labels: {
+                        horizontalAlignment: 'left',
+                        formatSettings: { sufix: '%' }
+                    }*/
+        },
+        series:
+        [
+          {
+            linesUnselectMode: 'click',
+            dataField: 'TotalEmpCount',
+            displayText: 'Tổng NV',
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value).toFixed(0);
+              }
+            },
+            labels:
+            {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: -20 },
+              'class': this.fnLabelsClass,
+              backgroundColor: 'white',
+              padding: { left: 5, right: 5, top: 1, bottom: 1 },
+              borderColor: this.fnLabelsBorderColor,
+              backgroundOpacity: 0.7,
+              borderOpacity: 0.7
+            }
+          }
+        ],
+        bands: [
+          {
+            minValue: 100, maxValue: 100, fillColor: 'red', lineWidth: 2, dashStyle: '2,2'
+          }
+        ]/*,
+                annotations: [
+                    {
+                        type: 'rect',
+                        yValue: 100,
+                        xValue: 12,
+                        offset: { x: -45, y: -25 },
+                        width: 90,
+                        height: 20,
+                        fillColor: '#EFEFEF',
+                        lineColor: 'red',
+                        text: {
+                            value: 'Trị mục tiêu',
+                            offset: {
+                                x: 2,
+                                y: 2
+                            },
+                            'class': 'redLabel',
+                            angle: 0
+                        }
+                    }
+                ],*/
+      },
+  
+      {
+        type: 'stackedcolumn',
+        toolTipFormatFunction: this.toolTipCustomFormatFnByCustomer,
+        columnsGapPercent: 50,
+        seriesGapPercent: 0,
+        series: [
+          {
+            dataField: 'ContractedJobLeavedEmpCount',
+            displayText: 'NV nghỉ việc',
+            labels: {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: 5 }
+            },
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value);
+              }
+            }
+          },
+          {
+            dataField: 'WorkingEmpCount',
+            displayText: 'NV trong dept',
+            labels: {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: 20 }
+            },
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value);
+              }
+            }
+          },
+          { dataField: 'FromOtherDeptEmpCount', 
+                displayText: 'NV dept khác' ,
+                labels: {
+                    visible: true,
+                    verticalAlignment: 'top',
+                    offset: { x: 0, y: 10 }
+                },
+                formatFunction: (value: any) => {
+                    if(value===0 || value==undefined) {
+                      return "";
+                    }else{
+                        return +(value);
+                    }
+                }
+          },
+          {
+            dataField: 'ToOtherDeptEmpCount',
+            displayText: 'NV sang dept khác',
+            labels: {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: 0 }
+            },
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value);
+              }
+            }
+          },
+          
+          {
+            dataField: 'OnsiteEmpCount',
+            displayText: 'NV onsite',
+            labels: {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: 5 }
+            },
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value);
+              }
+            }
+          },
+          {
+            dataField: 'StopWorkingEmpCount',
+            displayText: 'NV tạm nghỉ',
+            labels: {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: 5 }
+            },
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value);
+              }
+            }
+          }
+        ]
+      }
+    ];
+  
+    chartEventByEmpListByMonthly(event: any): any {
+      let eventData;
+      if (event) {
+        /*if (event.args) {
+            if (event.type == 'toggle') {
+                eventData = '<div><b>Last Event: </b>' + event.type + '<b>, Serie DataField: </b>' + event.args.serie.dataField + '<b>, visible: </b>' + event.args.state + '</div>';
+                return;
+            }
+            eventData = '<div><b>Last Event: </b>' + event.type + '<b>, Serie DataField: </b>' + event.args.serie.dataField + '<b>, Value: </b>' + event.args.elementValue + '</div>';
+        } else {
+            eventData = '<div><b>Last Event: </b>' + event.type + '';
+        }*/
+      }
+    }
+  
+    //hiển thị hay không hiển thị chart số MM phiên dịch
+    TransCheckedOnChangeByEmpListByMonthly(event: any) {
+      this.tab2EmpListByMonthlyChart.seriesGroups()[1].series[0].greyScale = !event.args.checked;
+      this.tab2EmpListByMonthlyChart.refresh();
+    };
+  
+    pngButtonOnClickByEmpListByMonthly() {
+      this.tab2EmpListByMonthlyChart.saveAsPNG('Doanh so.png', 'http://www.jqwidgets.com/export_server/export.php');
+    };
+  
+    btnPrintChartClickByEmpListByMonthly(): void {
+      let content = this.tab2EmpListByMonthlyChart.host[0].outerHTML;
+      let newWindow = window.open('', '', 'width=800, height=500'),
+        document = newWindow.document.open(),
+        pageContent =
+          '<!DOCTYPE html>' +
+          '<html>' +
+          '<head>' +
+          '<meta charset="utf-8" />' +
+          '<title>Doanh số theo từng khách hàng năm ' + this.processingYear + ' </title>' +
+          '</head>' +
+          '<body>' + content + '</body></html>';
+      try {
+        document.write(pageContent);
+        document.close();
+        newWindow.print();
+        newWindow.close();
+  
+      }
+      catch (error) {
+      }
+    }
+  
+    /**
+     *  Phần chart thong ke nhan su theo tung nam thang --END 
+     */
+   
+  public searchParams: any = {};
   public processingYear: any;
-  public prevYear : any;
+  public prevYear: any;
   public user: LoggedInUser;
   public sub: any;
   public paramId: any;
@@ -582,7 +1140,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   ngOnInit() {
     this.user = this._authenService.getLoggedInUser();
     this.processingYear = this.user.processingyear;
-    this.prevYear = this.processingYear -1 ;
+    this.prevYear = this.processingYear - 1;
     //get params
     this.sub = this._route
       .params
@@ -594,7 +1152,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     moment.locale("jp");
     let currentDate: string = moment().format("YYYY/MM/DD");
     this.getCurrentMMData();
-
+    this.initValue();  
   }
 
   ngAfterViewChecked() {
@@ -614,10 +1172,11 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     inputDiv.innerHTML = '<span style="font-size: 14px; width: 33%; display:inline-block; color: #407ec3">Mục tiêu</span><span style="width:33%; display:inline-block;">' + this.startValue1 + '</span><span style="width:33%; font-size: 14px; color: #00a4e1; display:inline-block;">Thực tích</span>'
     knobOneContainer.appendChild(inputDiv);*/
     this.getRevenueDataByType();
-
+    //doanh so so sanh giua cac nam
     this.getPrevYearRevenueCompareDataByType();
 
-    
+    //Doanh so theo tung khach hang
+    this.getCurrentYearRevenueByCustomerCompareDataByType();
   }
 
   getCurrentMMData() {
@@ -663,13 +1222,13 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       });
   }
 
-    getPrevYearRevenueCompareDataByType() {
+  getPrevYearRevenueCompareDataByType() {
     //this.searchParams.Keyword = this.filterKeyword;
     //this.searchModel.DateTimeItems = this.revenueSelectedYearMonths;
     //this.searchParams.StringItems = this.filterRecruitmentID;
     //this.searchParams.Page = this.pageIndex;
     //this.searchParams.PageSize = this.pageSize;
-    this.searchParams.NumberItems = [this.prevYear,this.processingYear];
+    this.searchParams.NumberItems = [this.prevYear, this.processingYear];
     //this.searchParams.BoolItems = [false];
 
 
@@ -677,7 +1236,42 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this._dataService.post('/api/statistic/getmmbytypeandyearmonthcompare', JSON.stringify(this.searchParams))
       .subscribe((response: any) => {
         this.revenuePrevYearRevenueCompareDataByType = response;
-        
+
+      });
+  }
+
+  getCurrentYearRevenueByCustomerCompareDataByType() {
+    //this.searchParams.Keyword = this.filterKeyword;
+    //this.searchModel.DateTimeItems = this.revenueSelectedYearMonths;
+    //this.searchParams.StringItems = this.filterRecruitmentID;
+    //this.searchParams.Page = this.pageIndex;
+    //this.searchParams.PageSize = this.pageSize;
+    this.searchParams.NumberItems = [this.processingYear];
+    //this.searchParams.BoolItems = [false];
+
+
+    //this._dataService.get('/api/statistic/getmmbytypeandyearmonth?&years=' + JSON.stringify(years) +'&isUnpivotColumnToRows=false')
+    this._dataService.post('/api/statistic/getmmbytypeandyearmonthcomparecustomer', JSON.stringify(this.searchParams))
+      .subscribe((response: any) => {
+        this.revenueCurrentYearRevenueByCustomerCompareDataByType = response;
+
+      });
+  }
+
+  getEmpCountByMonthly() {
+    //this.searchParams.Keyword = this.filterKeyword;
+    this.searchParams.DateTimeItems = [this.StartDate , this.EndDate];
+    //this.searchParams.StringItems = this.filterRecruitmentID;
+    //this.searchParams.Page = this.pageIndex;
+    //this.searchParams.PageSize = this.pageSize;
+    //this.searchParams.NumberItems = [this.processingYear];
+    //this.searchParams.BoolItems = [false];
+
+
+    //this._dataService.get('/api/statistic/getmmbytypeandyearmonth?&years=' + JSON.stringify(years) +'&isUnpivotColumnToRows=false')
+    this._dataService.post('/api/statistic/getempcountbymonthly', JSON.stringify(this.searchParams))
+      .subscribe((response: any) => {
+        this.empListByMonthly = response;
       });
   }
 
@@ -696,7 +1290,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.manRevenueMMTotal = 0;
     this.onsiteRevenueMMTotal = 0;
     this.sumaryRevenueMMTotal = 0;
-    
+
     //tính tong cua phan doanh số
     if (this.revenueDataByType) {
       this.revenueDataByType.forEach(element => {
@@ -744,7 +1338,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         console.log(response);
       });*/
 
-    this._dataService.getPdfFile('/api/statistic/getmmbytypeandyearmonthreport2?&year=2017')
+    this._dataService.getPdfFile('/api/statistic/getmmbytypeandyearmonthreport2?&year=' + this.processingYear)
       .subscribe((response: any) => {
         var fileURL = URL.createObjectURL(response);
         this._sanitizer.bypassSecurityTrustUrl(fileURL);
@@ -752,5 +1346,17 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       });
   }
 
+  public selectedStartDate(value: any) {
+    this.StartDate = moment(value).format('YYYY/MM/DD');
+  }
+
+  public selectedEndDate(value: any) {
+    this.EndDate = moment(value).format('YYYY/MM/DD');
+  }
+
+  public initValue(){
+    this.StartDate =  moment().format('YYYY/MM/01');
+    this.EndDate =  moment().format('YYYY/MM/01');
+  }
 }
 

@@ -145,7 +145,7 @@ export class EmpExpandableComponent implements OnInit {
             });
 
         //subscribe
-        this.subscriber = this._sharedComponentService.text$.subscribe(data => {
+        this.subscriber = this._sharedComponentService.sendToEmpExpandable$.subscribe(data => {
             console.log(data);
             this.paramGroup = data.group;
             this.loadDataByGroup(this.paramGroup);

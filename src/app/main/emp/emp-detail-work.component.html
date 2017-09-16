@@ -13,11 +13,15 @@
 
                 </div>
                 <div class="row">
-                    <div class="form-group m-t-20">
+                    <div class="col-md-4 m-t-20 m-b-20">
                         <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày hiệu lực</label>
-                        <br>
-                        <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #StartDate="ngModel" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Ngày hiệu lực"></p-calendar>
+                        <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #StartDate="ngModel" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Ngày bắt đầu" required></p-calendar>
                     </div>
+                    <div class="col-md-4 m-t-20 m-b-20">
+                        <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày hết hiệu lực</label>
+                        <p-calendar [showIcon]="true" [(ngModel)]="entity.EndDate" name="EndDate" #EndDate="ngModel" (onSelect)="selectedEndDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Ngày kết thúc"></p-calendar>
+                    </div>
+
                 </div>
 
                 <div class="row">
@@ -25,7 +29,7 @@
                         [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}" [showSourceControls]="false" [showTargetControls]="false">
                         <ng-template let-emp pTemplate="item">
                             <div class="ui-helper-clearfix">
-                                <img src="{{uriAvatarPath + emp.Avatar}}" style="display:inline-block;margin:2px 0 2px 2px" width="48">
+                                <img src="{{uriAvatarPath + emp.Avatar}}" class="img-circle" width="70" >
                                 <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{emp.FullName}} - {{emp.AccountName}} - {{emp.CurrentDeptID}}- {{emp.CurrentPositionID}}</div>
                             </div>
                         </ng-template>
@@ -116,6 +120,29 @@
 
                                 <div class="row form-group m-b-20">
                                     <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxRoomWithInternetAllowanceLevel($event)" [value]="0" [(ngModel)]="chkRoomWithInternetAllowanceLevel" [ngModelOptions]="{standalone: true}">Phòng có internet
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="roomWithInternetAllowanceLevels" [(ngModel)]="selectRoomWithInternetAllowanceLevels" [disabled]="chkRoomWithInternetAllowanceLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxRoomNoInternetAllowanceLevel($event)" [value]="0" [(ngModel)]="chkRoomNoInternetAllowanceLevel" [ngModelOptions]="{standalone: true}">Phòng không internet
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="roomNoInternetAllowanceLevels" [(ngModel)]="selectRoomNoInternetAllowanceLevels" [disabled]="chkRoomNoInternetAllowanceLevel==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
                                         <md-checkbox (change)="changeCheckboxBseLevel($event)" [value]="0" [(ngModel)]="chkBseLevel" [ngModelOptions]="{standalone: true}">Bse
                                         </md-checkbox>
 
@@ -125,6 +152,23 @@
                                         <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bseLevels" [(ngModel)]="selectBseLevels" [disabled]="chkBseLevel==false"></ss-multiselect-dropdown>
                                     </div>
                                 </div>
+
+                                <!-- Di chuyen nhan vien-->
+                                <div class="row">
+                                    <h5 class="m-t-0 m-b-20 header-title"><b>Loại nhân sự</b></h5>
+                                </div>
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxWorkEmpTypes($event)" [value]="0" [(ngModel)]="chkWorkEmpType" [ngModelOptions]="{standalone: true}">Loại nhân sự
+                                        </md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="workEmpTypes" [(ngModel)]="selectWorkEmpTypes" [disabled]="chkWorkEmpType==false"></ss-multiselect-dropdown>
+                                    </div>
+                                </div>
+                              
 
                             </tab>
 

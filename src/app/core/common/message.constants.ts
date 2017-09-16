@@ -21,4 +21,5 @@ export class MessageContstants {
     public static CONFIRM_DOWNLOAD_NO_DATA_MSG = "Chưa chọn file đối tượng để download";
     public static CONFIRM_IMPORT_DELETE_DATA_MSG = "Bạn có chắc import các dữ liệu trong file đã chọn?Dữ liệu cũ sẽ bị xóa?";
     public static CONFIRM_UPLOAD_MSG = "Upload file đã chọn?";
+    public static ALERT_NOT_HAS_ITEM_UPDATE_MSG = "Chưa chọn hạng mục để cập nhật";
 }

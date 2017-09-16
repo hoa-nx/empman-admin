@@ -10,6 +10,9 @@ export class SharedComponentService {
     private text = new Subject<any>();
     public text$ = this.text.asObservable();
 
+    private sendToEmpExpandable = new Subject<any>();
+    public sendToEmpExpandable$ = this.sendToEmpExpandable.asObservable();
+
     constructor(private appRef: ApplicationRef) {
         
     }
@@ -43,5 +46,11 @@ export class SharedComponentService {
         return this.text;
     }
 
+    publishValueToEmpExpandable(value : any){
+        this.sendToEmpExpandable.next(value);
+    }
 
+    getPublishValueToEmpExpandable() {
+        return this.sendToEmpExpandable;
+    }
 }

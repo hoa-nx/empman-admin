@@ -13,7 +13,8 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MdCheckboxModule } from '@angular/material';
-import * as FileSaver from 'file-saver';//https://stackoverflow.com/questions/40240796/angular-2-best-approach-to-use-filesaver-js
+//import * as FileSaver from 'file-saver';//https://stackoverflow.com/questions/40240796/angular-2-best-approach-to-use-filesaver-js
+import { CalendarModule } from 'primeng/primeng';
 
 const homeRoutes: Routes = [
   //localhost:4200/main/home
@@ -32,6 +33,7 @@ const homeRoutes: Routes = [
         ModalModule.forRoot(),
         RouterModule.forChild(homeRoutes),
         SharedModule,
+        CalendarModule,
         MdCheckboxModule,
         TabsModule.forRoot()
   ],

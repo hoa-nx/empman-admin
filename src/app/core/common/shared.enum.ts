@@ -109,7 +109,11 @@ export enum MasterKbnEnum {
     /**
      * Loại nhân viên phỏng vấn
      */
-    RecruitmentType = 30
+    RecruitmentType = 30,
+        /**
+     * Nhân viên dept khác chuyển sang , NV sang dept khác hỗ trợ , nhân viên onsite
+     */
+    WorkEmpType = 31
 
 }
 

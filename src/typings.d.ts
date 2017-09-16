@@ -5,3 +5,4 @@ interface NodeModule {
 }
 //bien toan cuc
 declare var tinymce : any;
+import { saveAs } from 'file-saver';

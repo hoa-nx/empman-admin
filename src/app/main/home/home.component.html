@@ -1,90 +1,87 @@
 <div class="container">
 
-  <!-- Page-Title -->
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="card-box">
-        <form #homeForm="ngForm" novalidate>
-          <div class="btn-group pull-right m-t-15">
-            <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i class="fa fa-cog"></i></span></button>
-            <ul class="dropdown-menu drop-menu-right" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </div>
-
-          <h4 class="page-title">Thống kê số liệu</h4>
-
-          <tabset>
-            <!-- Thông tin doanh số -->
-            <tab heading="Doanh số">
-              <div class="form-group">
-
-                <div class="panel panel-color panel-primary">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Doanh số đạt được {{processingYear}} cho đến hiện tại(Bao gồm onsite dài hạn) --Đơn vị MM</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="col-md-4">
-                          <span class="tag label label-primary">Mục tiêu</span>
-                          <br>
-                          <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM lập trình : {{devTargetMMTotal}}</label>
-                            <br>                          
-                          <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM quản lý : {{manTargetMMTotal}}</label>
-                            <br>                          
-                          <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM onsite : {{onsiteTargetMMTotal}}</label>
-                            <br>                          
-                          <label class="control-label bg-info"><i class="fa fa-gg" aria-hidden="true"></i>Tổng MM  : {{sumaryTargetMMTotal}}</label>
-                        </div>
-
-                        <div class="col-md-4">
-                          <jqxKnob #myKnobOne style="position: relative" (onChange)="myKnobOneOnChange($event)" [value]="revenueValue" [min]="0" [max]="100"
-                            [startAngle]="180" [endAngle]="540" [rotation]="'clockwise'" [snapToStep]="true" [style]="{ fill: '#FFFFFF' }"
-                            [marks]="marks" [progressBar]="progressBar" [pointer]="pointer" [pointerGrabAction]="'progressBar'"
-                            [width]="200" [height]="200"
-                            >
-                          </jqxKnob>
-                        </div>
-
-                        <div class="col-md-4">
-                            <span class="tag label label-success">Thực tích</span>
-                            <br>
-                            <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số lập trình : {{devRevenueMMTotal}}</label>
-                            <br>
-                            <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số quản lý: {{manRevenueMMTotal}}</label>
-                            <br>
-                            <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số onsite: {{onsiteRevenueMMTotal}}</label>
-                            <br>                            
-                            <label class="control-label bg-warning"><i class="fa fa-gg-circle" aria-hidden="true"></i>Tổng doanh số : {{sumaryRevenueMMTotal}}</label>
-
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
-                            <label class="control-label text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i>Doanh số còn lại: {{restRevenueMMTotal}}  ({{monthCount}} tháng)</label>
-                            <br>                            
-                            <label class="control-label text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i>Bình quân tháng: {{restAvgByMonthRevenueMMTotal}}</label>
-                        </div>
-                      </div>                     
-
+    <!-- Page-Title -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box">
+                <form #homeForm="ngForm" novalidate>
+                    <div class="btn-group pull-right m-t-15">
+                        <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i class="fa fa-cog"></i></span></button>
+                        <ul class="dropdown-menu drop-menu-right" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
                     </div>
 
-                  </div>
+                    <h4 class="page-title">Thống kê số liệu</h4>
 
-                </div>
+                    <tabset>
+                        <!-- Thông tin doanh số -->
+                        <tab heading="Doanh số">
+                            <div class="form-group">
 
-                <div class="panel panel-color panel-success">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Doanh số theo từng tháng từng loại</h3>
-                  </div>
-                  <div class="panel-body">
-                    <!--<div class="row">
+                                <div class="panel panel-color panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Doanh số đạt được {{processingYear}} cho đến hiện tại(Bao gồm onsite dài hạn) --Đơn vị MM</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <span class="tag label label-primary">Mục tiêu</span>
+                                                    <br>
+                                                    <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM lập trình : {{devTargetMMTotal}}</label>
+                                                    <br>
+                                                    <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM quản lý : {{manTargetMMTotal}}</label>
+                                                    <br>
+                                                    <label class="control-label"><i class="fa fa-gg" aria-hidden="true"></i>Số MM onsite : {{onsiteTargetMMTotal}}</label>
+                                                    <br>
+                                                    <label class="control-label bg-info"><i class="fa fa-gg" aria-hidden="true"></i>Tổng MM  : {{sumaryTargetMMTotal}}</label>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <jqxKnob #myKnobOne style="position: relative" (onChange)="myKnobOneOnChange($event)" [value]="revenueValue" [min]="0" [max]="100" [startAngle]="180" [endAngle]="540" [rotation]="'clockwise'" [snapToStep]="true" [style]="{ fill: '#FFFFFF' }" [marks]="marks"
+                                                        [progressBar]="progressBar" [pointer]="pointer" [pointerGrabAction]="'progressBar'" [width]="200" [height]="200">
+                                                    </jqxKnob>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <span class="tag label label-success">Thực tích</span>
+                                                    <br>
+                                                    <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số lập trình : {{devRevenueMMTotal}}</label>
+                                                    <br>
+                                                    <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số quản lý: {{manRevenueMMTotal}}</label>
+                                                    <br>
+                                                    <label class="control-label"><i class="fa fa-gg-circle" aria-hidden="true"></i>Doanh số onsite: {{onsiteRevenueMMTotal}}</label>
+                                                    <br>
+                                                    <label class="control-label bg-warning"><i class="fa fa-gg-circle" aria-hidden="true"></i>Tổng doanh số : {{sumaryRevenueMMTotal}}</label>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4 col-md-offset-4">
+                                                    <label class="control-label text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i>Doanh số còn lại: {{restRevenueMMTotal}}  ({{monthCount}} tháng)</label>
+                                                    <br>
+                                                    <label class="control-label text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i>Bình quân tháng: {{restAvgByMonthRevenueMMTotal}}</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="panel panel-color panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Doanh số theo từng tháng từng loại công việc năm {{processingYear}} </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <!--<div class="row">
                       <div class="input-group">
                         
                           <md-checkbox (change)="changeCheckbox($event)" [value]="0" [(ngModel)]="transInclude" [ngModelOptions]="{standalone: true}">Bao gồm cả phiên dịch</md-checkbox>
@@ -94,39 +91,34 @@
                     </div>-->
 
 
-                    <div class="row">
-                      <div class="col-md-12 col-sm-12 col-xs-12">
-                        <jqxChart #tab1RevenueChart [width]="'100%'" [height]="500" [title]="'Thống kê các phân loại doanh số trong năm'" [description]="'Bao gồm doanh số lập trình, quản lý,onsite dài hạn'"
-                          [showLegend]="true" [enableAnimations]="true" [padding]="padding" [titlePadding]="titlePadding" [source]="revenueDataByType"
-                          [xAxis]="xAxis" [valueAxis]="valueAxis" [seriesGroups]="seriesGroups"
-                          (onClick)="chartEvent($event)" (onToggle)="chartEvent($event)"
-                          (mouseleave)="chartEvent($event)" (mouseenter)="chartEvent($event)" 
-                          [colorScheme]="'scheme26'"
-                          [showBorderLine]="false"
-                          >
-                        </jqxChart>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <jqxChart #tab1RevenueChart [width]="'100%'" [height]="500" [title]="'Thống kê các phân loại doanh số trong năm'" [description]="'Bao gồm doanh số lập trình, quản lý,onsite dài hạn'" [showLegend]="true" [enableAnimations]="true" [padding]="padding" [titlePadding]="titlePadding"
+                                                    [source]="revenueDataByType" [xAxis]="xAxis" [valueAxis]="valueAxis" [seriesGroups]="seriesGroups" (onClick)="chartEvent($event)" (onToggle)="chartEvent($event)" (mouseleave)="chartEvent($event)" (mouseenter)="chartEvent($event)"
+                                                    [colorScheme]="'scheme26'" [showBorderLine]="false">
+                                                </jqxChart>
 
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="input-group">
-                        <button type="button" class="btn btn-primary" (click)="btnPrintChartClick()">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClick()">
                         <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
-                        <button type="button" class="btn btn-primary" (click)="btnPrintReportClick()">
-                        <i class="fa fa-print" aria-hidden="true"></i>Báo cáo</button>  
-                      </div>
-                    </div>
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintReportClick()">
+                        <i class="fa fa-print" aria-hidden="true"></i>Báo cáo</button>
+                                            </div>
+                                        </div>
 
 
-                  </div>
-                </div>
-
-                <div class="panel panel-color panel-success">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">So sánh với năm {{prevYear}}</h3>
-                  </div>
-                  <div class="panel-body">
-                    <!--<div class="row">
+                                    </div>
+                                </div>
+                                <!-- So sanh voi nam truoc S-->
+                                <div class="panel panel-color panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">So sánh với năm {{prevYear}}</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <!--<div class="row">
                       <div class="input-group">
                         
                           <md-checkbox (change)="changeCheckbox($event)" [value]="0" [(ngModel)]="transInclude" [ngModelOptions]="{standalone: true}">Bao gồm cả phiên dịch</md-checkbox>
@@ -136,146 +128,207 @@
                     </div>-->
 
 
-                    <div class="row">
-                      <div class="col-md-12 col-sm-12 col-xs-12">
-                        <jqxChart #tab1PrevYearRevenueCompareChart [width]="'100%'" [height]="500" [title]="'So sánh doanh số năm trước và năm tài chính'" [description]="'Bao gồm doanh số lập trình, quản lý,onsite dài hạn'"
-                          [showLegend]="true" [enableAnimations]="true" [padding]="padding" [titlePadding]="titlePadding" [source]="revenuePrevYearRevenueCompareDataByType"
-                          [xAxis]="xAxis" [valueAxis]="valueAxis" [seriesGroups]="seriesPrevYearRevenueCompareGroups"
-                          (onClick)="chartEvent($event)" (onToggle)="chartEvent($event)"
-                          (mouseleave)="chartEvent($event)" (mouseenter)="chartEvent($event)" 
-                          
-                          [showBorderLine]="false"
-                          >
-                        </jqxChart>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <jqxChart #tab1PrevYearRevenueCompareChart [width]="'100%'" [height]="500" [title]="'So sánh doanh số năm trước và năm tài chính'" [description]="'Bao gồm doanh số lập trình, quản lý,onsite dài hạn'" [showLegend]="true" [enableAnimations]="true" [padding]="padding"
+                                                    [titlePadding]="titlePadding" [source]="revenuePrevYearRevenueCompareDataByType" [xAxis]="xAxis" [valueAxis]="valueAxis" [seriesGroups]="seriesPrevYearRevenueCompareGroups" (onClick)="chartEvent($event)"
+                                                    (onToggle)="chartEvent($event)" (mouseleave)="chartEvent($event)" (mouseenter)="chartEvent($event)" [showBorderLine]="false">
+                                                </jqxChart>
 
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="input-group">
-                        <button type="button" class="btn btn-primary" (click)="btnPrintPrevYearCompareChartClick()">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintPrevYearCompareChartClick()">
                         <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- So sanh voi nam truoc E-->
+                                <!-- So sanh giua cac KH trong nam tai chinh S-->
+                                <div class="panel panel-color panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Theo từng khách hàng năm {{processingYear}}</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <!--<div class="row">
+                      <div class="input-group">
+                        
+                          <md-checkbox (change)="changeCheckbox($event)" [value]="0" [(ngModel)]="transInclude" [ngModelOptions]="{standalone: true}">Bao gồm cả phiên dịch</md-checkbox>
+                          <md-checkbox (change)="changeCheckbox($event)" [value]="1" [(ngModel)]="onsiteInclude" [ngModelOptions]="{standalone: true}">Bao gồm cả onsire dài hạn</md-checkbox>
                         
                       </div>
-                    </div>
+                    </div>-->
 
 
-                  </div>
-                </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <jqxChart #tab1CurrentYearRevenueByCustomerCompareChart [width]="'100%'" [height]="500" [title]="'Thống kê doanh số theo từng khách hàng trong năm '" [description]="'Bao gồm doanh số lập trình, quản lý,onsite dài hạn'" [showLegend]="true" [enableAnimations]="true"
+                                                    [padding]="padding" [titlePadding]="titlePadding" [source]="revenueCurrentYearRevenueByCustomerCompareDataByType" [xAxis]="xAxisByCustomer" [valueAxis]="valueAxisByCustomer" [seriesGroups]="seriesGroupsByCustomer"
+                                                    (onClick)="chartEventByCustomer($event)" (onToggle)="chartEventByCustomer($event)" (mouseleave)="chartEventByCustomer($event)" (mouseenter)="chartEventByCustomer($event)" [colorScheme]="'scheme26'" [showBorderLine]="false">
+                                                </jqxChart>
 
-              </div>
-            </tab>
-            <!-- Tab thống kê nhân viên-->
-            <tab heading="Thống kê Nhân viên">
-              <div class="form-group">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClick()">
+                        <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintReportClick()">
+                        <i class="fa fa-print" aria-hidden="true"></i>Báo cáo</button>
+                                            </div>
+                                        </div>
 
-                <div class="panel panel-color panel-primary">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Nhân viên</h3>
-                  </div>
-                  <div class="panel-body">
+                                    </div>
+                                </div>
+                                <!-- So sanh giua cac KH trong nam tai chinh S-->
 
-                    <div class="row">
-                      <div class="col-md-4 col-sm-6 col-xs-12">
+                            </div>
+                        </tab>
+                        <!-- Tab thống kê nhân viên-->
+                        <tab heading="Thống kê Nhân viên">
+                            <div class="form-group">
 
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                <!-- So sanh nhan su trong khoang thoi gian  S-->
+                                <div class="panel panel-color panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Theo từng tháng năm</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-4 m-t-10 m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Tháng năm bắt đầu</label>
+                                                <p-calendar [showIcon]="true" [(ngModel)]="StartDate" [ngModelOptions]="{standalone: true}" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Tháng năm bắt đầu"
+                                                    required></p-calendar>
+                                            </div>
+                                            <div class="col-md-4 m-t-10 m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Tháng năm kết thúc</label>
+                                                <p-calendar [showIcon]="true" [(ngModel)]="EndDate" [ngModelOptions]="{standalone: true}" (onSelect)="selectedEndDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Tháng năm kết thúc"
+                                                    required></p-calendar>
+                                            </div>
+                                            <div class="col-md-2 m-t-10 m-b-20">
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i></label><br>
+                                                <button type="button" [disabled]="!homeForm.form.valid" class="btn btn-default" (click)="getEmpCountByMonthly(homeForm.valid)">Hiển thị</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <jqxChart #tab2EmpListByMonthlyChart [width]="'100%'" [height]="500" [title]="'Thống kê nhân sự theo từng tháng '" [description]="'Bao gồm nhân sự trong dept, dept khác chuyển sang , tạm nghỉ...'" [showLegend]="true" [enableAnimations]="true" [padding]="padding"
+                                                    [titlePadding]="titlePadding" [source]="empListByMonthly" [xAxis]="xAxisByEmpListByMonthly" [valueAxis]="valueAxisByEmpListByMonthly" [seriesGroups]="seriesGroupsByEmpListByMonthly" (onClick)="chartEventByEmpListByMonthly($event)"
+                                                    (onToggle)="chartEventByEmpListByMonthly($event)" (mouseleave)="chartEventByEmpListByMonthly($event)" (mouseenter)="chartEventByEmpListByMonthly($event)" [colorScheme]="'scheme26'" [showBorderLine]="false">
+                                                </jqxChart>
 
-              </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClick()">
+                        <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintReportClick()">
+                        <i class="fa fa-print" aria-hidden="true"></i>Báo cáo</button>
+                                            </div>
+                                        </div>
 
-            </tab>
-            <!-- Tab mục tiêu doanh số-->
-            <tab heading="Hiệu suất hoạt động">
-              <div class="form-group">
-                <div class="panel panel-color panel-primary">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Hiệu suất hoạt động</h3>
-                  </div>
-                  <div class="panel-body">
-                    <div class="row">
-                      <div class="col-md-4 col-sm-6 col-xs-12">
+                                    </div>
+                                </div>
+                                <!-- So sanh nhan su trong khoang thoi gian E-->
 
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </tab>
-            <!-- Tab mục tiêu tiếng Nhật-->
-            <tab heading="Thống kê Tiếng Nhật">
-              <div class="form-group">
-                <div class="row">
-                  <div class="panel panel-color panel-primary">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Mục tiêu(Số Nhân Viên)</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="col-md-2 col-sm-6 col-xs-12">
+                            </div>
 
-                      </div>
+                        </tab>
+                        <!-- Tab mục tiêu doanh số-->
+                        <tab heading="Hiệu suất hoạt động">
+                            <div class="form-group">
+                                <div class="panel panel-color panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Hiệu suất hoạt động</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
 
-                    </div>
-                  </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+                        <!-- Tab mục tiêu tiếng Nhật-->
+                        <tab heading="Thống kê Tiếng Nhật">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="panel panel-color panel-primary">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Mục tiêu(Số Nhân Viên)</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-md-2 col-sm-6 col-xs-12">
 
-                </div>
+                                            </div>
 
+                                        </div>
+                                    </div>
 
-                <div class="row">
-
-
-                  <div class="panel panel-color panel-success">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Thực tích</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="col-md-2 col-sm-6 col-xs-12">
-
-                      </div>
-
-
-
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </tab>
-
-            <!-- Tab mục tiêu onsite-->
-            <tab>
-              <ng-template tabHeading>
-                <i class="glyphicon glyphicon-bell"></i>
-                </ng-template>
-                <div class="form-group">
-
-                  <div class="panel panel-color panel-primary">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Mục tiêu(Đơn vị tính : Số nhân viên)</h3>
-                    </div>
-                    <div class="panel-body">
-
-                      <div class="row">
-                        <div class="col-md-3 col-sm-6 col-xs-12">
-
-                        </div>
-
-                      </div>
-
-                    </div>
-                  </div>
+                                </div>
 
 
-                </div>
-            </tab>
+                                <div class="row">
 
-          </tabset>
 
-        </form>
-      </div>
+                                    <div class="panel panel-color panel-success">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Thực tích</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-md-2 col-sm-6 col-xs-12">
 
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </tab>
+
+                        <!-- Tab mục tiêu onsite-->
+                        <tab>
+                            <ng-template tabHeading>
+                                <i class="glyphicon glyphicon-bell"></i>
+                            </ng-template>
+                            <div class="form-group">
+
+                                <div class="panel panel-color panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Mục tiêu(Đơn vị tính : Số nhân viên)</h3>
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-6 col-xs-12">
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </tab>
+
+                    </tabset>
+
+                </form>
+            </div>
+
+        </div>
     </div>
-  </div>
 </div>
 <!-- container -->
