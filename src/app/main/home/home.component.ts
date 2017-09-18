@@ -880,7 +880,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
   
     seriesGroupsByEmpListByMonthly: any[] =
     [
-  
+      /** TONG SO NHAN VIEN TRONG TUNG THANG*/
       {
         type: 'line',
         valueAxis:
@@ -903,6 +903,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             linesUnselectMode: 'click',
             dataField: 'TotalEmpCount',
             displayText: 'Tổng NV',
+            color: "#29DAB2",
             formatFunction: (value: any) => {
               if (value === 0 || value==undefined) {
                 return "";
@@ -951,32 +952,82 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
                     }
                 ],*/
       },
-  
+      /** SO NHAN VIEN NGHI VIEC TRONG TUNG THANG*/
+      {
+        type: 'line',
+        series:
+        [
+          {
+            linesUnselectMode: 'click',
+            dataField: 'ContractedJobLeavedEmpCount',
+            displayText: 'Nghỉ việc',
+            color: "#FF3333",
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value).toFixed(0);
+              }
+            },
+            labels:
+            {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: -5 },
+              'class': 'redLabel',
+              backgroundColor: 'white',
+              padding: { left: 5, right: 5, top: 1, bottom: 1 },
+              borderColor: this.fnLabelsBorderColor,
+              backgroundOpacity: 0.7,
+              borderOpacity: 0.7
+            }
+          }
+        ]
+      },
+      /** DOANH SO TRONG TUNG THANG*/
+      {
+        type: 'line',
+        series:
+        [
+          {
+            linesUnselectMode: 'click',
+            dataField: 'RevenueCount',
+            displayText: 'Doanh số',
+            color: "#35BF1D",
+            formatFunction: (value: any) => {
+              if (value === 0 || value==undefined) {
+                return "";
+              } else {
+                return +(value).toFixed(0);
+              }
+            },
+            labels:
+            {
+              visible: true,
+              verticalAlignment: 'top',
+              offset: { x: 0, y: -5 },
+              'class': this.fnLabelsClass,
+              backgroundColor: 'white',
+              padding: { left: 5, right: 5, top: 1, bottom: 1 },
+              borderColor: this.fnLabelsBorderColor,
+              backgroundOpacity: 0.7,
+              borderOpacity: 0.7
+            }
+          }
+        ]
+      },
+      /** stackedcolumn */
       {
         type: 'stackedcolumn',
         toolTipFormatFunction: this.toolTipCustomFormatFnByCustomer,
         columnsGapPercent: 50,
         seriesGapPercent: 0,
         series: [
-          {
-            dataField: 'ContractedJobLeavedEmpCount',
-            displayText: 'NV nghỉ việc',
-            labels: {
-              visible: true,
-              verticalAlignment: 'top',
-              offset: { x: 0, y: 5 }
-            },
-            formatFunction: (value: any) => {
-              if (value === 0 || value==undefined) {
-                return "";
-              } else {
-                return +(value);
-              }
-            }
-          },
+
           {
             dataField: 'WorkingEmpCount',
             displayText: 'NV trong dept',
+            color: "#1D86BF",
             labels: {
               visible: true,
               verticalAlignment: 'top',
@@ -992,6 +1043,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           },
           { dataField: 'FromOtherDeptEmpCount', 
                 displayText: 'NV dept khác' ,
+                color: "#FFC300",
                 labels: {
                     visible: true,
                     verticalAlignment: 'top',
@@ -1008,6 +1060,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           {
             dataField: 'ToOtherDeptEmpCount',
             displayText: 'NV sang dept khác',
+            color: "#DA2984",
             labels: {
               visible: true,
               verticalAlignment: 'top',
@@ -1025,22 +1078,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           {
             dataField: 'OnsiteEmpCount',
             displayText: 'NV onsite',
-            labels: {
-              visible: true,
-              verticalAlignment: 'top',
-              offset: { x: 0, y: 5 }
-            },
-            formatFunction: (value: any) => {
-              if (value === 0 || value==undefined) {
-                return "";
-              } else {
-                return +(value);
-              }
-            }
-          },
-          {
-            dataField: 'StopWorkingEmpCount',
-            displayText: 'NV tạm nghỉ',
+            color: "#A4DA29",
             labels: {
               visible: true,
               verticalAlignment: 'top',
