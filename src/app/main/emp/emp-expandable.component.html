@@ -24,11 +24,15 @@
                         <li><a hre f="javascript:void(0)" (click)="loadDataByGroup('collect')">NV KN nhỏ hơn 4 tháng</a></li>
 
                     </ul>
-                </div>
+                   
 
+                </div>
+                <!-- Tab thống kê nhân viên theo các loại-->
                 <h4 class="page-title">Thống kê số liệu theo {{dataGroupName}} </h4>
 
-                <!-- Tab thống kê nhân viên theo chức vụ-->
+                <!-- Hiển thị nội dung cập nhật tùy theo từng loại chọn-->
+
+                <!--expandable list START-->
 
                 <div class="form-group m-t-15">
 
@@ -38,29 +42,40 @@
                                 <span class="expandable-list-info">
                                 <i class="fa fa-sitemap" aria-hidden="true"></i>{{ item.DeptName }}|{{ item.TeamName }}|{{ item.PositionName }}</span>
                                 <img *ngIf="item.PositionName=='Trial Staff'" width="60px" class="trialstaff-img-overlay" src="{{imgTrialStaff}}">
-                                <div>
+                                <div class="">
                                     <h4 class="expandable-list-fullname">
-                                        <a [routerLink]="['/main/emp/edit',item.ID,'edit']">{{ item.FullName }}</a>({{item.AccountName}})&nbsp;({{item.PhoneNumber1}})</h4>
-                                    <img alt="user-img" width="60px" class="img-circle" src="{{uriAvatarPath + item.Avatar}}">
-                                    <span><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.KeikenFromContractMonths}} tháng</span>
-                                    <span *ngIf="item.ContractDate"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>{{item.ContractDate| date:'yyyy/MM/dd'}}</span>
-
-                                    <span *ngIf="item.JobLeaveDate" class="label label-danger"><i class="fa fa-user-times" aria-hidden="true"></i>{{item.JobLeaveDate| date:'yyyy/MM/dd'}}</span>
-                                    <img *ngIf="item.JobLeaveDate" width="60px" class="jobleave-img-overlay" src="{{imgJobLeave}}">
-
-                                    <span *ngIf="item.JapaneseLevelName!='Không chỉ định'" class="label label-primary">{{item.JapaneseLevelName}}</span>
-                                    <span *ngIf="item.BseAllowanceLevelName!='Không chỉ định'" class="label label-success">{{item.BseAllowanceLevelName}}</span>
-                                    <span *ngIf="item.BusinessAllowanceLevelName!='Không chỉ định'" class="label label-info">{{item.BusinessAllowanceLevelName}}</span>
-                                    <span *ngIf="item.EmpTypeName!='Không chỉ định'" class="label label-inverse">{{item.EmpTypeName}}</span>
-
-                                    <span *ngIf="item.ContractTypeName!='Không chỉ định'" class="label label-inverse">{{item.ContractTypeName}}</span>
-                                    <span *ngIf="item.CollectName!='Không chỉ định'" class="label label-inverse">{{item.CollectName}}</span>
+                                    <a [routerLink]="['/main/emp/edit',item.ID,'edit']">{{ item.FullName }}</a>({{item.AccountName}})&nbsp;({{item.PhoneNumber1}})</h4>
+                                    <div class="overtext">            
+                                        <img alt="user-img" width="60px" class="img-circle img-circle-floating" src="{{uriAvatarPath + item.Avatar}}">
+                                        <span class="red-alert-text-rotation"  *ngIf="isJobLeaved(item)" >Nghỉ việc</span>
+                                        <span class="red-alert-text-rotation"  *ngIf="isJobLeavedInFuture(item)" >Sắp nghỉ</span>
+                                        <span class="red-alert-text-rotation"  *ngIf="isBabyYasumi(item)" >Nghỉ sinh</span>
+                                        <span class="success-alert-text-rotation"  *ngIf="isOnsite(item)" >Onister</span>
+                                        
+                                        <span><i class="fa fa-clock-o clearfix" aria-hidden="true"></i>{{item.KeikenFromContractMonths}} tháng</span>
+                                        <span *ngIf="item.ContractDate"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>{{item.ContractDate| date:'yyyy/MM/dd'}}</span>
+        
+                                        <span *ngIf="item.JobLeaveDate" class="label label-danger"><i class="fa fa-user-times" aria-hidden="true"></i>{{item.JobLeaveDate| date:'yyyy/MM/dd'}}</span>
+                                        <!-- <img *ngIf="item.JobLeaveDate" width="60px" class="jobleave-img-overlay" src="{{imgJobLeave}}"> -->
+                                        <span *ngIf="item.JapaneseLevelName!='Không chỉ định'" class="label label-primary">{{item.JapaneseLevelName}}</span>
+                                        <span *ngIf="item.BseAllowanceLevelName!='Không chỉ định'" class="label label-success">{{item.BseAllowanceLevelName}}</span>
+                                        <span *ngIf="item.BusinessAllowanceLevelName!='Không chỉ định'" class="label label-info">{{item.BusinessAllowanceLevelName}}</span>
+                                        <span *ngIf="item.EmpTypeName!='Không chỉ định'" class="label label-inverse">{{item.EmpTypeName}}</span>
+        
+                                        <span *ngIf="item.ContractTypeName!='Không chỉ định'" class="label label-inverse">{{item.ContractTypeName}}</span>
+                                        <span *ngIf="item.CollectName!='Không chỉ định'" class="label label-inverse">{{item.CollectName}}</span>
+                                        <div class="pull-right">
+                                            <md-checkbox [value]="0" [(ngModel)]="item.IsChecked" name="IsChecked" #IsChecked="ngModel" ></md-checkbox>
+                                        </div>
+                                    </div>
+                                        
                                 </div>
-                                <hr class="line-list-item">
+                            <hr class="line-list-item">
                             </a>
                         </p-accordionTab>
                     </p-accordion>
                 </div>
+            <!--expandable list END-->
             </form>
         </div>
     </div>

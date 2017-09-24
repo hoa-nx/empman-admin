@@ -12,7 +12,11 @@ import { SystemConstants } from '../../core/common/system.constants';
 import { PercentPipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { SharedComponentService } from '../../core/services/sharedcomponent.service';
+import { jqxMenuComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxmenu';
+
 declare var $: any;
+declare var moment: any;
+
 @Component({
     selector: 'emp-expandable',
     templateUrl: './emp-expandable.component.html',
@@ -28,6 +32,7 @@ export class EmpExpandableComponent implements OnInit {
     listCExpanded = false;
     public uriAvatarPath: string = SystemConstants.BASE_API;
     @ViewChild('TeamTreeGrid') teamTreeGrid: jqxTreeGridComponent;
+    @ViewChild('jqxMenu') jqxMenu: jqxMenuComponent;
     public teamExpData: any[];
     public dataDeptGroups: any[];
     public dataTeamGroups: any[];
@@ -49,6 +54,8 @@ export class EmpExpandableComponent implements OnInit {
 
     public imgJobLeave: string = SystemConstants.BASE_WEB + '/assets/images/danghiviec.png';
     public imgTrialStaff: string = SystemConstants.BASE_WEB + '/assets/images/thuviec.png';
+    public currentDate : Date;
+    public onsiteDatas : any[];
 
     source: any =
     {
@@ -144,6 +151,8 @@ export class EmpExpandableComponent implements OnInit {
                 //this.paramGroup = params['group'];
             });
 
+        this.loadOnsiteData();
+        
         //subscribe
         this.subscriber = this._sharedComponentService.sendToEmpExpandable$.subscribe(data => {
             console.log(data);
@@ -151,6 +160,9 @@ export class EmpExpandableComponent implements OnInit {
             this.loadDataByGroup(this.paramGroup);
         });
        
+        moment.locale("jp");
+        this.currentDate = moment().format("YYYY/MM/DD");
+        
         //this.loadDataByGroup('team');
         //this.loadDataByGroup('position');
         //this.loadDataByGroup('japanese');
@@ -283,5 +295,64 @@ export class EmpExpandableComponent implements OnInit {
             this.selectedTab = event.id;
         }
     }
+
+    ngAfterViewInit() {
+        //this.jqxMenu.minimize();
+    }
+
+
+isJobLeaved(item : any){
+    //da nghi viec 
+    if(item.JobLeaveDate){
+        return moment(item.JobLeaveDate).format("YYYY/MM/DD") < this.currentDate;
+    }else{
+        return false;
+    }
+    
+}
+
+isJobLeavedInFuture(item : any){
+    //sap nghi viec 
+    if(item.JobLeaveDate){
+        return moment(item.JobLeaveDate).format("YYYY/MM/DD") > this.currentDate;
+    }else{
+        return false;
+    }
+}
+
+isOnsite(item : any){
+    //dang onsite 
+    //kiem tra data onsite trong thang hien tai , neu co du lieu thi xem nhu la nhan vien dang onsite KH
+    let onsiteData : any[] = this.onsiteDatas.filter( x => x.ID===item.ID);
+
+    return onsiteData.length > 0;
+}
+
+isBabyYasumi(item : any){
+    //dang nghi thai san
+    if(item.BabyBornScheduleEndDate){
+        return moment(item.BabyBornScheduleEndDate).format("YYYY/MM/DD") > this.currentDate;
+    }else{
+        return false;
+    }
+}
+
+isTrial(item : any){
+    //dangthu viec
+    if(item.EndTrialDate){
+        return moment(item.EndTrialDate).format("YYYY/MM/DD") >= this.currentDate;
+    }else{
+        return false;
+    }
+}
+
+loadOnsiteData() {
+    this._dataService.get('/api/empdetailwork/getonistebyemp')
+    .subscribe((response: any) => {
+      this.onsiteDatas = response;
+    }, error => this._dataService.handleError(error));
+    
+}
+
 
 }

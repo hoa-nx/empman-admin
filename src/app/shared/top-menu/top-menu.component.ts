@@ -49,6 +49,7 @@ export class TopMenuComponent implements OnInit, OnDestroy {
   public empTrialJobLeavedCount: any | 0;
   public empContractedJobLeavedInProcessingYearCount: any | 0;
   public empTrialJobLeavedInProcessingYearCount: any | 0;
+  public empTrialInProcessingYearCount : any|0;
   public processingYear: any | 0;
 
   private text: string;
@@ -101,6 +102,7 @@ export class TopMenuComponent implements OnInit, OnDestroy {
       this.empTrialJobLeavedCount = data.empTrialJobLeavedCount | 0;
       this.empTrialJobLeavedInProcessingYearCount = data.empTrialJobLeavedInProcessingYearCount | 0;
       this.empContractedJobLeavedInProcessingYearCount = data.empContractedJobLeavedInProcessingYearCount | 0;
+      this.empTrialInProcessingYearCount = data.empTrialInProcessingYearCount|0;
       this.processingYear = data.processingYear | 0;
       this.expMonth = data.expMonth | 4;
     });
@@ -158,6 +160,7 @@ export class TopMenuComponent implements OnInit, OnDestroy {
 
           this.empTrialJobLeavedInProcessingYearCount = this.emps[0].TrialJobLeavedInProcessingYearCount | 0;
           this.empContractedJobLeavedInProcessingYearCount = this.emps[0].ContractedJobLeavedInProcessingYearCount | 0;
+          this.empTrialInProcessingYearCount = this.emps[0].TrialInProcessingYearCount | 0;
           this.processingYear = this.emps[0].ProcessingYear | 0;
         }
 

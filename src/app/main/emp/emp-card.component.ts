@@ -29,6 +29,7 @@ import { LoaderService } from '../../shared/utils/spinner.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenService } from '../../core/services/authen.service';
 import { LoggedInUser } from '../../core/domain/loggedin.user';
+import { AfterViewInit, AfterViewChecked } from '@angular/core';
 
 declare var moment: any;
 
@@ -58,11 +59,12 @@ declare var moment: any;
 
 })
 
-export class EmpCardComponent implements OnInit {
+export class EmpCardComponent implements OnInit  {
     @ViewChild('childModal') public childModal: ModalDirective;
     @Input() user: IEmp | undefined;  /* add | undefined to fix warning khen build */
     @Output() removeUser = new EventEmitter();
     @Output() userCreated = new EventEmitter();
+    @Input() onsitedatas: any[]; 
 
     edittedUser: IEmp | undefined; /* add | undefined to fix warning khen build */
     onEdit: boolean = false;
@@ -95,6 +97,8 @@ export class EmpCardComponent implements OnInit {
 
     public uriAvatarPath: string = SystemConstants.BASE_API;
     public userLogin: LoggedInUser;
+    public currentDate : Date;
+    
 
     constructor(
         private _route: ActivatedRoute,
@@ -143,8 +147,14 @@ export class EmpCardComponent implements OnInit {
         }
         //khoi tao gia tri cho co quan ly file co thay doi khong 
         this.isFileChanged = false;
+
+        moment.locale("jp");
+        this.currentDate = moment().format("YYYY/MM/DD");
+        //this.loadOnsiteData();
+        
     }
 
+    
     editUser() {
 
         this.onEdit = !this.onEdit;
@@ -374,5 +384,51 @@ opened() {
     this.output = '(opened)';
 }
 */
+
+isJobLeaved(item : any){
+    //da nghi viec 
+    if(item.JobLeaveDate){
+        return moment(item.JobLeaveDate).format("YYYY/MM/DD") < this.currentDate;
+    }else{
+        return false;
+    }
+    
+}
+
+isJobLeavedInFuture(item : any){
+    //sap nghi viec 
+    if(item.JobLeaveDate){
+        return moment(item.JobLeaveDate).format("YYYY/MM/DD") > this.currentDate;
+    }else{
+        return false;
+    }
+}
+
+isOnsite(item : any){
+    //dang onsite 
+    //kiem tra data onsite trong thang hien tai , neu co du lieu thi xem nhu la nhan vien dang onsite KH
+    let onsiteData : any[] = this.onsitedatas.filter( x => x.ID===item.ID);
+
+    return onsiteData.length > 0;
+}
+
+isBabyYasumi(item : any){
+    //dang nghi thai san
+    if(item.BabyBornScheduleEndDate){
+        return moment(item.BabyBornScheduleEndDate).format("YYYY/MM/DD") > this.currentDate;
+    }else{
+        return false;
+    }
+}
+
+isTrial(item : any){
+    //dangthu viec
+    if(item.EndTrialDate){
+        return moment(item.EndTrialDate).format("YYYY/MM/DD") >= this.currentDate;
+    }else{
+        return false;
+    }
+}
+
 
 }

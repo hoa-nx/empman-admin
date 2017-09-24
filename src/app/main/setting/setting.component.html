@@ -221,6 +221,29 @@
                                     </div>
 
                                 </div>
+
+                                <div class="row form-group m-b-20">
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <md-checkbox (change)="changeCheckboxGetDataToDate($event)" [value]="0" [(ngModel)]="chkGetDataToDate" [ngModelOptions]="{standalone: true}">Thời điểm thống kê</md-checkbox>
+
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <!-- <input type="text" [disabled]="chkGetDataToDate==false" [ngModelOptions]="{standalone: true}" title="Ngày thống kê start" daterangepicker (selected)="selectedGetDataToDateFrom($event)" [options]="dateOptions" [(ngModel)]="getDataToDateFrom" name="getDataToDateFrom" class="form-control"
+                                            placeholder="Thời điểm bắt đầu" /> -->
+                                            <p-calendar  [disabled]="chkGetDataToDate==false" [hidden]="true"  [showIcon]="true" [showTime]="false" hourFormat="24"   [monthNavigator]="true"
+                                            [yearNavigator]="true" yearRange="2000:2100" [ngModelOptions]="{standalone: true}" [(ngModel)]="getDataToDateFrom"  name="getDataToDateFrom" (onSelect)="selectedGetDataToDateFrom($event)" dateFormat="yy/mm/dd" class="focusedInput" placeholder="Ngày thống kê start"></p-calendar>
+
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <!-- <input type="text" [disabled]="chkGetDataToDate==false" [ngModelOptions]="{standalone: true}" title="Ngày thống kê end" daterangepicker (selected)="selectedGetDataToDateTo($event)" [options]="dateOptions" [(ngModel)]="getDataToDateTo" name="getDataToDateTo" class="form-control"
+                                            placeholder="Thời điểm kết thúc" /> -->
+                                            <p-calendar  [disabled]="chkGetDataToDate==false"  [showIcon]="true" [showTime]="false" hourFormat="24"  [monthNavigator]="true"
+                                            [yearNavigator]="true" yearRange="2000:2100"   [ngModelOptions]="{standalone: true}" [(ngModel)]="getDataToDateTo" name="getDataToDateTo" (onSelect)="selectedGetDataToDateTo($event)" dateFormat="yy/mm/dd" class="focusedInput" placeholder="Ngày thống kê end"></p-calendar>
+                                    </div>
+                                </div>
+
                                 <!-- -->
                                 <div class="row">
                                     <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin khác</b></h5>

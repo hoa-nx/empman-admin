@@ -13,168 +13,249 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-md-4 m-t-20 m-b-20">
+                    <div class="col-md-4 m-t-20 m-b-10">
                         <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày hiệu lực</label>
-                        <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #StartDate="ngModel" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Ngày bắt đầu" required></p-calendar>
+                        <p-calendar [showIcon]="true" [(ngModel)]="entity.StartDate" name="StartDate" #StartDate="ngModel" (onSelect)="selectedStartDate($event)"
+                            dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput"
+                            placeholder="Ngày bắt đầu"  [disabled]="entity.IsDetailWorkCreateData==false"></p-calendar>
                     </div>
-                    <div class="col-md-4 m-t-20 m-b-20">
+                    <div class="col-md-4 m-t-20 m-b-10">
                         <label class="control-label"><i class="fa" aria-hidden="true"></i>Ngày hết hiệu lực</label>
-                        <p-calendar [showIcon]="true" [(ngModel)]="entity.EndDate" name="EndDate" #EndDate="ngModel" (onSelect)="selectedEndDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Ngày kết thúc"></p-calendar>
+                        <p-calendar [showIcon]="true" [(ngModel)]="entity.EndDate" name="EndDate" #EndDate="ngModel" (onSelect)="selectedEndDate($event)"
+                            dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput"
+                            placeholder="Ngày kết thúc" [disabled]="entity.IsDetailWorkCreateData==false"></p-calendar>
                     </div>
-
                 </div>
-
                 <div class="row">
-                    <p-pickList [source]="sourceEmps" [target]="targetEmps" sourceHeader="Danh sách nhân viên" targetHeader="Danh sách được chọn" [responsive]="true" filterBy="FullName" dragdrop="true" sourceFilterPlaceholder="Tìm kiếm..." targetFilterPlaceholder="Tìm kiếm..."
+                    <div class="col-md-12 m-t-20 m-b-20">
+                        <md-checkbox (change)="changeCheckboxDetailWorkCreateData($event)" [value]="0" [(ngModel)]="entity.IsDetailWorkCreateData" name="IsDetailWorkCreateData" #IsDetailWorkCreateData="ngModel" >Tạo chi tiết
+                            </md-checkbox>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 m-t-20 m-b-20">
+                        <label class="control-label"><i class="fa" aria-hidden="true"></i>Chi chú</label>
+                        <textarea class="form-control" #Note="ngModel" [(ngModel)]="entity.Note" name="Note" #Note="ngModel" wrap="soft"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <p-pickList [source]="sourceEmps" [target]="targetEmps" sourceHeader="Danh sách nhân viên" targetHeader="Danh sách được chọn"
+                        [responsive]="true" filterBy="FullName" dragdrop="true" sourceFilterPlaceholder="Tìm kiếm..." targetFilterPlaceholder="Tìm kiếm..."
                         [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}" [showSourceControls]="false" [showTargetControls]="false">
                         <ng-template let-emp pTemplate="item">
                             <div class="ui-helper-clearfix">
-                                <img src="{{uriAvatarPath + emp.Avatar}}" class="img-circle" width="70" >
+                                <img src="{{uriAvatarPath + emp.Avatar}}" class="img-circle" width="70">
                                 <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{emp.FullName}} - {{emp.AccountName}} - {{emp.CurrentDeptID}}- {{emp.CurrentPositionID}}</div>
                             </div>
                         </ng-template>
                     </p-pickList>
                 </div>
 
-                <div class="form-group">
-                    <div class="row">
-                        <tabset>
-                            <!-- Tab Điều kiện lọc dữ liệu  -->
-                            <tab heading="Cập nhật tổ chức">
-                                <!-- Các loại phụ cấp-->
-                                <div class="row">
-                                    <h5 class="m-t-0 m-b-20 header-title"><b>Tổ chức</b></h5>
-                                </div>
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
-                                        </md-checkbox>
-                                    </div>
+                <!-- Thong tin cap nhat -->
+                <div class="row">
+                    <tabset>
+                        <!-- Tab Điều kiện lọc dữ liệu  -->
+                        <tab heading="Cập nhật tổ chức">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <!-- Các loại phụ cấp-->
+                                        <div class="row">
+                                            <h5 class="m-t-0 m-b-20 header-title"><b>Tổ chức/Đào tạo</b></h5>
+                                        </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
+                                                </md-checkbox>
+                                            </div>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts" [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts"
+                                                    [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
-                                        </md-checkbox>
-                                    </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
+                                                </md-checkbox>
+                                            </div>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams" [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams"
+                                                    [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxPosition($event)" [value]="0" [(ngModel)]="chkPosition" [ngModelOptions]="{standalone: true}">Ngạch bậc
-                                        </md-checkbox>
-                                    </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxPosition($event)" [value]="0" [(ngModel)]="chkPosition" [ngModelOptions]="{standalone: true}">Ngạch bậc
+                                                </md-checkbox>
+                                            </div>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="positions" [(ngModel)]="selectPositions" [disabled]="chkPosition==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="positions"
+                                                    [(ngModel)]="selectPositions" [disabled]="chkPosition==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxEmpType($event)" [value]="0" [(ngModel)]="chkEmpType" [ngModelOptions]="{standalone: true}">Loại công việc
-                                        </md-checkbox>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxEmpType($event)" [value]="0" [(ngModel)]="chkEmpType" [ngModelOptions]="{standalone: true}">Loại công việc
+                                                </md-checkbox>
 
-                                    </div>
+                                            </div>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empTypes" [(ngModel)]="selectEmpTypes" [disabled]="chkEmpType==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empTypes"
+                                                    [(ngModel)]="selectEmpTypes" [disabled]="chkEmpType==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                <!-- Các loại phụ cấp-->
-                                <div class="row">
-                                    <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin phụ cấp</b></h5>
-                                </div>
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxBussinessAllowanceLevel($event)" [value]="0" [(ngModel)]="chkBussinessAllowanceLevel" [ngModelOptions]="{standalone: true}">Nghiệp vụ
-                                        </md-checkbox>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxEducationLevel($event)" [value]="0" [(ngModel)]="chkEducationLevel" [ngModelOptions]="{standalone: true}">Bậc học
+                                                </md-checkbox>
 
-                                    </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="educationLevels"
+                                                    [(ngModel)]="selectEducationLevels" [disabled]="chkEducationLevel==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bussinessAllowanceLevels" [(ngModel)]="selectBussinessAllowanceLevels" [disabled]="chkBussinessAllowanceLevel==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxCollect($event)" [value]="0" [(ngModel)]="chkCollect" [ngModelOptions]="{standalone: true}">Trường học
+                                                </md-checkbox>
 
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxJapaneseLevel($event)" [value]="0" [(ngModel)]="chkJapaneseLevel" [ngModelOptions]="{standalone: true}">Tiếng Nhật
-                                        </md-checkbox>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="collects"
+                                                    [(ngModel)]="selectCollects" [disabled]="chkCollect==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                    </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxContractType($event)" [value]="0" [(ngModel)]="chkContractType" [ngModelOptions]="{standalone: true}">Hợp đồng
+                                                </md-checkbox>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="japaneseLevels" [(ngModel)]="selectJapaneseLevels" [disabled]="chkJapaneseLevel==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="contractTypes"
+                                                    [(ngModel)]="selectContractTypes" [disabled]="chkContractType==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
 
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxRoomWithInternetAllowanceLevel($event)" [value]="0" [(ngModel)]="chkRoomWithInternetAllowanceLevel" [ngModelOptions]="{standalone: true}">Phòng có internet
-                                        </md-checkbox>
-
-                                    </div>
-
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="roomWithInternetAllowanceLevels" [(ngModel)]="selectRoomWithInternetAllowanceLevels" [disabled]="chkRoomWithInternetAllowanceLevel==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxRoomNoInternetAllowanceLevel($event)" [value]="0" [(ngModel)]="chkRoomNoInternetAllowanceLevel" [ngModelOptions]="{standalone: true}">Phòng không internet
-                                        </md-checkbox>
-
-                                    </div>
-
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="roomNoInternetAllowanceLevels" [(ngModel)]="selectRoomNoInternetAllowanceLevels" [disabled]="chkRoomNoInternetAllowanceLevel==false"></ss-multiselect-dropdown>
                                     </div>
                                 </div>
 
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxBseLevel($event)" [value]="0" [(ngModel)]="chkBseLevel" [ngModelOptions]="{standalone: true}">Bse
-                                        </md-checkbox>
+                                <div class="col-lg-6">
+                                    <div class="card-box">
+                                        <!-- Các loại phụ cấp-->
+                                        <div class="row">
+                                            <h5 class="m-t-0 m-b-20 header-title"><b>Thông tin phụ cấp</b></h5>
+                                        </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxBussinessAllowanceLevel($event)" [value]="0" [(ngModel)]="chkBussinessAllowanceLevel"
+                                                    [ngModelOptions]="{standalone: true}">Nghiệp vụ
+                                                </md-checkbox>
 
-                                    </div>
+                                            </div>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bseLevels" [(ngModel)]="selectBseLevels" [disabled]="chkBseLevel==false"></ss-multiselect-dropdown>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bussinessAllowanceLevels"
+                                                    [(ngModel)]="selectBussinessAllowanceLevels" [disabled]="chkBussinessAllowanceLevel==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxJapaneseLevel($event)" [value]="0" [(ngModel)]="chkJapaneseLevel" [ngModelOptions]="{standalone: true}">Tiếng Nhật
+                                                </md-checkbox>
+
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="japaneseLevels"
+                                                    [(ngModel)]="selectJapaneseLevels" [disabled]="chkJapaneseLevel==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxRoomWithInternetAllowanceLevel($event)" [value]="0" [(ngModel)]="chkRoomWithInternetAllowanceLevel"
+                                                    [ngModelOptions]="{standalone: true}">Phòng có internet
+                                                </md-checkbox>
+
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="roomWithInternetAllowanceLevels"
+                                                    [(ngModel)]="selectRoomWithInternetAllowanceLevels" [disabled]="chkRoomWithInternetAllowanceLevel==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxRoomNoInternetAllowanceLevel($event)" [value]="0" [(ngModel)]="chkRoomNoInternetAllowanceLevel"
+                                                    [ngModelOptions]="{standalone: true}">Phòng không internet
+                                                </md-checkbox>
+
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="roomNoInternetAllowanceLevels"
+                                                    [(ngModel)]="selectRoomNoInternetAllowanceLevels" [disabled]="chkRoomNoInternetAllowanceLevel==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group m-b-20">
+                                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                                <md-checkbox (change)="changeCheckboxBseLevel($event)" [value]="0" [(ngModel)]="chkBseLevel" [ngModelOptions]="{standalone: true}">Bse
+                                                </md-checkbox>
+
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="bseLevels"
+                                                    [(ngModel)]="selectBseLevels" [disabled]="chkBseLevel==false"></ss-multiselect-dropdown>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Di chuyen nhan vien-->
-                                <div class="row">
-                                    <h5 class="m-t-0 m-b-20 header-title"><b>Loại nhân sự</b></h5>
+                                <div class="col-lg-12">
+                                        <div class="card-box">
+                                            <!-- Di chuyen nhan vien-->
+                                            <div class="row">
+                                                    <h5 class="m-t-0 m-b-20 header-title"><b>Loại nhân sự</b></h5>
+                                                </div>
+                                                <div class="row form-group m-b-20">
+                                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                                        <md-checkbox (change)="changeCheckboxWorkEmpTypes($event)" [value]="0" [(ngModel)]="chkWorkEmpType" [ngModelOptions]="{standalone: true}">Loại nhân sự
+                                                        </md-checkbox>
+
+                                                    </div>
+
+                                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="workEmpTypes"
+                                                            [(ngModel)]="selectWorkEmpTypes" [disabled]="chkWorkEmpType==false" (ngModelChange)="onChangeWorkEmpTypes($event)"></ss-multiselect-dropdown>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                                        Chọn KH
+                                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="customers"
+                                                            [(ngModel)]="selectCustomers" [disabled]="chkWorkEmpType==false||(chkWorkEmpType && selectWorkEmpTypes!=3)"></ss-multiselect-dropdown>
+                                                    </div>
+                                                </div>
+                                        </div>
                                 </div>
-                                <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxWorkEmpTypes($event)" [value]="0" [(ngModel)]="chkWorkEmpType" [ngModelOptions]="{standalone: true}">Loại nhân sự
-                                        </md-checkbox>
+                            </div>
+                        </tab>
 
-                                    </div>
+                    </tabset>
 
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="workEmpTypes" [(ngModel)]="selectWorkEmpTypes" [disabled]="chkWorkEmpType==false"></ss-multiselect-dropdown>
-                                    </div>
-                                </div>
-                              
-
-                            </tab>
-
-                        </tabset>
-
-                    </div>
                 </div>
 
             </form>

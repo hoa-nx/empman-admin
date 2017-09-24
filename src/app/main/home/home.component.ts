@@ -736,7 +736,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           labels: {
             visible: true,
             verticalAlignment: 'top',
-            offset: { x: 0, y: 0 }
+            offset: { x: 15, y: 0 }
           },
           formatFunction: (value: any) => {
             if (value === 0 || value==undefined) {
@@ -752,7 +752,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           labels: {
             visible: true,
             verticalAlignment: 'top',
-            offset: { x: 0, y: 5 }
+            offset: { x: -10, y: 0 }
           },
           formatFunction: (value: any) => {
             if (value === 0 || value==undefined) {
@@ -780,12 +780,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       }*/
     }
   }
-
-  //hiển thị hay không hiển thị chart số MM phiên dịch
-  TransCheckedOnChangeByCustomer(event: any) {
-    this.tab1CurrentYearRevenueByCustomerCompareChart.seriesGroups()[1].series[0].greyScale = !event.args.checked;
-    this.tab1CurrentYearRevenueByCustomerCompareChart.refresh();
-  };
 
   pngButtonOnClickByCustomer() {
     this.tab1CurrentYearRevenueByCustomerCompareChart.saveAsPNG('Doanh so.png', 'http://www.jqwidgets.com/export_server/export.php');
@@ -964,7 +958,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             color: "#FF3333",
             formatFunction: (value: any) => {
               if (value === 0 || value==undefined) {
-                return "";
+                return "0";
               } else {
                 return +(value).toFixed(0);
               }
@@ -1005,7 +999,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             {
               visible: true,
               verticalAlignment: 'top',
-              offset: { x: 0, y: -5 },
+              offset: { x: 0, y: 15 },
               'class': this.fnLabelsClass,
               backgroundColor: 'white',
               padding: { left: 5, right: 5, top: 1, bottom: 1 },
@@ -1082,7 +1076,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
             labels: {
               visible: true,
               verticalAlignment: 'top',
-              offset: { x: 0, y: 5 }
+              offset: { x: 0, y: 0 }
             },
             formatFunction: (value: any) => {
               if (value === 0 || value==undefined) {
@@ -1110,15 +1104,9 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }*/
       }
     }
-  
-    //hiển thị hay không hiển thị chart số MM phiên dịch
-    TransCheckedOnChangeByEmpListByMonthly(event: any) {
-      this.tab2EmpListByMonthlyChart.seriesGroups()[1].series[0].greyScale = !event.args.checked;
-      this.tab2EmpListByMonthlyChart.refresh();
-    };
-  
+   
     pngButtonOnClickByEmpListByMonthly() {
-      this.tab2EmpListByMonthlyChart.saveAsPNG('Doanh so.png', 'http://www.jqwidgets.com/export_server/export.php');
+      this.tab2EmpListByMonthlyChart.saveAsPNG('Thong ke nhan su doanh so.png', 'http://www.jqwidgets.com/export_server/export.php');
     };
   
     btnPrintChartClickByEmpListByMonthly(): void {
@@ -1130,7 +1118,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
           '<html>' +
           '<head>' +
           '<meta charset="utf-8" />' +
-          '<title>Doanh số theo từng khách hàng năm ' + this.processingYear + ' </title>' +
+          '<title>Thống kê nhân sự - doanh số từ ' + this.StartDate + ' ~ '+ this.EndDate + ' </title>' +
           '</head>' +
           '<body>' + content + '</body></html>';
       try {

@@ -34,10 +34,11 @@ import { EmpEstimateComponent } from './emp-estimate.component';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { AccordionModule } from 'primeng/primeng';     //accordion and accordion tab
 import { CalendarModule } from 'primeng/primeng';     //CalendarModule
-import { MenuItem } from 'primeng/primeng';            //api
+import { SlideMenuModule,MenuItem } from 'primeng/primeng';            //api
 import { PickListModule } from 'primeng/primeng';
 import { DndModule } from 'ng2-dnd';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { EmpTimelineComponent } from './emp-timeline.component';
 
 const empRoutes: Routes = [
   //localhost:4200/main/emp
@@ -53,7 +54,9 @@ const empRoutes: Routes = [
   { path: 'emp-expandable/:group', component: EmpExpandableComponent },
   //{ path: ':id/emp-basic', component: EmpBasicComponent}
   { path: 'edit/:id/:action', component: EmpBasicComponent },
-  { path: 'work', component: EmpDetailWorkComponent }
+  { path: 'work', component: EmpDetailWorkComponent },
+  { path: 'emp-timeline', component: EmpTimelineComponent },
+  { path: 'emp-timeline/:id', component: EmpTimelineComponent }
 
 ]
 @NgModule({
@@ -80,6 +83,7 @@ const empRoutes: Routes = [
     MdAutocompleteModule,
     MdInputModule,
     MdRadioModule,
+    SlideMenuModule,
     DndModule.forRoot()
   ],
   declarations: [
@@ -98,7 +102,8 @@ const empRoutes: Routes = [
     EmpDetailWorkComponent,
     EmpOnsiteComponent,
     EmpSupportComponent,
-    EmpEstimateComponent
+    EmpEstimateComponent,
+    EmpTimelineComponent
   ],
   providers: [DataService, NotificationService, ItemsService, MappingService, SessionService]
 })

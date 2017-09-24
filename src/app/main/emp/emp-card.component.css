@@ -19,3 +19,95 @@
     position:relative;
     z-index: 200;
 }
+
+.overtext {
+    background: 
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0.4)
+      );
+
+    position: relative;
+    overflow: hidden;
+    margin: 20px;
+  }
+  .overtext > header {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 10px;
+  }
+  .overtext > header > h4 {
+    margin: 0;
+    color:red;
+    /* Safari */
+    -webkit-transform: rotate(-30deg);
+
+    /* Firefox */
+    -moz-transform: rotate(-30deg);
+
+    /* IE */
+    -ms-transform: rotate(-30deg);
+
+    /* Opera */
+    -o-transform: rotate(-30deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .red-alert-text-rotation{
+    position: absolute;
+    top: 30px;
+    left: -5px;
+    width: 100%;
+    /*padding: 20px 10px;*/
+    margin: 0;
+    color:red;
+    /* Safari */
+    -webkit-transform: rotate(-30deg);
+
+    /* Firefox */
+    -moz-transform: rotate(-30deg);
+
+    /* IE */
+    -ms-transform: rotate(-30deg);
+
+    /* Opera */
+    -o-transform: rotate(-30deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+
+  }
+  .success-alert-text-rotation{
+    position: absolute;
+    top: 30px;
+    left: -5px;
+    width: 100%;
+    /*padding: 20px 10px;*/
+    margin: 0;
+    color:greenyellow;
+    /* Safari */
+    -webkit-transform: rotate(-30deg);
+
+    /* Firefox */
+    -moz-transform: rotate(-30deg);
+
+    /* IE */
+    -ms-transform: rotate(-30deg);
+
+    /* Opera */
+    -o-transform: rotate(-30deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+
+  }

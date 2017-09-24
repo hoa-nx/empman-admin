@@ -25,6 +25,7 @@ import { NativeDateAdapter } from "@angular/material";
 import { MdRadioModule } from '@angular/material';
 import { DndModule } from 'ng2-dnd';
 import { SessionService } from '../../core/services/session.service';
+import { CalendarModule } from 'primeng/primeng';
 
 const targetRoutes: Routes = [
   //localhost:4200/main/setting
@@ -82,7 +83,8 @@ export const MY_DATE_FORMATS = {
     MdAutocompleteModule,
     MdInputModule,
     MdRadioModule,
-    DndModule.forRoot()
+    DndModule.forRoot(),
+    CalendarModule
 
   ],
   declarations: [SettingComponent, ImportComponent],

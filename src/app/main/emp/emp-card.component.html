@@ -1,7 +1,7 @@
 <div class="panel panel-primary" [ngClass]="{shadowCard: onEdit}" [@flyInOut]="'in'">
     <div class="panel-heading">
         <!--<h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="{true : 'fa fa-male fa-1x', false:'fa fa-female'}[edittedUser.Gender]" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>-->
-        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="(edittedUser.Gender==true)?'fa fa-male fa-1x' : 'fa fa-female'" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>
+        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="(edittedUser.Gender==true)?'fa fa-male fa-1x' : 'fa fa-female'" aria-hidden="true"></i>{{edittedUser.FullName}}<a [routerLink]="['/main/emp/emp-timeline',edittedUser.ID]"><i class="fa fa-history pull-right" aria-hidden="true"></i></a> </h3>
         <input [(ngModel)]="edittedUser.FullName" [class.hidden]="!onEdit" [style.color]="'brown'" required class="form-control"
         />
         
@@ -20,17 +20,20 @@
                     <div *ngIf="!edittedUser.ShowAvatar" class=profile-picture-section-request-image-group>
                         <p class="profile-picture-section-request-image-instructions">Kéo hình vào</p>
                     </div>
-                    <div *ngIf="edittedUser.ShowAvatar" class="profile-picture-section-request-image-container">
-                        
-                        <img class="profile-picture-section-request-image" src="{{(edittedUser.ShowAvatar &&(!isFileChanged)) === false ? currentProfileImage : uriAvatarPath + edittedUser.Avatar}}"
-                        />
-                        
+                    <div *ngIf="edittedUser.ShowAvatar" class="profile-picture-section-request-image-container overtext">
+                        <img class="profile-picture-section-request-image" src="{{(edittedUser.ShowAvatar &&(!isFileChanged)) === false ? currentProfileImage : uriAvatarPath + edittedUser.Avatar}}"/>
                         <button class="btn btn-primary" [routerLink]="['/main/emp/edit',edittedUser.ID,'edit']" [disabled]="edittedUser.ID < 0">
-                        <i class="fa fa-alt" aria-hidden="true"></i> Chi tiết
+                            <i class="fa fa-alt" aria-hidden="true"></i> Chi tiết
                         </button>
+                        <span class="red-alert-text-rotation"  *ngIf="isJobLeaved(edittedUser)" >Nghỉ việc</span>
+                        <span class="red-alert-text-rotation"  *ngIf="isJobLeavedInFuture(edittedUser)" >Sắp nghỉ</span>
+                        <span class="red-alert-text-rotation"  *ngIf="isBabyYasumi(edittedUser)" >Nghỉ sinh</span>
+                        <span class="success-alert-text-rotation"  *ngIf="isOnsite(edittedUser)" >Onister</span>
+
                     </div>
                     
                 </div>
+                
             </div>
 
             <!-- Image drag and drop END-->

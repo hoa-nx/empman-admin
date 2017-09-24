@@ -36,6 +36,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class EmpBasicComponent implements OnInit, OnDestroy {
 
   @ViewChild('modalAddEdit') public modalAddEdit: ModalDirective;
+  @ViewChild('modalAddEditDetailWork') public modalAddEditDetailWork: ModalDirective;
 
   @ViewChild('avatar') avatar;
 
@@ -48,6 +49,14 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = '';
+
+  //DetailWork
+  public pageIndexDetailWork: number = 1;
+  public pageSizeDetailWork: number = 10;
+  public pageDisplayDetailWork: number = 10;
+  public totalRowDetailWork: number;
+  public filterDetailWork: string = '';
+
   public apiHost: string;
   public id: number;
   public entity: any;
@@ -58,10 +67,13 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public customers: any[];
   public companys: any[];
   public depts: any[];
+  public teamOrigins: any[];
   public teams: any[];
+
   public positions: any[];
   public bloodGroups: any[];
   public empTypes: any[];
+  public workEmpTypes: any[];
   public educationLevels: any[];
   public collects: any[];
   public bseLevels: any[];
@@ -70,8 +82,8 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public japaneseLevels: any[];
   public bussinessAllowanceLevels: any[];
   public allMasterDetails: any[];
-  public roomNoInternetAllowanceLevels : any[];
-  public roomWithInternetAllowanceLevels : any[];
+  public roomNoInternetAllowanceLevels: any[];
+  public roomWithInternetAllowanceLevels: any[];
 
   public emps: any[];
   public orderUnits: any[];
@@ -103,7 +115,9 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   private currentProfileImage: string = SystemConstants.BASE_WEB + '/assets/images/profile-default.png';
   public uriAvatarPath: string = SystemConstants.BASE_API;
   public trialResults: any[];
-  public jobLeaveReasons : any[];
+  public jobLeaveReasons: any[];
+
+  public entityDetailWork: any;
 
   constructor(
     private _route: ActivatedRoute,
@@ -123,6 +137,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.entity = {};
+    this.entityDetailWork = {};
     this.user = this._authenService.getLoggedInUser();
     //load master data va thuc thi cac xu ly load data chi tiet
     this.loadMultiTableCallBack();
@@ -158,6 +173,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     uri.push('/api/team/getall');
     uri.push('/api/position/getall');
     uri.push('/api/masterdetail/getall');
+    uri.push('/api/customer/getall');
 
     return this._dataService.getMulti(uri);
   }
@@ -168,6 +184,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         this.companys = response[0];
         this.depts = response[1];
+        this.teamOrigins = response[2];
         this.teams = response[2];
         this.positions = response[3];
         this.allMasterDetails = response[4];
@@ -177,10 +194,13 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
         this.roomNoInternetAllowanceLevels = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.RoomNoInternetAllowanceLevel);
         this.roomWithInternetAllowanceLevels = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.RoomWithInternetAllowanceLevel);
         this.empTypes = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.EmpType);
+        this.workEmpTypes = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.WorkEmpType);
         this.educationLevels = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.EducationLevel);
         this.collects = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.CollectNameList);
         this.bseLevels = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.BseAllowanceLevel);
         this.contractTypes = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.ContractType);
+
+        this.customers = response[5];
 
         //nhom mau 
         this.bloodGroups = BloodGroup.BloodGroups;
@@ -210,6 +230,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
         this.entity = response;
         this.formatDateDisplay();
         this.loadDataFile();
+        this.loadDetailWorkData();
         this._loaderService.displayLoader(false);
       },
       error => {
@@ -219,7 +240,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
 
   private loadAutoCompleteDataByCustomer() {
     this.trialResults = [];
-    this.jobLeaveReasons =[];
+    this.jobLeaveReasons = [];
 
     return this._dataService.get('/api/emp/getallautocompletedata')
       .subscribe((response: any) => {
@@ -288,6 +309,18 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
       this.entity.MarriedDate = moment(this.entity.MarriedDate).format('YYYY/MM/DD');
     }
 
+    if(this.entity.BabyBornStartDate){
+      this.entity.BabyBornStartDate = moment(this.entity.BabyBornStartDate).format('YYYY/MM/DD');
+    }
+
+    if(this.entity.BabyBornScheduleEndDate){
+      this.entity.BabyBornScheduleEndDate = moment(this.entity.BabyBornScheduleEndDate).format('YYYY/MM/DD');
+    }
+
+    if(this.entity.BabyBornActualEndDate){
+      this.entity.BabyBornActualEndDate = moment(this.entity.BabyBornActualEndDate).format('YYYY/MM/DD');
+    }
+
   }
 
   saveChange(valid: boolean) {
@@ -315,19 +348,20 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setMasterKbnId(){
+  private setMasterKbnId() {
 
-    this.entity.ContractTypeMasterID  = MasterKbnEnum.ContractType;
-    this.entity.EmpTypeMasterID  = MasterKbnEnum.EmpType;
-    this.entity.JapaneseLevelMasterID  = MasterKbnEnum.JapaneseLevel;
-    this.entity.BusinessAllowanceLevelMasterID  = MasterKbnEnum.BusinessAllowanceLevel;
-    this.entity.RoomWithInternetAllowanceLevelMasterID  = MasterKbnEnum.RoomWithInternetAllowanceLevel;
-    this.entity.RoomNoInternetAllowanceLevelMasterID  = MasterKbnEnum.RoomNoInternetAllowanceLevel;
-    this.entity.BseAllowanceLevelMasterID  = MasterKbnEnum.BseAllowanceLevel;
-    this.entity.CollectMasterID  = MasterKbnEnum.CollectNameList;
-    this.entity.EducationLevelMasterID  = MasterKbnEnum.EducationLevel;
+    this.entity.ContractTypeMasterID = MasterKbnEnum.ContractType;
+    this.entity.EmpTypeMasterID = MasterKbnEnum.EmpType;
+    this.entity.JapaneseLevelMasterID = MasterKbnEnum.JapaneseLevel;
+    this.entity.BusinessAllowanceLevelMasterID = MasterKbnEnum.BusinessAllowanceLevel;
+    this.entity.RoomWithInternetAllowanceLevelMasterID = MasterKbnEnum.RoomWithInternetAllowanceLevel;
+    this.entity.RoomNoInternetAllowanceLevelMasterID = MasterKbnEnum.RoomNoInternetAllowanceLevel;
+    this.entity.BseAllowanceLevelMasterID = MasterKbnEnum.BseAllowanceLevel;
+    this.entity.CollectMasterID = MasterKbnEnum.CollectNameList;
+    this.entity.EducationLevelMasterID = MasterKbnEnum.EducationLevel;
 
   }
+
   public onFocus(value: any) {
 
     switch (value.target.name) {
@@ -412,10 +446,10 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public selectedStartTrialDate(value: any) {
     this.entity.StartTrialDate = moment(value).format('YYYY/MM/DD');
     //tinh ra ngay ket thuc thu viec
-    if(this.entity.StartTrialDate){
+    if (this.entity.StartTrialDate) {
       this.entity.EndTrialDate = moment(this.calTrialEndDate(this.entity.StartTrialDate)).format('YYYY/MM/DD');
-    }else{
-      this.entity.EndTrialDate =null;
+    } else {
+      this.entity.EndTrialDate = null;
     }
   }
 
@@ -426,10 +460,10 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public selectedJobLeaveRequestDate(value: any) {
     this.entity.JobLeaveRequestDate = moment(value).format('YYYY/MM/DD');
     //tinh ra ngay lam viec cuoi cung
-    if(this.entity.JobLeaveRequestDate){
+    if (this.entity.JobLeaveRequestDate) {
       this.entity.JobLeaveDate = moment(this.calJobLeaveDate(this.entity.JobLeaveRequestDate)).format('YYYY/MM/DD');
-    }else{
-      this.entity.JobLeaveDate =null;
+    } else {
+      this.entity.JobLeaveDate = null;
     }
   }
 
@@ -452,10 +486,10 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   public selectedBabyBornStartDate(value: any) {
     this.entity.BabyBornStartDate = moment(value).format('YYYY/MM/DD');
     //tinh ra ngay nghi thai san 
-    if(this.entity.BabyBornStartDate){
+    if (this.entity.BabyBornStartDate) {
       this.entity.BabyBornScheduleEndDate = moment(this.calBabyScheduleEndDate(this.entity.BabyBornStartDate)).format('YYYY/MM/DD');
-    }else{
-      this.entity.BabyBornScheduleEndDate =null;
+    } else {
+      this.entity.BabyBornScheduleEndDate = null;
     }
   }
 
@@ -467,21 +501,21 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     this.entity.BabyBornActualEndDate = moment(value).format('YYYY/MM/DD');
   }
 
-  private calJobLeaveDate(requestDate : Date){
-    if(requestDate){
-      return DateTimeHelper.addDays(requestDate,45); 
+  private calJobLeaveDate(requestDate: Date) {
+    if (requestDate) {
+      return DateTimeHelper.addDays(requestDate, 45);
     }
   }
 
-  private calBabyScheduleEndDate(startDate : Date){
-    if(startDate){
-      return DateTimeHelper.addMonths(startDate,6); 
+  private calBabyScheduleEndDate(startDate: Date) {
+    if (startDate) {
+      return DateTimeHelper.addMonths(startDate, 6);
     }
   }
 
-  private calTrialEndDate(startDate : Date){
-    if(startDate){
-      return DateTimeHelper.addMonths(startDate,2); 
+  private calTrialEndDate(startDate: Date) {
+    if (startDate) {
+      return DateTimeHelper.addMonths(startDate, 2);
     }
   }
 
@@ -524,6 +558,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   pageChanged(event: any): void {
     this.pageIndex = event.page;
   }
+
   showAddModal() {
     this.entity = {};
     this.modalAddEdit.show();
@@ -532,6 +567,139 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     this.modalAddEdit.show();
   }
 
+  /**
+   * detail working 
+   */
+
+  loadDetailWorkData() {
+    this._dataService.get('/api/empdetailwork/getallpagingbyemp?&emp=' + this.entity.ID + '&keyword=' + this.filterDetailWork + '&page=' + this.pageIndexDetailWork + '&pageSize=' + this.pageSizeDetailWork)
+      .subscribe((response: any) => {
+        this.empDetailWorks = response.Items;
+        this.pageIndexDetailWork = response.PageIndex;
+        this.pageSizeDetailWork = response.PageSize;
+        this.totalRowDetailWork = response.TotalRows;
+      }, error => this._dataService.handleError(error));
+  }
+  pageChangedDetailWork(event: any): void {
+    this.pageIndexDetailWork = event.page;
+  }
+
+
+  deleteDetailWorkItem(id: any) {
+    this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/empdetailwork/delete/', 'id', id).subscribe((response: any) => {
+        this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
+        this.loadDetailWorkData();
+      });
+    });
+  }
+
+  showDetailWorkEditModal(id: any) {
+    this.loadDetailWorkEdit(id);
+    this.modalAddEditDetailWork.show();
+  }
+
+  loadDetailWorkEdit(id: any, isCopy : boolean=false) {
+    this._dataService.get('/api/empdetailwork/detail/' + id)
+      .subscribe((response: any) => {
+        this.entityDetailWork = response;
+        
+        if(this.entityDetailWork.StartDate){
+          this.entityDetailWork.StartDate = moment(new Date(this.entityDetailWork.StartDate)).format('YYYY/MM/DD');
+        }
+
+        if(this.entityDetailWork.EndDate){
+          this.entityDetailWork.EndDate = moment(new Date(this.entityDetailWork.EndDate)).format('YYYY/MM/DD');
+        }
+
+        this.onChangeDeptDetailWork(this.entityDetailWork.DeptID);
+
+        if(isCopy){
+          this.entityDetailWork.ID = undefined;
+        }
+
+      }, error => this._dataService.handleError(error));
+  }
+
+  saveChangeDetailWork(form: NgForm) {
+    if (form.valid) {
+      this.saveDataDetailWork(form);
+    }
+  }
+  private saveDataDetailWork(form: NgForm) {
+
+    this.setMasterKbnIdDetailWork();
+    if (this.entityDetailWork.ID == undefined) {
+      this._dataService.post('/api/empdetailwork/add', JSON.stringify(this.entityDetailWork))
+        .subscribe((response: any) => {
+          this.loadDetailWorkData();
+          this.modalAddEditDetailWork.hide();
+          form.resetForm();
+          this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+        }, error => this._dataService.handleError(error));
+    }
+    else {
+      this._dataService.put('/api/empdetailwork/update', JSON.stringify(this.entityDetailWork))
+        .subscribe((response: any) => {
+          this.loadDetailWorkData();
+          this.modalAddEditDetailWork.hide();
+          form.resetForm();
+          this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
+        }, error => this._dataService.handleError(error));
+    }
+  }
+
+  private setMasterKbnIdDetailWork() {
+    
+    this.entityDetailWork.ContractTypeMasterID = MasterKbnEnum.ContractType;
+    this.entityDetailWork.EmpTypeMasterID = MasterKbnEnum.EmpType;
+    this.entityDetailWork.WorkEmpType = MasterKbnEnum.WorkEmpType;
+    this.entityDetailWork.JapaneseLevelMasterID = MasterKbnEnum.JapaneseLevel;
+    this.entityDetailWork.BusinessAllowanceLevelMasterID = MasterKbnEnum.BusinessAllowanceLevel;
+    this.entityDetailWork.RoomWithInternetAllowanceLevelMasterID = MasterKbnEnum.RoomWithInternetAllowanceLevel;
+    this.entityDetailWork.RoomNoInternetAllowanceLevelMasterID = MasterKbnEnum.RoomNoInternetAllowanceLevel;
+    this.entityDetailWork.BseAllowanceLevelMasterID = MasterKbnEnum.BseAllowanceLevel;
+    this.entityDetailWork.CollectMasterID = MasterKbnEnum.CollectNameList;
+    this.entityDetailWork.EducationLevelMasterID = MasterKbnEnum.EducationLevel;
+
+  }
+  
+  public selectedStartDateDetailWork(value: any) {
+    this.entityDetailWork.StartDate = moment(value).format('YYYY/MM/DD');
+  }
+
+  public selectedEndDateDetailWork(value: any) {
+    this.entityDetailWork.EndDate = moment(value).format('YYYY/MM/DD');
+  }
+
+  public onChangeCompanyDetailWork(value: any) {
+    if (value) {
+
+    }
+  }
+
+  public onChangeDeptDetailWork(value: any) {
+    if (value) {
+      this.teams = this.teamOrigins.filter(x => (x.DeptID==value || x.DeptID==0));
+    }
+  }
+
+  public onChangeTeamDetailWork(value: any) {
+    if (value) {
+
+    }
+  }
+
+  public onChangePositionDetailWork(value: any) {
+    if (value) {
+
+    }
+  }
+  public onChangeOnsiteCustomer(value: any) {
+    if (value) {
+
+    }
+  }
 
   /**
    * upload file to serve
@@ -593,7 +761,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
           this._sanitizer.bypassSecurityTrustUrl(fileURL);
           window.open(fileURL);
         } else {
-          saveAs(response , file.FileName);
+          saveAs(response, file.FileName);
         }
 
       });
@@ -661,29 +829,29 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     switch (event.target.name) {
 
       case 'StartTrialDate':
-          //tinh ra ngay end thu viec
-          if(this.entity.JobLeaveRequestDate){
-            this.entity.EndTrialDate = moment(this.calTrialEndDate(this.entity.StartTrialDate)).format('YYYY/MM/DD');
-          }else{
-            this.entity.EndTrialDate =null;
-          }
+        //tinh ra ngay end thu viec
+        if (this.entity.JobLeaveRequestDate) {
+          this.entity.EndTrialDate = moment(this.calTrialEndDate(this.entity.StartTrialDate)).format('YYYY/MM/DD');
+        } else {
+          this.entity.EndTrialDate = null;
+        }
         break;
-      case 'JobLeaveRequestDate': 
-          //tinh ra ngay lam viec cuoi cung
-          if(this.entity.JobLeaveRequestDate){
-            this.entity.JobLeaveDate = moment(this.calJobLeaveDate(this.entity.JobLeaveRequestDate)).format('YYYY/MM/DD');
-          }else{
-            this.entity.JobLeaveDate =null;
-          } 
+      case 'JobLeaveRequestDate':
+        //tinh ra ngay lam viec cuoi cung
+        if (this.entity.JobLeaveRequestDate) {
+          this.entity.JobLeaveDate = moment(this.calJobLeaveDate(this.entity.JobLeaveRequestDate)).format('YYYY/MM/DD');
+        } else {
+          this.entity.JobLeaveDate = null;
+        }
         break;
 
       case 'BabyBornStartDate':
-          //tinh ra ngay nghi thai san 
-          if(this.entity.BabyBornStartDate){
-            this.entity.BabyBornScheduleEndDate = moment(this.calBabyScheduleEndDate(this.entity.BabyBornStartDate)).format('YYYY/MM/DD');
-          }else{
-            this.entity.BabyBornScheduleEndDate =null;
-          }
+        //tinh ra ngay nghi thai san 
+        if (this.entity.BabyBornStartDate) {
+          this.entity.BabyBornScheduleEndDate = moment(this.calBabyScheduleEndDate(this.entity.BabyBornStartDate)).format('YYYY/MM/DD');
+        } else {
+          this.entity.BabyBornScheduleEndDate = null;
+        }
         break;
 
       case 'OrderProjectSumMM':

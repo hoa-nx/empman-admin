@@ -42,54 +42,58 @@
 
                                 <!-- list item-->
                                 <a *ngIf="empContractedCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedcount')" class="list-group-item">
-                  Số LTV chính thức đang làm việc
-                  <span class="badge badge-primary">{{empContractedCount}}</span>
-                </a>
-                                <!-- list item-->
-                                <a *ngIf="empContractedJobLeavedCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedjobleavedcount')"  class="list-group-item">
-                  Số LTV chính thức đã nghỉ
-                  <span class="badge badge-primary">{{empContractedJobLeavedCount}}</span>
-                </a>
-                                <!-- list item-->
-                                <a *ngIf="empContractedJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedjobleavedinprocessingyearcount')" class="list-group-item">
-                  Số LTV chính thức nghỉ việc năm {{processingYear}}
-                  <span class="badge badge-danger">{{empContractedJobLeavedInProcessingYearCount}}</span>
-                </a>
-                                <!-- list item-->
-                                <a *ngIf="empTrialJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialjobleavedinprocessingyearcount')" class="list-group-item">
-                  LTV thử việc không nhận chính thức năm {{processingYear}}
-                  <span class="badge badge-warning">{{empTrialJobLeavedInProcessingYearCount}}</span>
-                </a>
-
-                                <!-- list item-->
-                                <a *ngIf="empContractedLTNMonthCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('contractedltnmonthcount')"  class="list-group-item">
-                  Số LTV chính thức nhỏ hơn {{expMonth}} tháng
-                  <span class="badge">{{empContractedLTNMonthCount}}</span>
-                </a>
-
-                                <!-- list item-->
-                                <a *ngIf="empOnsiteCount!=0" href="javascript:void(0);" class="list-group-item">
-                  LTV onsite dài hạn
-                  <span class="badge badge-success">{{empOnsiteCount}}</span>
-                </a>
-
+                                ※Số LTV chính thức đang làm việc(+onsite)
+                                    <span class="badge badge-primary">{{empContractedCount}}</span>
+                                </a>
                                 <!-- list item-->
                                 <a *ngIf="empOtherCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('othercount')" class="list-group-item">
-                  NV tổng vụ , qui trình
-                  <span class="badge badge-pink">{{empOtherCount}}</span>
-                </a>
+                                        ※Số NV tổng vụ , qui trình chính thức
+                                    <span class="badge badge-pink">{{empOtherCount}}</span>
+                                </a>
+                                <!-- list item-->
+                                <a *ngIf="empOnsiteCount!=0" href="javascript:void(0);" class="list-group-item">
+                                        Số NV onsite dài hạn
+                                    <span class="badge badge-success">{{empOnsiteCount}}</span>
+                                </a>
+                                <!-- list item-->
+                                <a *ngIf="empContractedLTNMonthCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('contractedltnmonthcount')"  class="list-group-item">
+                                    Số NV chính thức nhỏ hơn {{expMonth}} tháng
+                                    <span class="badge">{{empContractedLTNMonthCount}}</span>
+                                </a>
+                                <!-- list item-->
+                                <a *ngIf="empTrialCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialcount')" class="list-group-item">
+                                        ※Số NV đang thử việc
+                                    <span class="badge badge-warning">{{empTrialCount}}</span>
+                                </a>
+
+                                <!-- list item-->
+                                <!-- <a *ngIf="empContractedJobLeavedCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedjobleavedcount')"  class="list-group-item">
+                                    Tổng NV chính thức đã nghỉ
+                                    <span class="badge badge-primary">{{empContractedJobLeavedCount}}</span>
+                                </a> -->
+
+                                <!-- list item-->
+                                <a *ngIf="empContractedJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('contractedjobleavedinprocessingyearcount')" class="list-group-item">
+                                    ※Số NV chính thức nghỉ việc năm {{processingYear}}
+                                    <span class="badge badge-danger">{{empContractedJobLeavedInProcessingYearCount}}</span>
+                                </a>
+                                <!-- list item-->
+                                <a *ngIf="empTrialInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialInProcessingYearCount')" class="list-group-item">
+                                        ※Tổng NV thử việc năm {{processingYear}}
+                                    <span class="badge badge-warning">{{empTrialInProcessingYearCount}}</span>
+                                </a>
+
+                                <!-- list item-->
+                                <a *ngIf="empTrialJobLeavedInProcessingYearCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialjobleavedinprocessingyearcount')" class="list-group-item">
+                                        ※Số NV không nhận chính thức năm {{processingYear}}
+                                    <span class="badge badge-warning">{{empTrialJobLeavedInProcessingYearCount}}</span>
+                                </a>
 
                                 <!-- list item-->
                                 <a *ngIf="empTransCount!=0" href="javascript:void(0);"  (click)="displayEmpByType('transcount')"  class="list-group-item">
-                  NV Phiên dịch
-                  <span class="badge badge-purple">{{empTransCount}}</span>
-                </a>
-
-                                <!-- list item-->
-                                <a *ngIf="empTrialCount!=0" href="javascript:void(0);" (click)="displayEmpByType('trialcount')" class="list-group-item">
-                  LTV đang thử việc
-                  <span class="badge badge-warning">{{empTrialCount}}</span>
-                </a>
+                                        ※Số NV phiên dịch đang làm việc
+                                    <span class="badge badge-purple">{{empTransCount}}</span>
+                                </a>
 
                         </ul>
                         </li>

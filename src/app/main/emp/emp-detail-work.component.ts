@@ -62,6 +62,10 @@ export class EmpDetailWorkComponent implements OnInit {
   public totalRow: number;
   public filter: string = '';
 
+  public chkCustomer: boolean = false;
+  public customers: any[] = [];
+  public selectCustomers: any[] = [];
+  
   public chkDept: boolean = false;
   public depts: any[] = [];
   public selectDepts: any[] = [];
@@ -103,7 +107,7 @@ export class EmpDetailWorkComponent implements OnInit {
   public educationLevels: any[] = [];
   public selectEducationLevels: any[] = [];
 
-  public chkCollects: boolean = false;
+  public chkCollect: boolean = false;
   public collects: any[] = [];
   public selectCollects: any[] = [];
 
@@ -144,6 +148,7 @@ export class EmpDetailWorkComponent implements OnInit {
 
   ngOnInit() {
     this.entity = {};
+    this.entity.IsDetailWorkCreateData = false;
     this.user = this._authenService.getLoggedInUser();
     //load master data va thuc thi cac xu ly load data chi tiet
     this.loadMultiTableCallBack();
@@ -174,6 +179,7 @@ export class EmpDetailWorkComponent implements OnInit {
     uri.push('/api/position/getall');
     uri.push('/api/masterdetail/getall');
     uri.push('/api/emp/getall');
+    uri.push('/api/customer/getall');
 
     return this._dataService.getMulti(uri);
   }
@@ -191,7 +197,8 @@ export class EmpDetailWorkComponent implements OnInit {
 
         this.emps = response[4];
         this.sourceEmps = response[4];
-
+        this.customers = MappingService.mapIdNameToDropdownModel(response[5]);
+        
         this.japaneseLevels = MappingService.mapMasterDetailToDropdownModel(this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.JapaneseLevel));
 
         this.bussinessAllowanceLevels = MappingService.mapMasterDetailToDropdownModel(this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.BusinessAllowanceLevel));
@@ -257,6 +264,7 @@ export class EmpDetailWorkComponent implements OnInit {
         */
         if (this.chkWorkEmpType) {
           this.entity.WorkEmpTypeMasterDetailID = this.selectWorkEmpTypes[0];
+          this.entity.OnsiteCustomerID = this.selectCustomers[0];
           hasItemUpdate = true;
         }
         if (this.chkEmpType) {
@@ -283,7 +291,7 @@ export class EmpDetailWorkComponent implements OnInit {
           this.entity.BseAllowanceLevelMasterDetailID = this.selectBseLevels[0];
           hasItemUpdate = true;
         }
-        if (this.chkCollects) {
+        if (this.chkCollect) {
           this.entity.CollectMasterDetailID = this.selectCollects[0];
           hasItemUpdate = true;
         }
@@ -371,6 +379,26 @@ export class EmpDetailWorkComponent implements OnInit {
 
   changeCheckboxWorkEmpTypes() {
 
+  }
+
+  onChangeWorkEmpTypes(event:any){
+    
+  }
+
+  changeCheckboxDetailWorkCreateData(vent : any){
+
+  }
+
+  changeCheckboxEducationLevel(vent : any){
+    
+  }
+
+  changeCheckboxCollect(vent : any){
+    
+  }
+
+  changeCheckboxContractType(vent : any){
+    
   }
 
   back() {

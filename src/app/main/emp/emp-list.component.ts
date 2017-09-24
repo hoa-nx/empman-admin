@@ -21,6 +21,7 @@ import { SharedComponentService } from '../../core/services/sharedcomponent.serv
 export class EmpListComponent implements OnInit {
 
     users: IEmp[];
+
     addingUser: boolean = false;
 
     public pageIndex: number = 1;
@@ -53,6 +54,9 @@ export class EmpListComponent implements OnInit {
         processingYear : 0,
         expMonth : 4,
     }
+
+    public onsiteDatas : any[];
+    
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
@@ -75,7 +79,8 @@ export class EmpListComponent implements OnInit {
                 this.filter = params['filter'] || '';
                 this.loadData();
             });
-       
+       //get data onsiet
+       this.loadOnsiteData();
     }
 
     loadData() {
@@ -113,7 +118,7 @@ export class EmpListComponent implements OnInit {
 
             },
             error => {
-                this._notificationService.printErrorMessage('Có lỗi xảy ra khi lấy danh sách nhân viên' + error);
+                this._dataService.handleError(error);
             });
     }
 
@@ -275,6 +280,14 @@ export class EmpListComponent implements OnInit {
         this.loadData();
     }
 
+    loadOnsiteData() {
+        this._dataService.get('/api/empdetailwork/getonistebyemp')
+        .subscribe((response: any) => {
+          this.onsiteDatas = response;
+        }, error => this._dataService.handleError(error));
+        
+    }
+    
 
 
 }

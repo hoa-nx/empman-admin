@@ -14,7 +14,7 @@
 
     <!--<div class="col-md-4 col-sm-6 hero-feature" *ngFor="let user of emps; trackBy: trackByFn">-->
     <div class="col-md-4 col-sm-6 hero-feature" *ngFor="let user of emps">
-        <emp-card [user]="user" (removeUser)="removeUser($event);" (userCreated)="userCreated($event);"></emp-card>
+        <emp-card [user]="user" [onsitedatas]="onsiteDatas" (removeUser)="removeUser($event);" (userCreated)="userCreated($event);"></emp-card>
     </div>
 
     <!-- paging -->

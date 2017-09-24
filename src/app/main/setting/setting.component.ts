@@ -119,6 +119,11 @@ export class SettingComponent implements OnInit {
   public jobLeaveDateFrom: any;
   public jobLeaveDateTo: any;
 
+  public chkGetDataToDate: boolean = false;
+  public getDataToDateFrom: any;
+  public getDataToDateTo: any;
+
+
   public chkLearning: boolean = false;
   public chkTrainingInclude: boolean = false;
   public chkExperence: boolean = false;
@@ -158,6 +163,7 @@ export class SettingComponent implements OnInit {
     empTrialJobLeavedCount: 0,
     empContractedJobLeavedInProcessingYearCount: 0,
     empTrialJobLeavedInProcessingYearCount: 0,
+    empTrialInProcessingYearCount : 0,
     processingYear: 0,
     expMonth: 4,
   }
@@ -259,7 +265,7 @@ export class SettingComponent implements OnInit {
         //this.setSystemValueUpdate();
         this.mapFilterToModel();
 
-      });
+      }, error => this._dataService.handleError(error));
   }
 
   mapFilterToModel() {
@@ -337,6 +343,19 @@ export class SettingComponent implements OnInit {
       this.jobLeaveDateTo = null;
     }
 
+    this.chkGetDataToDate = this.searchFilterEntity.chkGetDataToDate;
+    if (this.searchFilterEntity.getDataToDateFrom) {
+      this.getDataToDateFrom = moment(this.searchFilterEntity.getDataToDateFrom).format('YYYY/MM/DD');
+    } else {
+      this.getDataToDateFrom = null;
+    }
+
+    if (this.searchFilterEntity.getDataToDateTo) {
+      this.getDataToDateTo = moment(this.searchFilterEntity.getDataToDateTo).format('YYYY/MM/DD');
+    } else {
+      this.getDataToDateTo = null;
+    }
+
     this.chkExperence = this.searchFilterEntity.chkExperence;
 
     this.chkLearning = this.searchFilterEntity.chkLearning;
@@ -399,6 +418,10 @@ export class SettingComponent implements OnInit {
       jobLeaveDateFrom: this.jobLeaveDateFrom,
       jobLeaveDateTo: this.jobLeaveDateTo,
 
+      chkGetDataToDate: this.chkGetDataToDate,
+      getDataToDateFrom: this.getDataToDateFrom,
+      getDataToDateTo: this.getDataToDateTo,
+
       chkExperence: this.chkExperence,
 
       chkLearning: this.chkLearning,
@@ -453,6 +476,10 @@ export class SettingComponent implements OnInit {
       this.filterViewModel.chkJobLeaveDate = this.chkJobLeaveDate;
       this.filterViewModel.jobLeaveDateFrom = this.jobLeaveDateFrom;
       this.filterViewModel.jobLeaveDateTo = this.jobLeaveDateTo;
+
+      this.filterViewModel.chkGetDataToDate = this.chkGetDataToDate;
+      this.filterViewModel.getDataToDateFrom = this.getDataToDateFrom;
+      this.filterViewModel.getDataToDateTo = this.getDataToDateTo;
 
       this.filterViewModel.chkExperence = this.chkExperence;
 
@@ -554,6 +581,17 @@ export class SettingComponent implements OnInit {
     this.entity.ProcessingYear = moment(value.start).format('YYYY/MM/DD');
   }
 
+  public selectedGetDataToDateFrom(value: any) {
+    //this.getDataToDateFrom = moment(value.start).format('YYYY/MM/DD');
+    this.getDataToDateFrom = moment(value).format('YYYY/MM/DD');
+  }
+
+  public selectedGetDataToDateTo(value: any) {
+    //this.getDataToDateTo = moment(value.start).format('YYYY/MM/DD');
+    this.getDataToDateTo = moment(value).format('YYYY/MM/DD');
+  }
+
+  
 
   changeCheckboxDept(event) {
 
@@ -589,6 +627,10 @@ export class SettingComponent implements OnInit {
 
   changeCheckboxJobLeaveDate(event) {
 
+  }
+
+  changeCheckboxGetDataToDate(event) {
+    
   }
 
   addToSortItems($event: any) {
@@ -632,6 +674,7 @@ export class SettingComponent implements OnInit {
 
           this.sendValueToTopMenu.empTrialJobLeavedInProcessingYearCount = this.emps[0].TrialJobLeavedInProcessingYearCount | 0;
           this.sendValueToTopMenu.empContractedJobLeavedInProcessingYearCount = this.emps[0].ContractedJobLeavedInProcessingYearCount | 0;
+          this.sendValueToTopMenu.empTrialInProcessingYearCount = this.emps[0].TrialInProcessingYearCount | 0;
           this.sendValueToTopMenu.processingYear = this.emps[0].ProcessingYear | 0;
         }
 
@@ -641,7 +684,7 @@ export class SettingComponent implements OnInit {
 
       },
       error => {
-        this._notificationService.printErrorMessage('Có lỗi xảy ra khi lấy danh sách nhân viên' + error);
+        this._dataService.handleError(error);
       });
   }
 

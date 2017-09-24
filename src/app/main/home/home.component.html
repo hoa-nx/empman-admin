@@ -174,7 +174,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-group">
-                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClick()">
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClickByCustomer()">
                         <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
                                                 <button type="button" class="btn btn-primary" (click)="btnPrintReportClick()">
                         <i class="fa fa-print" aria-hidden="true"></i>Báo cáo</button>
@@ -198,18 +198,16 @@
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-4 m-t-10 m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Tháng năm bắt đầu</label>
+                                            <div class="col-md-3 m-t-10 m-b-20">
                                                 <p-calendar [showIcon]="true" [(ngModel)]="StartDate" [ngModelOptions]="{standalone: true}" (onSelect)="selectedStartDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Tháng năm bắt đầu"
                                                     required></p-calendar>
                                             </div>
                                             <div class="col-md-4 m-t-10 m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>Tháng năm kết thúc</label>
+                                                <label class="control-label"><i class="fa" aria-hidden="true"></i>　～　</label>
                                                 <p-calendar [showIcon]="true" [(ngModel)]="EndDate" [ngModelOptions]="{standalone: true}" (onSelect)="selectedEndDate($event)" dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2100" class="focusedInput" placeholder="Tháng năm kết thúc"
                                                     required></p-calendar>
                                             </div>
                                             <div class="col-md-2 m-t-10 m-b-20">
-                                                <label class="control-label"><i class="fa" aria-hidden="true"></i></label><br>
                                                 <button type="button" [disabled]="!homeForm.form.valid" class="btn btn-default" (click)="getEmpCountByMonthly(homeForm.valid)">Hiển thị</button>
                                             </div>
                                         </div>
@@ -224,7 +222,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-group">
-                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClick()">
+                                                <button type="button" class="btn btn-primary" (click)="btnPrintChartClickByEmpListByMonthly()">
                         <i class="fa fa-print" aria-hidden="true"></i>In biểu đồ</button>
                                                 <button type="button" class="btn btn-primary" (click)="btnPrintReportClick()">
                         <i class="fa fa-print" aria-hidden="true"></i>Báo cáo</button>

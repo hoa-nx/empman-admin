@@ -1,0 +1,51 @@
+<div class="row">
+        <div class="col-md-12">
+            <div class="card-box">
+                <h4 *ngIf="empDetailWorks && empDetailWorks.length > 0"  class="m-t-0 header-title"><b>Quá trình làm việc {{empDetailWorks[0].Name}}</b></h4>
+                <!-- Header -->
+                <!-- <div class="row">
+                    <div class="col-md-2 col-sm-6 col-xs-12 form-group">
+                        
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-12 form-group">
+                        <div class="form-group contact-search m-b-30">
+                            <input type="text" id="search" class="form-control" placeholder="Tìm ..." name="filter" (keyup.enter)="search()" [(ngModel)]="filterKeyword">
+                            <button class="btn btn-white" (click)="search()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-6 col-xs-12 form-group">
+                        <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
+                    </div>
+                </div> -->
+
+                <section id="cd-timeline" class="cd-container">
+                    <div *ngIf="empDetailWorks && empDetailWorks.length > 0" class="cd-timeline-block">
+                        <div class="cd-timeline-img circular--portrait">
+                            <img alt="user-img" src="{{uriApi + avatar}}">
+                        </div> <!-- cd-timeline-img -->
+
+                        <div class="cd-timeline-content">
+                            <h3><a [routerLink]="['/main/emp/edit',empDetailWorks[0].ID,'edit']">{{empDetailWorks[0].Name}}</a></h3>
+                            
+                            <p>{{empDetailWorks[0].CollectName}}</p>
+                            <span class="cd-date">{{empDetailWorks[0].KeikenFromContractMonths}} tháng</span>
+                        </div> <!-- cd-timeline-content -->
+                    </div> <!-- cd-timeline-block -->
+                        
+                    <div class="cd-timeline-block" *ngFor="let item of empDetailWorks; let i = index;">
+                        
+                        <div class="cd-timeline-img {{item.CssName}}">
+                            <i class="{{item.Icon}}"></i>
+                        </div> <!-- cd-timeline-img -->
+    
+                        <div class="cd-timeline-content">
+                            <h3>{{item.Title}}</h3>
+                            <p>{{item.Description}}</p>
+                            <span class="cd-date">{{item.StartDate| date : 'yyyy/MM/dd'}}</span>
+                        </div> <!-- cd-timeline-content -->
+                    </div> <!-- cd-timeline-block -->
+    
+                </section> <!-- cd-timeline -->
+            </div><!-- card-box -->
+        </div> <!--col-md-12-->
+    </div><!-- Row -->

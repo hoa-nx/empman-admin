@@ -635,6 +635,10 @@ export interface IEmpFilterViewModel {
     jobLeaveDateFrom?: any;
     jobLeaveDateTo?: any;
 
+    chkGetDataToDate?: boolean;
+    getDataToDateFrom?: any;
+    getDataToDateTo?: any;
+
     chkLearning?: boolean;
 
     chkTrainingInclude?: boolean;
