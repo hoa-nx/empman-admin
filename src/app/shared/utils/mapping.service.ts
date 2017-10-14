@@ -193,8 +193,8 @@ export class MappingService {
     let model: any[] = [];
     data.map(item => {
         model.push({
-            label: item.ID,
-            value: item.Name
+            label: item.Name,
+            value: item.MasterDetailCode
         });
     });
     return model;

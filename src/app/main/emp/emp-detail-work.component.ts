@@ -348,36 +348,36 @@ export class EmpDetailWorkComponent implements OnInit {
   }
 
 
-  changeCheckboxDept(event) {
+  changeCheckboxDept(event:any) {
 
   }
 
-  changeCheckboxTeam(event) {
+  changeCheckboxTeam(event:any) {
 
   }
 
-  changeCheckboxPosition(event) {
+  changeCheckboxPosition(event:any) {
 
   }
 
-  changeCheckboxEmpType(event) {
+  changeCheckboxEmpType(event:any) {
 
   }
 
 
-  changeCheckboxJapaneseLevel(event) {
+  changeCheckboxJapaneseLevel(event:any) {
 
   }
 
-  changeCheckboxBussinessAllowanceLevel(event) {
+  changeCheckboxBussinessAllowanceLevel(event:any) {
 
   }
 
-  changeCheckboxBseLevel(event) {
+  changeCheckboxBseLevel(event:any) {
 
   }
 
-  changeCheckboxWorkEmpTypes() {
+  changeCheckboxWorkEmpTypes(event:any) {
 
   }
 
@@ -385,22 +385,30 @@ export class EmpDetailWorkComponent implements OnInit {
     
   }
 
-  changeCheckboxDetailWorkCreateData(vent : any){
+  changeCheckboxDetailWorkCreateData(event : any){
 
   }
 
-  changeCheckboxEducationLevel(vent : any){
+  changeCheckboxEducationLevel(event : any){
     
   }
 
-  changeCheckboxCollect(vent : any){
+  changeCheckboxCollect(event : any){
     
   }
 
-  changeCheckboxContractType(vent : any){
+  changeCheckboxContractType(event : any){
     
   }
 
+  changeCheckboxRoomWithInternetAllowanceLevel(event : any){
+
+  }
+
+  changeCheckboxRoomNoInternetAllowanceLevel(event : any){
+    
+  }
+  
   back() {
     this._router.navigateByUrl(this.backUrl);
   }

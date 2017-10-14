@@ -72,7 +72,7 @@
                                             {{item.EstimateEmpName}}
                                         </td>
 
-                                        <td>{{item.CustomerYosanMM| currency:'MM':true:'1.0-0'}}</td>
+                                        <td>{{item.CustomerYosanMM}}</td>
                                         <td>{{item.EstimateDetailMM}}</td>
                                         <td>{{item.EstimateDevMM}}</td>
                                         <td>{{item.EstimateUtMM}}</td>
@@ -85,10 +85,22 @@
 
                                         <td>{{item.Note}}</td>
                                         <td>
+                                            <input type="file" multiple="true" accept=".xls,.xlsx,.doc,.docx,.pdf,.gif,.jpg,.png" name="fileUpload" #fileUpload [(ngModel)]="item.fileUpload" [id]="item.ID" [name]="item.ID" [ngModelOptions]="{standalone: true}" (change)="uploadFiles(item , $event)"
+                                            style="visibility: hidden;">
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="fileUpload.click()" title="Upload các file liên quan"><i class="fa fa-upload"></i></a>
                                             <a href="javascript:void(0)" class="table-action-btn"[routerLink]="['../../estimate/edit',item.ID,'edit']"  title="Cập nhật thông tin báo giá"><i class="md md-edit"></i></a>
                                             <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close" title="Xóa báo giá"></i></a>
-
+                                            <div class="btn-group">
+                                                <a *ngIf="item.AttachmentFileLists[0]" href="javascript:void(0)" class="table-action-btn"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-download"></i></a>
+                                                <ul class="dropdown-menu drop-menu-right" role="menu">
+                                                    <li *ngFor="let file of item.AttachmentFileLists">
+                                                        <div class="form-group">
+                                                            <a href="javascript:void(0)" (click)="downloadItemFile(file)" routerLinkActive="active">{{file.FileName}}</a>
+                                                            <a href="javascript:void(0)" (click)="deleteItemFile(file)" routerLinkActive="active"><span class="m-l-5"><i class="fa fa-close deleteIconColor"></i></span></a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
 
                                         </td>
                                     </tr>

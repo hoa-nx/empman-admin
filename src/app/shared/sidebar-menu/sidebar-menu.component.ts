@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { DataService } from './../../core/services/data.service';
 
 declare var $: any;
@@ -7,9 +7,19 @@ declare var $: any;
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.css']
 })
-export class SidebarMenuComponent implements OnInit {
+export class SidebarMenuComponent implements OnInit, AfterViewInit  {
   public functions: any[];
-  constructor(private dataService: DataService) { }
+  public menuHtml: string;
+  
+
+  @ViewChild('menuHtml') menu: ElementRef;
+
+  constructor(
+    private dataService: DataService,
+    private renderer: Renderer
+  ) {
+
+  }
 
   ngOnInit() {
     this.dataService.get('/api/function/getlisthierarchy').subscribe((response: any[]) => {
@@ -20,17 +30,22 @@ export class SidebarMenuComponent implements OnInit {
           return -1;
         return 0;
       });
+      
+      console.log(this.functions);
+
     }, error => this.dataService.handleError(error));
+
+    
   }
   //fix loi khong the toogle menu
   ngAfterViewInit() {
-    /*setTimeout(_ => {
-      $.getScript("../../assets/js/jquery.app.js", function () {
+     /* setTimeout(_ => {
+      $.getScript("assets/js/jquery.app.js", function () {
         //do some things  
-        console.log("SidebarMenuComponent");
+        console.log("sidebar-menu.component.ts ngAfterViewInit");
       });
-    });*/
-
+    });  */
+    
   }
 
 

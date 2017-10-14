@@ -71,8 +71,10 @@ export class TeamComponent implements OnInit {
 
   public search() {
     this._loaderService.displayLoader(true);
-    this._dataService.get('/api/team/getall?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword + '&filterDeptID=' + this.filterDeptID)
+    this._dataService.get('/api/team/getallpagingbydept?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword + '&filterDeptID=' + this.filterDeptID)
+    //this._dataService.get('/api/team/getallpaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword)
       .subscribe((response: any) => {
+        console.log(response);
         this.teams = response.Items;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;

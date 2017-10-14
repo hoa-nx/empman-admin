@@ -3,7 +3,7 @@ import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UtilityService } from '../../core/services/utility.service';
 import { AuthenService } from '../../core/services/authen.service';
-import { SystemConstants, DateRangePickerConfig } from '../../core/common/system.constants';
+import { SystemConstants, DateRangePickerConfig, ApllRoles } from '../../core/common/system.constants';
 import { MessageContstants } from '../../core/common/message.constants';
 import * as moment from 'moment';
 import { ISearchItemViewModel, IMasterDetailItemViewModel, PaginatedResult, IEmpFilterViewModel, ISystemValueViewModel } from '../../core/interfaces/interfaces';
@@ -62,14 +62,17 @@ export class SettingComponent implements OnInit {
   public totalRow: number;
   public filter: string = '';
 
+  public isPermissionDeptChange: boolean = false;
   public chkDept: boolean = false;
   public depts: any[] = [];
   public selectDepts: any[] = [];
 
+  public isPermissionTeamChange: boolean = false;
   public chkTeam: boolean = false;
   public teams: any[] = [];
   public selectTeams: any[] = [];
 
+  public isPermissionPositionChange: boolean = false;
   public chkPosition: boolean = false;
   public positions: any[] = [];
   public selectPositions: any[] = [];
@@ -207,6 +210,9 @@ export class SettingComponent implements OnInit {
 
     this.loadDataSearchFilter();
 
+    //kiem tra quyen han
+    this.settingUsableItemPermission(this.user);
+        
   }
 
   /**
@@ -266,6 +272,34 @@ export class SettingComponent implements OnInit {
         this.mapFilterToModel();
 
       }, error => this._dataService.handleError(error));
+  }
+
+  settingUsableItemPermission(user : LoggedInUser){
+    let userRoles : any[] = user.roles;
+
+    let isAdminRole = userRoles.includes(ApllRoles.ADMIN) ;
+    let isLeaderRole = userRoles.includes(ApllRoles.LEADER) ;
+
+    if(isAdminRole){
+      //co quyen han admin
+      this.isPermissionDeptChange = true;
+      this.isPermissionPositionChange = true;
+      this.isPermissionTeamChange = true;
+    }
+
+    if(isLeaderRole){
+      this.isPermissionDeptChange = false;
+      //setting init dept
+      this.chkDept = true;
+      let defaultDept = this.depts.find( x => x.id==user.deptid);
+      this.selectDepts =  [+user.deptid];
+      
+      //setting init team 
+      this.isPermissionTeamChange = false;
+      this.chkTeam = true;
+      this.selectTeams =  [+user.teamid];
+    }
+
   }
 
   mapFilterToModel() {
@@ -377,6 +411,8 @@ export class SettingComponent implements OnInit {
     }
     //system value
     this.setSystemValueUpdate();
+    //kiem tra quyen han
+    this.settingUsableItemPermission(this.user);
   }
 
   initSearchFilterModel() {
@@ -438,7 +474,8 @@ export class SettingComponent implements OnInit {
   }
 
   saveChange(val) {
-
+    //kiem tra quyen han
+    this.settingUsableItemPermission(this.user);
     if (val) {
       this.filterViewModel.chkDept = this.chkDept;
       this.filterViewModel.selectDepts = this.selectDepts;
@@ -594,7 +631,7 @@ export class SettingComponent implements OnInit {
   
 
   changeCheckboxDept(event) {
-
+    console.log(this.selectDepts);
   }
 
   changeCheckboxTeam(event) {

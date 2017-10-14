@@ -60,7 +60,9 @@ export const mainRoutes: Routes = [
             //localhost:4200/main/recruitment-staff
             { path: 'recruitment-staff', loadChildren: './recruitment-staff/recruitment-staff.module#RecruitmentStaffModule' },
             //localhost:4200/main/recruitment-interview
-            { path: 'recruitment-interview', loadChildren: './recruitment-interview/recruitment-interview.module#RecruitmentInterviewModule' }
+            { path: 'recruitment-interview', loadChildren: './recruitment-interview/recruitment-interview.module#RecruitmentInterviewModule' },
+            //localhost:4200/main/job
+            { path: 'job', loadChildren: './job/job.module#JobModule' }
 
             //localhost:4200/main/file-storage
             //{ path: 'file-storage', loadChildren: './file-storage/file-storage.module#FileStorageModule' },

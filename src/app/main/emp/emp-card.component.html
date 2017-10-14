@@ -1,7 +1,7 @@
 <div class="panel panel-primary" [ngClass]="{shadowCard: onEdit}" [@flyInOut]="'in'">
     <div class="panel-heading">
         <!--<h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="{true : 'fa fa-male fa-1x', false:'fa fa-female'}[edittedUser.Gender]" aria-hidden="true"></i>{{edittedUser.FullName}}</h3>-->
-        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="(edittedUser.Gender==true)?'fa fa-male fa-1x' : 'fa fa-female'" aria-hidden="true"></i>{{edittedUser.FullName}}<a [routerLink]="['/main/emp/emp-timeline',edittedUser.ID]"><i class="fa fa-history pull-right" aria-hidden="true"></i></a> </h3>
+        <h3 class="panel-title pull-left" [class.hidden]="onEdit"><i [ngClass]="(edittedUser.Gender==true)?'fa fa-male fa-1x' : 'fa fa-female'" aria-hidden="true"></i>{{edittedUser.FullName}}<a [routerLink]="['/main/emp/emp-timeline',edittedUser.ID]"><i class="fa fa-history pull-right" aria-hidden="false"></i></a> </h3>
         <input [(ngModel)]="edittedUser.FullName" [class.hidden]="!onEdit" [style.color]="'brown'" required class="form-control"
         />
         

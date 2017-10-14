@@ -46,11 +46,15 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
   }
   //fix loi khong the toogle menu
   ngAfterViewInit() {
+    console.log("Main.component.ts ngAfterViewInit");
+
     setTimeout(_ => {
-      $.getScript("assets/js/jquery.app.js", function () {
+      $.getScript("../assets/js/jquery.app.js", function () {
         //do some things  
+        //console.log('Main component ex script');
       });
-    });
+    },2000); 
+
   }
 
 

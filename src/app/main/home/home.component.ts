@@ -1284,7 +1284,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterViewChecked {
       });
   }
 
-  getEmpCountByMonthly() {
+  getEmpCountByMonthly(valid: boolean) {
     //this.searchParams.Keyword = this.filterKeyword;
     this.searchParams.DateTimeItems = [this.StartDate , this.EndDate];
     //this.searchParams.StringItems = this.filterRecruitmentID;

@@ -20,6 +20,8 @@
 *28 : Nhóm chức vụ.
 *29 : kết quả báo giá.
 *30 : Loại nhân viên phỏng vấn
+*31 : Nhân viên dept khác chuyển sang , NV sang dept khác hỗ trợ , nhân viên onsite
+*32 : Tình trạng đơn hàng
  */
 export enum MasterKbnEnum {
     /**
@@ -110,10 +112,14 @@ export enum MasterKbnEnum {
      * Loại nhân viên phỏng vấn
      */
     RecruitmentType = 30,
-        /**
-     * Nhân viên dept khác chuyển sang , NV sang dept khác hỗ trợ , nhân viên onsite
-     */
-    WorkEmpType = 31
+    /**
+ * Nhân viên dept khác chuyển sang , NV sang dept khác hỗ trợ , nhân viên onsite
+ */
+    WorkEmpType = 31,
+    /**
+ * TÌnh trạng đơn hàng
+ */
+    OrderStatus = 32
 
 }
 
@@ -218,21 +224,21 @@ export enum DataStatusEnum {
 
     /** <summary>
      *  Chờ đăng ký phỏng vấn
-     */ 
+     */
     REC_INTERVIEW_RIGISTER_WAITING = 0,
     /** <summary>
      *  Không đăng ký phỏng vấn
-     */ 
+     */
     REC_INTERVIEW_UNRIGISTER = 10,
 
     /** <summary>
      *  Đăng ký phỏng vấn nhưng chưa có lịch phỏng vấn
-     */ 
+     */
     REC_INTERVIEW_RIGISTER = 20,
 
     /** <summary>
      *  Chờ phỏng vấn
-     */ 
+     */
     REC_INTERVIEW_WAITING = 30,
     /** <summary>
      *  Chờ kết quả phỏng vấn
@@ -245,29 +251,56 @@ export enum DataStatusEnum {
 
     /** <summary>
      *  Chờ nói chuyện DKLC
-     */ 
+     */
     REC_INTERVIEW_CONDITION_WORKING_TALK_WAITING = 50,
     /** <summary>
      *  Chờ phản hồi 
-     */ 
+     */
     REC_INTERVIEW_CONDITION_WORKING_TALK_FEEDBACK = 60,
     /** <summary>
      *  Chờ vào thử việc
-     */ 
+     */
     REC_INTERVIEW_TRIAL_WAITING = 70,
     /** <summary>
      *  Vào thử việc nhưng chưa đăng ký emp
-     */ 
+     */
     REC_INTERVIEW_TRIAL = 80,
 
     /** <summary>
      *  Đang thử việc
-     */ 
+     */
     REC_INTERVIEW_TRIAL_EMPID_CREATED = 90
 
     /** Dữ liệu trạng thái liên quan đến data XXXX **/
 
 
     /** Dữ liệu trạng thái liên quan đến data XXXX **/
+
+}
+
+/// <summary>
+/// Loại job 
+/// </summary>
+export enum JobTypeEnum {
+    /// <summary>
+    /// Thông báo lịch phỏng vấn nhân viên thử việc
+    /// </summary>
+    DevInterviewDateNotify = 1,
+
+    /// <summary>
+    /// Thông báo nhân sự chuẩn bị vào thử việc
+    /// </summary>
+    TrialStaffStartTrialDateNotify = 2,
+
+    /// <summary>
+    /// Thông báo nhân viên sắp hết hạn thử việc
+    /// </summary>
+    TrialStaffEndTrialDateNotify = 3,
+
+    /// <summary>
+    /// Thông báo nhân viên được nhận chính thức
+    /// </summary>
+    TrialStaffToDevContractDateNotify = 4
+
 
 }

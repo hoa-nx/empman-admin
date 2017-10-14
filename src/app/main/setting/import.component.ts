@@ -91,10 +91,20 @@ export class ImportComponent implements OnInit {
                     recruitmentType: this.recruitments.find(x => x.ID == this.recruitmentID).RecruitmentTypeMasterDetailID
 
                 };
-                this._uploadService.postWithFile('/api/recruitmentstaff/import', postData, fi.files).then((message: string) => {
-                    this._loaderService.displayLoader(false);
-                    this._notificationService.printSuccessMessage(message);
-                });
+                if(postData.recruitmentType===1){
+                    //thu viec truc tiep
+                    this._uploadService.postWithFile('/api/recruitmentstaff/import', postData, fi.files).then((message: string) => {
+                        this._loaderService.displayLoader(false);
+                        this._notificationService.printSuccessMessage(message);
+                    });
+                }else if(postData.recruitmentType===2){
+                    //huan luyen
+                    this._uploadService.postWithFile('/api/recruitmentstaff/importtrainer', postData, fi.files).then((message: string) => {
+                        this._loaderService.displayLoader(false);
+                        this._notificationService.printSuccessMessage(message);
+                    });
+                }
+                
             });
         } else {
             this._notificationService.printAlertDialog(MessageContstants.CONFIRM_NOT_SELECT_FILE_MSG, () => { });

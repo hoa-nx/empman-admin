@@ -1,0 +1,131 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <form #dataForm="ngForm" novalidate>
+                    <div class="col-lg-12">
+                        <h4 class="m-t-0 header-title"><b>Danh sách job</b></h4>
+
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-md-2 col-sm-6 col-xs-12 form-group">
+                                <!-- <p-multiSelect [options]="primeModelCustomers" [(ngModel)]="filterCustomerID" name="filterCustomerID" (ngModelChange)="onChangeCustomer($event)"></p-multiSelect> -->
+                            </div>
+                            <div class="col-md-2 col-sm-6 col-xs-12 form-group">
+                                <div class="form-group contact-search m-b-30">
+                                    <input type="text" id="search" class="form-control" placeholder="Tìm ..." name="filter" (keyup.enter)="search()" [(ngModel)]="filterKeyword">
+                                    <button class="btn btn-white" (click)="search()"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 col-xs-12 form-group">
+                                <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
+                                <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
+                                <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
+                                <button class="btn btn-inverse" type="button" (click)="runJob()">Thực thi</button>
+                                <!-- <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="showAddModal()" class="btn btn-info" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm</button> -->
+                                <a [routerLink]="['../../job/edit',0,'new']" class="btn btn-default waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a"><i class="md md-add"></i> Thêm mới</a>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+
+                            </div>
+                        </div>
+                        <!-- Header end-->
+
+                        <!-- List -->
+                        <div class="table-responsive">
+                            <table class="table table-hover mails m-0 table table-actions-bar">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Id</th>
+                                        <th>Loại job</th>
+                                        <th>Tên </th>
+                                        <th>Tên bảng</th>
+                                        <th>Khóa liên kết</th>
+                                        <th>Thời điểm diễn ra</th>
+                                        <!-- <th>Thời gian dự định</th> -->
+                                        <th>Thực thi job</th>
+                                        <th>Nội dung</th>
+                                        <th>Điện thoại</th>
+                                        <th>Email</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ghi chú</th>
+                                        <th style="min-width: 160px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of jobs">
+                                        <td>
+                                            <md-checkbox [value]="0" [(ngModel)]="item.Checked" [ngModelOptions]="{standalone: true}">
+                                            </md-checkbox>
+                                        </td>
+                                        <td>
+                                            <a [routerLink]="['/main/job/edit',item.ID,'edit']">{{item.ID}}</a>
+                                        </td>
+                                        <td>{{item.JobType}}</td>
+                                        <td>{{item.Name}}</td>
+                                        <td>{{item.TableNameRelation}}</td>
+                                        <td>{{item.TableKey}}</td>
+                                        <td>{{item.EventDate| date:'yyyy/MM/dd HH:mm'}}</td>
+                                        <!-- <td>{{item.ScheduleRunJobDate| date:'yyyy/MM/dd HH:mm'}}</td> -->
+                                        <td>{{item.ActualRunJobDate| date:'yyyy/MM/dd HH:mm'}}</td>
+                                        <td>{{item.JobContent}}</td>
+                                        <td>{{item.SMSToNumber}}</td>
+                                        <td>{{item.ToNotiEmailList}}</td>
+                                        <td>
+                                            <span *ngIf="item.JobStatus==0" class="tag label label-primary">chưa gửi</span>
+                                            <span *ngIf="item.JobStatus==1" class="tag label label-inverse">đang chờ</span>
+                                            <span *ngIf="item.JobStatus==2" class="tag label label-danger">thất bại</span>
+                                            <span *ngIf="item.JobStatus==3" class="tag label label-warning">hủy</span>
+                                            <span *ngIf="item.JobStatus==9" class="tag label label-success">đã gửi</span>
+                                        </td>
+                                        <td>{{item.Note}}</td>
+                                        <td>
+                                            <!-- <input type="file" multiple="true" accept=".xls,.xlsx,.doc,.docx,.pdf,.gif,.jpg,.png" name="fileUpload" #fileUpload [(ngModel)]="item.fileUpload" [id]="item.ID" [name]="item.ID" [ngModelOptions]="{standalone: true}" (change)="uploadFiles(item , $event)"
+                                          style="visibility: hidden;"> -->
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="fileUpload.click()" title="Upload các file liên quan"><i class="fa fa-upload"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn" [routerLink]="['../../job/edit',item.ID,'edit']" title="Cập nhật thông tin job"><i class="md md-edit"></i></a>
+                                            <a href="javascript:void(0)" class="table-action-btn" (click)="deleteItem(item.ID)"><i class="md md-close" title="Xóa job"></i></a>
+                                            <!-- <div class="btn-group">
+                                              <a *ngIf="item.AttachmentFileLists[0]" href="javascript:void(0)" class="table-action-btn"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-download"></i></a>
+                                              <ul class="dropdown-menu drop-menu-right" role="menu">
+                                                  <li *ngFor="let file of item.AttachmentFileLists">
+                                                      <div class="form-group">
+                                                          <a href="javascript:void(0)" (click)="downloadItemFile(file)" routerLinkActive="active">{{file.FileName}}</a>
+                                                          <a href="javascript:void(0)" (click)="deleteItemFile(file)" routerLinkActive="active"><span class="m-l-5"><i class="fa fa-close deleteIconColor"></i></span></a>
+                                                      </div>
+                                                  </li>
+                                              </ul>
+                                          </div> -->
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <!-- paging -->
+                        <div class="col-md-12">
+
+                            <div *ngIf="jobs && jobs.length == 0" class="col-md-12">
+                                <div class="alert alert-info">
+                                    <strong>Thông báo!</strong> Hiện tại chưa có dữ liệu nào ứng với loại đã chọn
+                                </div>
+
+                            </div>
+                            <div *ngIf="jobs && jobs.length > 0" class="col-md-12">
+                                <pagination [boundaryLinks]="true" [ngModelOptions]="{standalone: true}" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)" [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+                                    lastText="&raquo;"></pagination>
+                            </div>
+                        </div>
+                        <!-- paging end-->
+                        <!-- List end-->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

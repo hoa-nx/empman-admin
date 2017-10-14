@@ -557,7 +557,7 @@ export class EstimateEditComponent implements OnInit, OnDestroy {
         this.calTotalMM();
         break;
 
-      case 'EstimateTransMM':
+      case 'EstimateManMM':
         this.calTotalMM();
         break;
 
@@ -575,6 +575,7 @@ export class EstimateEditComponent implements OnInit, OnDestroy {
       case 'EstimateUserTestMM':
         this.calTotalMM();
         break;
+
       default:
 
         break;

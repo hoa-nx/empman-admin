@@ -11,6 +11,7 @@ import { Subscription } from "rxjs/Subscription";
 import { SharedComponentService } from '../../core/services/sharedcomponent.service';
 import { LoaderService } from '../utils/spinner.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { MessageContstants } from '../../core/common/message.constants';
 
 
 @Component({
@@ -136,7 +137,18 @@ export class TopMenuComponent implements OnInit, OnDestroy {
   gotoSetting() {
     this._router.navigateByUrl("/main/setting/index/" + this.currentUrl);
   }
+
   reLoadDataEmp() {
+    this._dataService.get('/api/setting/detailsystemconfig?&id=' + this.user.username )
+    .subscribe((respone) =>{
+      if(respone.ID){
+        
+      }else{
+        this._notificationService.printAlertDialog(MessageContstants.ALERT_SYSTEM_CONFIG_NOTFOUND,()=>{});
+        return;
+      }
+    });
+
     this._loaderService.displayLoader(true);
     this._dataService.get('/api/emp/getallpagingfromview?&keyword=' + this.filter + '&page=1&pageSize=1')
       .subscribe((response: any) => {
@@ -169,6 +181,17 @@ export class TopMenuComponent implements OnInit, OnDestroy {
       }, error => this._dataService.handleError(error));
   }
 
+  public hasSystemConfigData(account : any){
+    this._dataService.get('/api/setting/detailsystemconfig?&id=' + account )
+    .subscribe((respone) =>{
+      if(respone.ID){
+        return true;
+      }else{
+        return false;
+      }
+    });
+    
+  }
   public addSearchTags(tag: any) {
     console.log(tag);
     this.tagName = tag;

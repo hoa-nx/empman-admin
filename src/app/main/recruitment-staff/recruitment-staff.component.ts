@@ -7,7 +7,7 @@ import { AuthenService } from '../../core/services/authen.service';
 import { UtilityService } from '../../core/services/utility.service';
 
 import { MessageContstants } from '../../core/common/message.constants';
-import { SystemConstants } from '../../core/common/system.constants';
+import { SystemConstants, ApllRoles, AccessRightFunctions , AccessRight} from '../../core/common/system.constants';
 
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { LoaderService } from '../../shared/utils/spinner.service';
@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InterviewResult, RecruitConditionDisplay } from '../../core/common/shared.class';
 import { element } from 'protractor';
 import * as moment from 'moment';
-import { ApprovedStatusEnum, DataStatusEnum } from '../../core/common/shared.enum';
+import { ApprovedStatusEnum, DataStatusEnum, MasterKbnEnum, JobTypeEnum } from '../../core/common/shared.enum';
 import { MappingService } from '../../shared/utils/mapping.service';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -109,6 +109,8 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
   public uriAvatarPath: string = SystemConstants.BASE_API;
   public imageShown: boolean = false;
 
+  public isApprovedDataPermission : boolean = false ;  
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -157,6 +159,7 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
       this.updateInterviewStatusEvent();
     }, 5000);
 
+    this.settingUsableItemPermission(this.user);
   }
 
   ngOnDestroy() {
@@ -253,10 +256,19 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
       this.saveData(form);
     }
   }
+
   private saveData(form: NgForm) {
     if (this.entity.ID == undefined) {
       this._dataService.post('/api/recruitmentstaff/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
+          //xy ly tao job ney nhu thong itn ngay gio phong van da co 
+          /* if (+response.ID > 0 && response.InterviewDate && response.InterviewRoom != '') {
+            this._dataService.get('/api/recruitmentinterview/getinterviewstaffbyrecruitmentstaffforjob?recruitmentID=' + response.RecruitmentID + '&recruitmentStaffID=' + response.RecruitmentStaffID)
+              .subscribe((interviewStaffLists: any) => {
+                this.registerAlertInterviewJob('RecruitmentStaffs', response.RecruitmentStaffID, response.ID, interviewStaffLists);
+              });
+          } */
+
           this.search();
           this.modalAddEdit.hide();
           form.resetForm();
@@ -266,6 +278,16 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
     else {
       this._dataService.put('/api/recruitmentstaff/update', JSON.stringify(this.entity))
         .subscribe((response: any) => {
+
+          //xy ly tao job ney nhu thong itn ngay gio phong van da co 
+          /* if (+response.ID > 0 && response.InterviewDate && response.InterviewRoom != '') {
+            this._dataService.get('/api/recruitmentinterview/getinterviewstaffbyrecruitmentstaffforjob?recruitmentID=' + response.RecruitmentID + '&recruitmentStaffID=' + response.RecruitmentStaffID)
+              .subscribe((interviewStaffLists: any) => {
+                console.log(interviewStaffLists);
+                this.registerAlertInterviewJob('RecruitmentStaffs', response.RecruitmentStaffID, response.ID, interviewStaffLists);
+              });
+          } */
+
           this.search();
           this.modalAddEdit.hide();
           form.resetForm();
@@ -273,9 +295,11 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
         }, error => this._dataService.handleError(error));
     }
   }
+
   deleteItem(id: any) {
     this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
+
   deleteItemConfirm(id: any) {
     this._dataService.delete('/api/recruitmentstaff/delete', 'id', id).subscribe((response: Response) => {
       this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
@@ -296,6 +320,24 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
           this.search();
         }, error => this._dataService.handleError(error));
       });
+    }
+
+  }
+
+  settingUsableItemPermission(user : LoggedInUser){
+    let userRoles : any[] = user.roles;
+
+    let isAdminRole = userRoles.includes(ApllRoles.ADMIN) ;
+    let isLeaderRole = userRoles.includes(ApllRoles.LEADER) ;
+
+    if(isAdminRole){
+      //co quyen han admin
+      this.isApprovedDataPermission = true;
+    }
+
+    if(isLeaderRole){
+      this.isApprovedDataPermission = false;
+      
     }
 
   }
@@ -377,9 +419,17 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
 
         if (item.IsRegister == true) {
           //insert 
-          console.log("Add " + this.recruitmentIntreview);
+          console.log( this.recruitmentIntreview);
           this._dataService.post('/api/recruitmentinterview/add', JSON.stringify(this.recruitmentIntreview))
             .subscribe((response: any) => {
+              //dang ky job
+              /* if (response.ScheduleInterviewDate && (response.ScheduleInterviewRoom != '' || response.ScheduleInterviewRoom != undefined)) {
+                this._dataService.get('/api/recruitmentinterview/getinterviewstaffbyrecruitmentstaffforjob?recruitmentID=' + response.RecruitmentID + '&recruitmentStaffID=' + response.RecruitmentStaffID)
+                .subscribe((interviewStaffLists: any) => {
+                  this.registerAlertInterviewJob('RecruitmentStaffs', response.RecruitmentStaffID, response.ID, interviewStaffLists);
+                });
+              } */
+
               this.search();
               this.modalAddEdit.hide();
               this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
@@ -389,10 +439,19 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
           if (this.recruitmentIntreview.ID) {
             console.log("Delete " + this.recruitmentIntreview);
             this._dataService.delete('/api/recruitmentinterview/delete', 'id', this.recruitmentIntreview.ID)
-              .subscribe((response: Response) => {
+              .subscribe((response: any) => {
+                //delete thong tin job 
+                /* var parameters = { "table": 'RecruitmentStaffs', "tableKey": this.recruitmentIntreview.RecruitmentStaffID , "tableKeyId": this.recruitmentIntreview.RegInterviewEmpID };
+                this._dataService.deleteWithMultiParams('/api/jobscheduler/deletebytablekey', parameters )
+                .subscribe((response : any) =>{
+
+                }
+                ,error => this._dataService.handleError(error)); */
+
+                //hien thi lai du lieu
                 this.search();
                 this.modalAddEdit.hide();
-                this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+                this._notificationService.printSuccessMessage(MessageContstants.DELETED_OK_MSG);
               }, error => this._dataService.handleError(error));
           }
 
@@ -424,10 +483,10 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
     modelRegister.Name = recruitmentStaff.Name;
     modelRegister.ShortName = recruitmentStaff.Name;
     if (recruitmentStaff.InterviewDate) {
-      modelRegister.InterviewDate = recruitmentStaff.InterviewDate;
+      modelRegister.ScheduleInterviewDate = recruitmentStaff.InterviewDate;
     }
     if (recruitmentStaff.InterviewRoom) {
-      modelRegister.InterviewRoom = recruitmentStaff.InterviewRoom;
+      modelRegister.ScheduleInterviewRoom = recruitmentStaff.InterviewRoom;
     }
 
     if (regInterviewEmpID == undefined) {
@@ -445,7 +504,6 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
         this.recruitmentIntreview = response;
       });
   }
-
 
   showInterviewStaffModal(id: any) {
     this.loadInterviewStaffs(id);
@@ -663,6 +721,7 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
           relatedTable: 'RecruitmentStaffs',
           relatedKey: item.RecruitmentStaffID,
 
+
         };
 
         //for (let i = 0; i < fi.files.length; i++) {
@@ -732,6 +791,10 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
       empData.CurrentCompanyID = this.user.companyid;
       empData.CurrentDeptID = item.DeptReceived;
       empData.CurrentTeamID = item.TeamReceived;
+      empData.CurrentPositionID = 210; // trial staff
+      empData.EmpTypeMasterID = MasterKbnEnum.EmpType;
+      empData.EmpTypeMasterDetailID = 1; //LTV
+
       empData.InterviewDate = item.InterviewDate;
       empData.WorkingConditionTalkDate = item.WorkingConditionTalkDate;
       empData.StartWorkingDate = item.TrialStartDate;
@@ -739,6 +802,11 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
       empData.Hobby = item.Hobby;
       empData.Objective = item.Objective;
       empData.Note = item.Note;
+
+      if (item.RecruitmentTypeMasterDetailID == 2) {
+        //loai nhan vien huan luyen
+        empData.Note = empData.Note + 'Chuyển qua từ huấn luyện';
+      }
 
       this._notificationService.printConfirmationDialog(MessageContstants.CONFIRM_CREATE_EMP_FROM_RECRUITMENT_MSG, () => {
         // tao nhan vien 
@@ -758,4 +826,66 @@ export class RecruitmentStaffComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  /**
+   * Dang ky alert sms job ve thoi gian phong van ung vien
+   */
+  public registerAlertInterviewJob(table: string, tableKey: string, tableKeyId: string, interviewStaffLists: any) {
+
+    let alertJob: any = {};
+    //loop qua danh sach cac nhan vien dang ky phong van ung vien
+    for (let item of interviewStaffLists) {
+      if (item.ScheduleInterviewDate && (item.ScheduleInterviewRoom != '' || item.ScheduleInterviewRoom != undefined)) {
+        tableKeyId = item.RegInterviewEmpID;
+        //tim xem data co ton tai chua 
+        this._dataService.get('/api/jobscheduler/detailbytablekey?jobType=&table=' + table + '&tableKey=' + tableKey + '&tableKeyId=' + tableKeyId)
+          .subscribe((response: any) => {
+
+            alertJob = response;
+
+            if (alertJob.ID) {
+              //neu ton tai du lieu 
+              alertJob.ScheduleRunJobDate = item.ScheduleInterviewDate;
+              alertJob.EventDate = item.ScheduleInterviewDate;
+              alertJob.EventUser = item.Name;
+              alertJob.ToNotiEmailList = item.WorkingEmail;
+              alertJob.SMSToNumber = item.PhoneNumber1;
+              alertJob.LocationEvent = item.ScheduleInterviewRoom;
+            } else {
+              alertJob = {};
+              alertJob.JobType =  JobTypeEnum.DevInterviewDateNotify;//Lich phong van 
+              alertJob.Name = 'Thông báo lịch phỏng vấn';
+              alertJob.TableNameRelation = table;
+              alertJob.TableKey = tableKey;
+              alertJob.TableKeyID = tableKeyId;
+              alertJob.ScheduleRunJobDate = item.ScheduleInterviewDate;
+              alertJob.EventDate = item.ScheduleInterviewDate;
+              alertJob.EventUser = item.Name;
+              alertJob.FromEmail = '';
+              alertJob.ToNotiEmailList = item.WorkingEmail;
+              alertJob.CcNotiEmailList = '';
+              alertJob.BccNotiEmailList = '';
+              alertJob.SMSFromNumber = '';
+              alertJob.SMSToNumber = item.PhoneNumber1;
+              //alertJob.SMSContent = '';
+              //alertJob.JobContent = '';.
+              alertJob.JobStatus = 0;
+              //alertJob.ActualRunJobDate='';
+              alertJob.TemplateID = JobTypeEnum.DevInterviewDateNotify;//Lich phong van 
+              alertJob.LocationEvent = item.ScheduleInterviewRoom;
+              alertJob.Note = 'Tạo tự động';
+
+            }
+            //dang ky job 
+            this._dataService.post('/api/jobscheduler/findregister', JSON.stringify(alertJob))
+              .subscribe((response: any) => {
+                //this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+              }, error => this._dataService.handleError(error));
+          }, error => this._dataService.handleError(error));
+
+      }//if
+    }//for
+  }//function
+
+
 }

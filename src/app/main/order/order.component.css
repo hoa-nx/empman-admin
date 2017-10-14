@@ -1,3 +1,16 @@
 /* .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: paleturquoise;
 } */
+
+.disableClick {
+  pointer-events: none;
+}
+
+.deleteIconColor {
+  color: red;
+}
+span{
+  display: block;
+  width: 100px;
+  word-wrap: break-word;
+}

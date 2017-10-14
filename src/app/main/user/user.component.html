@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="form-group contact-search m-b-30">
-                                <input type="text" id="search" class="form-control" placeholder="Gõ tên người dùng..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
+                                <input type="text" id="search" class="form-control" placeholder="Nhập tên người dùng..." name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter">
                                 <button class="btn btn-white" (click)="loadData()"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
@@ -41,8 +41,8 @@
                                     <td>{{user.PhoneNumber}}</td>
                                     <td><img [src]="baseFolder + user.Avatar" class="img-circle" width="80" /></td>
                                     <td>
-                                        <a class="table-action-btn" *ngIf="_authenService.hasPermission('USER','update')" (click)="showEditModal(user.Id)"><i class="md md-edit"></i></a>
-                                        <a class="table-action-btn" *ngIf="_authenService.hasPermission('USER','delete')" (click)="deleteItem(user.Id)"><i class="md md-close"></i></a>
+                                        <a href="javascript:void(0)"  class="table-action-btn" *ngIf="_authenService.hasPermission('USER','update')" (click)="showEditModal(user.Id)"><i class="md md-edit"></i></a>
+                                        <a href="javascript:void(0)"  class="table-action-btn" *ngIf="_authenService.hasPermission('USER','delete') && user.UserName!=='admin'" (click)="deleteItem(user.Id)"><i class="md md-close"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -129,10 +129,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Điện thoại</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" #phonenumber="ngModel" [(ngModel)]="entity.PhoneNumber" required name="phonenumber" class="form-control">
-                            <small [hidden]="phonenumber.valid || (phonenumber.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập số điện thoại
-              </small>
+                            <input type="text" #phonenumber="ngModel" [(ngModel)]="entity.PhoneNumber"  name="phonenumber" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -157,10 +154,12 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Giới tính</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
 
-                            <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='true'" name="gender" [ngModel]="entity.Gender" value="True" required /> Nam
-
-                            <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='false'" name="gender" [ngModel]="entity.Gender" value="False" /> Nữ
-
+<!--                             <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='true'" name="gender" [ngModel]="entity.Gender" value="True" required /> Nam
+                            <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='false'" name="gender" [ngModel]="entity.Gender" value="False" /> Nữ -->
+                            <md-radio-group name="Gender" [(ngModel)]="entity.Gender" class="form-control  no-border">
+                                    <md-radio-button (change)="selectGender($event)" [value]="1" [checked]="entity.Gender===1">Nam</md-radio-button>
+                                    <md-radio-button (change)="selectGender($event)" [value]="0" [checked]="entity.Gender===0">Nữ</md-radio-button>
+                                </md-radio-group>
                         </div>
                     </div>
 
@@ -195,14 +194,21 @@
                         </div>
                     </div>
 
-
-
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Thuộc nhóm</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [options]="allRoles" [(ngModel)]="myRoles"></ss-multiselect-dropdown>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Trạng thái</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <md-checkbox (change)="changeCheckboxStatus($event)" [value]="0" [(ngModel)]="entity.Status" #Status="ngModel" name="Status">Đang hoạt động
+                            </md-checkbox>
+                        </div>
+                    </div>
+                    
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">

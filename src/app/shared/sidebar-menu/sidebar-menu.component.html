@@ -5,18 +5,16 @@
         <!--- Divider -->
         <div id="sidebar-menu">
             <ul>
-
                 <!-- Menu from DB -->
-                <!--<li class="text-muted menu-title">Trang chủ</li>
-        <li class="has_sub" *ngFor="let item of functions">
+                <li class="has_sub" *ngFor="let item of functions">
 
-          <a href="javascript:void(0);" class="waves-effect"><i class="fa {{item.IconCss}}"></i> <span > {{item.Name}}  </span> <span  *ngIf="item.ChildFunctions.length>0" class="menu-arrow"></span> </a>
-                <ul class="list-unstyled">
-              <li *ngFor="let subItem of item.ChildFunctions"><a routerLink="{{subItem.URL}}" routerLinkActive="active">{{subItem.Name}}</a></li>
-            </ul>
-        </li>-->
+                <a href="javascript:void(0);" class="waves-effect"><i class="{{item.IconCss}}"></i> <span > {{item.Name}}  </span> <span  *ngIf="item.ChildFunctions.length>0" class="menu-arrow"></span> </a>
+                        <ul class="list-unstyled">
+                    <li *ngFor="let subItem of item.ChildFunctions"><a routerLink="{{subItem.URL}}" routerLinkActive="active"><i class="{{subItem.IconCss}}"></i> {{subItem.Name}}</a></li>
+                    </ul>
+                </li>
                 <!-- Menu from DB end-->
-
+<!-- 
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ti-pencil-alt"></i><span>Thông tin chung </span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled">
@@ -49,8 +47,7 @@
                         <li><a routerLink="/main/order/index" routerLinkActive="active">Nhận đơn hàng</a></li>
                         <li><a routerLink="/main/project/index" routerLinkActive="active">Dự án</a></li>
                         <li><a routerLink="/main/target/index" routerLinkActive="active">Mục tiêu</a></li>
-                        <!--<li><a routerLink="/main/revenue/index" routerLinkActive="active">Doanh thu</a></li>
-                        <li><a routerLink="/main/revenue/list" routerLinkActive="active">Danh sách doanh số</a></li>-->
+                        
                         <li><a routerLink="/main/revenue/grid" routerLinkActive="active">Doanh số</a></li>
                     </ul>
                 </li>
@@ -97,13 +94,13 @@
                         <li><a routerLink="/main/role/index" routerLinkActive="active">Nhóm quyền</a></li>
                         <li><a routerLink="/main/user/index" routerLinkActive="active">Người dùng</a></li>
                         <li><a routerLink="/main/function/index" routerLinkActive="active">Chức năng HT</a></li>
-                        <!--                         <li><a routerLink="/main/product-category/index" routerLinkActive="active">Danh mục</a></li>
-                        <li><a routerLink="/main/product/index" routerLinkActive="active">Sản phẩm</a></li> -->
+                        
                         <li><a routerLink="/main/setting/index" routerLinkActive="active">Cấu hình hệ thống</a></li>
                         <li><a routerLink="/main/setting/import" routerLinkActive="active">Nhập dữ liệu</a></li>
                         <li><a routerLink="/main/setting/export" routerLinkActive="active">Xuất dữ liệu</a></li>
+                        <li><a routerLink="/main/job/index" routerLinkActive="active">Job</a></li>
                     </ul>
-                </li>
+                </li> -->
 
             </ul>
             <div class="clearfix"></div>

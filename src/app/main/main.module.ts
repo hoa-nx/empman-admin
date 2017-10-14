@@ -24,6 +24,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
+import { PanelMenuModule, MenuItem } from 'primeng/primeng';
 
 @NgModule({
   imports: [
@@ -32,7 +33,9 @@ import 'rxjs/add/operator/toPromise';
     HomeModule,
     PaginationModule.forRoot(),
     RouterModule.forChild(mainRoutes),
-    StickyModule
+    StickyModule,
+    PanelMenuModule
+    
   ],
   providers: [UtilityService, AuthenService, SharedComponentService],
   declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, RightbarMenuComponent ]

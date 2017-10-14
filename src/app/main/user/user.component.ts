@@ -167,10 +167,16 @@ export class UserComponent implements OnInit {
     });
   }
   public selectGender(event) {
-    this.entity.Gender = event.target.value
+    //this.entity.Gender = event.target.value
+    this.entity.Gender = event.source._checked;
   }
 
   public selectedDate(value: any) {
     this.entity.BirthDay = moment(value.end._d).format('YYYY/MM/DD');
   }
+
+  changeCheckboxStatus(event) {
+    
+  }
+
 }

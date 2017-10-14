@@ -71,15 +71,71 @@ export class AccessRight{
     public static RIGHT_EXPORT = "export";
 }
 
-export class AccessRightFolder{
+export class AccessRightFunctions{
     /**
      * Dữ liệu chung của hệ thống chẳng hạn như master công ty , phòng ban... 
      */
-    public static MASTER_DATA = "MASTER_DATA";
-    public static BUSSINESS_DATA = "REV";
-    public static SYSTEM_DATA = "SYSTEM";
-    public static REPORT_DATA = "REPORT";
-    public static EMP_DATA = "EMP";
-    public static PROJECT_DATA = "PROJECT";
+    public static COMPANY = "COMPANY";
+    public static COMPANY_RULE = "COMPANY_RULE";
+    public static CUSTOMER = "CUSTOMER";
+    public static CUSTOMER_UNITPRICE = "CUSTOMER_UNITPRICE";
+    public static EXCHANGE_RATE = "EXCHANGE_RATE";
+    public static DEPT = "DEPT";
+    public static TEAM = "TEAM";
+    public static POSITION = "POSITION";
+    public static MASTER = "MASTER";
+    public static MASTER_DETAIL = "MASTER_DETAIL";
+    public static EMP_CARD = "EMP_CARD";
+    public static EMP_BASIC = "EMP_BASIC";
+    public static EMP_ALLOWANCE = "EMP_ALLOWANCE";
+    public static EMP_CONTRACT = "EMP_CONTRACT";
+    public static EMP_EXPANDABLE = "EMP_EXPANDABLE";
+    public static EMP_TIMELINE = "EMP_TIMELINE";
+    public static EMP_WORK = "EMP_WORK";
+
+    public static ERROR = "ERROR";
+
+    public static ESTIMATE = "ESTIMATE";
+    public static ORDER_RECEIVED = "ORDER_RECEIVED";
+    public static PROJECT = "PROJECT";
+    public static PROJECT_DETAIL_LIST = "PROJECT_DETAIL_LIST";
+    public static PROJECT_LIST = "PROJECT_LIST";
+    public static TARGET_LIST = "TARGET_LIST";
+    public static TARGET_EDIT = "TARGET_EDIT";
+    public static REVENUE_LIST = "REVENUE_LIST";
+    public static REVENUE_EDIT = "REVENUE_EDIT";
+
+    public static RECRUITMENT = "RECRUITMENT";
+    public static RECRUITMENT_STAFF = "RECRUITMENT_STAFF";
+    public static RECRUITMENT_INTERVIEW = "RECRUITMENT_INTERVIEW";
+
+    public static SEMINAR = "SEMINAR";
+    public static SEMINAR_COURSE = "SEMINAR_COURSE";
+    public static SEMINAR_RECORD = "SEMINAR_RECORD";
+
+    public static FILE = "FILE";
+    public static FILE_EDIT = "FILE_EDIT";
+    public static FILE_LIST = "FILE_LIST";
+
+    public static ROLE = "ROLE";
+    public static USER = "USER";
+    public static FUNCTION = "FUNCTION";
+    public static SYSTEM_CONFIG = "SYSTEM_CONFIG";
+    public static IMPORT = "IMPORT";
+    public static EXPORT = "EXPORT";
+
+    public static STATISTIC = "STATISTIC";
+    public static JOB_SCHEDULER = "JOB_SCHEDULER";
 }
 
+export class ApllRoles{
+    public static MEMBER ="Member";
+    public static GENERAL_MANAGER ="GeneralManager";
+    public static DIRECTORY_BOARD ="DirectoryBoard";
+    public static LEADER ="Leader";
+    public static SUBLEADER ="SubLeader";
+    public static MANAGER ="Manager";
+    public static VICE_MANAGER ="ViceManager";
+    public static DEPT_ADMIN ="DeptAdmin" //Tong vu dept
+    public static ADMIN ="Admin";
+}

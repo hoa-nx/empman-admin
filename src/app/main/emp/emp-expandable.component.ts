@@ -260,6 +260,11 @@ export class EmpExpandableComponent implements OnInit {
                         this.dataGroupName = "Trường ĐH";
                         break;
 
+                    case 'empnotsatisfiedkeiken':
+                        this.dataCollectGroups = response;
+                        this.dataGroupName = "DS xem xét nâng ngạch";
+                        break;
+                        
                 }
                 this._loaderService.displayLoader(false);
             },

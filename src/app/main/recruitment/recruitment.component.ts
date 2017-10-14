@@ -16,6 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { LoggedInUser } from '../../core/domain/loggedin.user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MasterKbnEnum } from '../../core/common/shared.enum';
+import { MappingService } from '../../shared/utils/mapping.service';
 
 declare var moment: any;
 
@@ -40,6 +41,8 @@ export class RecruitmentComponent implements OnInit {
   public filterMasterID: number;
   public recruitments: any[];
   public recruitmentTypes: any[];
+  public primeModelRecruitmentTypes :any[];
+  public filterRecruitmentTypeID: any[] = [];
   public checkedItems: any[];
   public emps: any[];
   public fileStorages: any[];
@@ -48,6 +51,7 @@ export class RecruitmentComponent implements OnInit {
   public sub: any;
   public paramId: any;
   public paramAction: any;
+  public searchModel: any = {};
 
   constructor(
     private _route: ActivatedRoute,
@@ -109,6 +113,9 @@ export class RecruitmentComponent implements OnInit {
       .subscribe((response: any) => {
         this.recruitmentTypes = response[0];        //Loại tuyển dụng
         this.emps = response[1];                    //nhan vien
+
+        this.primeModelRecruitmentTypes = MappingService.mapMasterDetailToPrimeMultiSelectModel(this.recruitmentTypes);
+
         this._loaderService.displayLoader(false);
       },
       error => {
@@ -133,6 +140,25 @@ export class RecruitmentComponent implements OnInit {
 
   public search() {
     this._loaderService.displayLoader(true);
+    this.searchModel.Keyword = this.filterKeyword;
+    //this.searchModel.DateTimeItems = this.revenueSelectedYearMonths;
+    this.searchModel.NumberItems = this.filterRecruitmentTypeID;
+    this.searchModel.Page = this.pageIndex;
+    this.searchModel.PageSize = this.pageSize;
+    //this.searchModel.BoolItems = [this.nextMonthInclude];
+    this._loaderService.displayLoader(true);
+    //this._dataService.get('/api/recruitmentstaff/getallpaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword + '&filterRecruitmentID=' + this.filterRecruitmentID)
+    this._dataService.post('/api/recruitment/getallpaging', JSON.stringify(this.searchModel))
+      .subscribe((response: any) => {
+        this.recruitments = response.Items;
+        this.pageIndex = response.PageIndex;
+        this.pageSize = response.PageSize;
+        this.totalRow = response.TotalRows;
+
+        this._loaderService.displayLoader(false);
+      }, error => this._dataService.handleError(error));
+
+    /*
     this._dataService.get('/api/recruitment/getallpaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filterKeyword)
       .subscribe((response: any) => {
         this.recruitments = response.Items;
@@ -141,6 +167,8 @@ export class RecruitmentComponent implements OnInit {
         this.totalRow = response.TotalRows;
         this._loaderService.displayLoader(false);
       }, error => this._dataService.handleError(error));
+      */
+
   }
 
   public reset() {
@@ -266,6 +294,11 @@ export class RecruitmentComponent implements OnInit {
   public changeCheckboxIsFinished(event: any) {
 
   }
+
+  public onChangeRecruitmentType(event:any){
+
+  }
+
   /**
      * upload file ho so 
      */

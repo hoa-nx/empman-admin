@@ -11,7 +11,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { SharedModule } from '../../shared/module/shared.module';
 import { MdCheckboxModule, MdAutocompleteModule } from '@angular/material';
-import { CalendarModule } from 'primeng/primeng';
+import { CalendarModule, MultiSelectModule } from 'primeng/primeng';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 const recruitmentRoutes: Routes = [
   //localhost:4200/main/recruiment
@@ -31,7 +32,9 @@ const recruitmentRoutes: Routes = [
     SharedModule,
     MdCheckboxModule,
     MdAutocompleteModule,
-    CalendarModule
+    CalendarModule,
+    MultiSelectModule,
+    MultiselectDropdownModule
   ],
   declarations: [RecruitmentComponent],
   providers: [DataService, NotificationService, UploadService, SessionService]

@@ -39,26 +39,26 @@
                                     <h5 class="m-t-0 m-b-20 header-title"><b>Tổ chức - công việc</b></h5>
                                 </div>
                                 <div class="row form-group m-b-20">
-                                    <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
+                                    <div class="col-md-2 col-sm-6 col-xs-12" >
+                                        <md-checkbox *ngIf="isPermissionDeptChange" (change)="changeCheckboxDept($event)" [value]="0" [(ngModel)]="chkDept" [ngModelOptions]="{standalone: true}">Phòng ban
                                         </md-checkbox>
 
                                     </div>
 
                                     <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts" [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
+                                        <ss-multiselect-dropdown  *ngIf="isPermissionDeptChange" [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="depts" [(ngModel)]="selectDepts" [disabled]="chkDept==false"></ss-multiselect-dropdown>
                                     </div>
                                 </div>
 
                                 <div class="row form-group m-b-20">
                                     <div class="col-md-2 col-sm-6 col-xs-12">
-                                        <md-checkbox (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
+                                        <md-checkbox *ngIf="isPermissionTeamChange" (change)="changeCheckboxTeam($event)" [value]="0" [(ngModel)]="chkTeam" [ngModelOptions]="{standalone: true}">Nhóm/Team
                                         </md-checkbox>
 
                                     </div>
 
                                     <div class="col-md-3 col-sm-6 col-xs-12">
-                                        <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams" [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
+                                        <ss-multiselect-dropdown  *ngIf="isPermissionTeamChange" [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="teams" [(ngModel)]="selectTeams" [disabled]="chkTeam==false"></ss-multiselect-dropdown>
                                     </div>
                                 </div>
 

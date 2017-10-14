@@ -7,7 +7,7 @@ import { LoaderService } from './shared/utils/spinner.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit , AfterViewInit {
     private runCount: number = 0;
 
     constructor(private elementRef: ElementRef,private viewContainerRef: ViewContainerRef) {
@@ -37,7 +37,6 @@ export class AppComponent implements AfterViewInit {
     ngAfterViewInit() {
         //stuff that doesn't do view changes
         //setTimeout(_ => this.addScript());
-
     }
 
     ngAfterViewChecked() {

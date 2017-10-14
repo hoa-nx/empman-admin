@@ -111,3 +111,8 @@
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 
   }
+
+  /* Mo rong pane title*/
+  .panel-heading h3{
+    width: 90% ;
+  }

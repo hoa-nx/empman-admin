@@ -147,7 +147,9 @@ export class DataService {
       //this._utilityService.navigateToLogin();
     }
     else {
-      let errMsg = JSON.parse(error._body).Message;
+      console.log(JSON.parse(error._body));
+      //let errMsg = JSON.parse(error._body).Message;
+      let errMsg = JSON.parse(error._body);
       this._notificationService.printErrorMessage(errMsg);
 
       return Observable.throw(errMsg);

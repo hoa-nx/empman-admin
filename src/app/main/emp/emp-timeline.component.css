@@ -25,6 +25,7 @@
     height: 100%;
     margin-left: -50px;
   }
+  
   #cd-timeline::before{
     background: lightcoral !important;
   }

@@ -32,6 +32,7 @@ import { element } from 'protractor';
 })
 export class EstimateComponent  implements OnInit, OnDestroy {
 
+  @ViewChild('fileUpload') public fileUpload: any;
   public baseFolder: string = SystemConstants.BASE_API;
   public entity: any;
   public totalRow: number;

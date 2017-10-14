@@ -8,7 +8,8 @@ export class BloodGroup
         {"id": "A", "name" : "Nhóm máu A"},
         {"id": "B" , "name" : "Nhóm máu B"},
         {"id": "AB" , "name" : "Nhóm máu AB"},
-        {"id": "O" , "name" : "Nhóm máu O"}
+        {"id": "O" , "name" : "Nhóm máu O"},
+        {"id": "U" , "name" : "Nhóm máu khác"}
     ];
 
 }
@@ -25,7 +26,8 @@ export class InterviewResult
         {"id": "Không tới" , "name" : "Không tới PV"},
         {"id": "Dept khác nhận" , "name" : "Dept khác nhận"},
         {"id": "Đạt-chưa quyết định dept nhận" , "name" : "Đạt-chưa biết dept nhận"},
-        {"id": "Đã tìm được việc" , "name" : "Đã tìm được việc"}
+        {"id": "Đã tìm được việc" , "name" : "Đã tìm được việc"},
+        {"id": "Công ty phân bổ" , "name" : "Công ty phân bổ"}
     ];
 
 }
@@ -45,7 +47,8 @@ export class InterviewResult
         {"label": "Chỉ ứng viên đạt (dept # nhận)" , "value" : "5"},
         {"label": "Chỉ ứng viên không đạt" , "value" : "6"},
         {"label": "Chỉ ứng viên đã nói chuyện DKLV" , "value" : "7"},
-        {"label": "Chỉ ứng viên đã vào thử việc" , "value" : "8"}
+        {"label": "Chỉ ứng viên đã vào thử việc" , "value" : "8"},
+        {"label": "Huấn luyện" , "value" : "9"}
     ];
      
  }

@@ -22,7 +22,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { SearchModalComponent } from '../../shared/search-modal/search-modal.component';
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile } from 'ng2-file-drop';
 import { UploadService } from '../../core/services/upload.service';
-import { MasterKbnEnum } from '../../core/common/shared.enum';
+import { MasterKbnEnum, JobTypeEnum } from '../../core/common/shared.enum';
 import { BloodGroup } from '../../core/common/shared.class';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -309,15 +309,15 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
       this.entity.MarriedDate = moment(this.entity.MarriedDate).format('YYYY/MM/DD');
     }
 
-    if(this.entity.BabyBornStartDate){
+    if (this.entity.BabyBornStartDate) {
       this.entity.BabyBornStartDate = moment(this.entity.BabyBornStartDate).format('YYYY/MM/DD');
     }
 
-    if(this.entity.BabyBornScheduleEndDate){
+    if (this.entity.BabyBornScheduleEndDate) {
       this.entity.BabyBornScheduleEndDate = moment(this.entity.BabyBornScheduleEndDate).format('YYYY/MM/DD');
     }
 
-    if(this.entity.BabyBornActualEndDate){
+    if (this.entity.BabyBornActualEndDate) {
       this.entity.BabyBornActualEndDate = moment(this.entity.BabyBornActualEndDate).format('YYYY/MM/DD');
     }
 
@@ -335,6 +335,9 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     if (this.entity.No == undefined) {
       this._dataService.post('/api/emp/add', JSON.stringify(this.entity))
         .subscribe((response: any) => {
+          //dang ky job 
+          //this.registerEndTrialDateJob(response);
+          //this.registerContractDateJob(response);
 
           this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
         }, error => this._dataService.handleError(error));
@@ -342,9 +345,47 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     else {
       this._dataService.put('/api/emp/update', JSON.stringify(this.entity))
         .subscribe((response: any) => {
+          //dang ky job 
+          //this.registerEndTrialDateJob(response);
+          //this.registerContractDateJob(response);
 
           this._notificationService.printSuccessMessage(MessageContstants.UPDATED_OK_MSG);
         }, error => this._dataService.handleError(error));
+    }
+  }
+
+  private registerEndTrialDateJob(data: any) {
+    if (data.EndTrialDate === undefined || data.EndTrialDate === '') {
+      return;
+    }
+
+    //check xem ky HD chua
+    if (moment(moment(data.EndTrialDate).format('YYYY/MM/DD')).isSameOrAfter(moment().format('YYYY/MM/DD')) 
+      && (data.ContractDate===undefined || data.ContractDate ===''|| data.ContractDate ===null) ) {
+      let otherStaff: any[] = [];
+      //lay thong tin cua leader
+      this._dataService.get('/api/emp/getalertlistofstaff?staff=' + data.ID + '&includeManager=0&otherStaff=' + otherStaff)
+        .subscribe((staffList: any) => {
+          this.registerAlertTrialStaffEndTrialDateNotify('Emps', data.ID, data.No, data, staffList);
+        });
+    }
+  }
+
+  private registerContractDateJob(data: any) {
+    if (data.ContractDate === undefined || data.ContractDate === '') {
+      return;
+    }
+    //Truong hop ngay hop dong nho hon ngay hien tai thi khong tao data thong bao
+    if (moment(moment(data.ContractDate).format('YYYY/MM/DD')).isSameOrAfter(moment().format('YYYY/MM/DD'))) {
+      //thong bao cho nhan vien duoc nhan chinh thuc
+      this.registerAlertTrialStaffToDevContractDateNotify('Emps', data.ID, data.No, data, [data]);
+      /* let otherStaff: any[] = [];
+      //lay thong tin cua leader
+      this._dataService.get('/api/emp/getalertlistofstaff?staff=' + data.ID + '&includeManager=0&otherStaff=' + otherStaff)
+        .subscribe((staffList: any) => {
+          this.registerAlertTrialStaffToDevContractDateNotify('Emps', data.ID, data.No, data, staffList);
+        }); */
+          
     }
   }
 
@@ -599,22 +640,22 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     this.modalAddEditDetailWork.show();
   }
 
-  loadDetailWorkEdit(id: any, isCopy : boolean=false) {
+  loadDetailWorkEdit(id: any, isCopy: boolean = false) {
     this._dataService.get('/api/empdetailwork/detail/' + id)
       .subscribe((response: any) => {
         this.entityDetailWork = response;
-        
-        if(this.entityDetailWork.StartDate){
+
+        if (this.entityDetailWork.StartDate) {
           this.entityDetailWork.StartDate = moment(new Date(this.entityDetailWork.StartDate)).format('YYYY/MM/DD');
         }
 
-        if(this.entityDetailWork.EndDate){
+        if (this.entityDetailWork.EndDate) {
           this.entityDetailWork.EndDate = moment(new Date(this.entityDetailWork.EndDate)).format('YYYY/MM/DD');
         }
 
         this.onChangeDeptDetailWork(this.entityDetailWork.DeptID);
 
-        if(isCopy){
+        if (isCopy) {
           this.entityDetailWork.ID = undefined;
         }
 
@@ -650,7 +691,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
   }
 
   private setMasterKbnIdDetailWork() {
-    
+
     this.entityDetailWork.ContractTypeMasterID = MasterKbnEnum.ContractType;
     this.entityDetailWork.EmpTypeMasterID = MasterKbnEnum.EmpType;
     this.entityDetailWork.WorkEmpType = MasterKbnEnum.WorkEmpType;
@@ -663,7 +704,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     this.entityDetailWork.EducationLevelMasterID = MasterKbnEnum.EducationLevel;
 
   }
-  
+
   public selectedStartDateDetailWork(value: any) {
     this.entityDetailWork.StartDate = moment(value).format('YYYY/MM/DD');
   }
@@ -680,7 +721,7 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
 
   public onChangeDeptDetailWork(value: any) {
     if (value) {
-      this.teams = this.teamOrigins.filter(x => (x.DeptID==value || x.DeptID==0));
+      this.teams = this.teamOrigins.filter(x => (x.DeptID == value || x.DeptID == 0));
     }
   }
 
@@ -883,6 +924,123 @@ export class EmpBasicComponent implements OnInit, OnDestroy {
     //lam tron cac so lieu 
     //this.entityRoundNumber();
   }
+
+  /**
+   * Dang ky alert sms job ve thong bao het han thu viec
+   */
+  public registerAlertTrialStaffEndTrialDateNotify(table: string, tableKey: string, tableKeyId: string, itemData: any, notifyDataList: any[]) {
+
+    let alertJob: any = {};
+    for (let item of notifyDataList) {
+      tableKeyId = item.ID;//ma nhan vien
+      //tim xem data co ton tai chua 
+      this._dataService.get('/api/jobscheduler/detailbytablekey?jobType=&table=' + table + '&tableKey=' + tableKey + '&tableKeyId=' + tableKeyId)
+        .subscribe((response: any) => {
+
+          alertJob = response;
+
+          if (alertJob.ID) {
+            //neu ton tai du lieu 
+            alertJob.ScheduleRunJobDate = itemData.EndTrialDate;
+            alertJob.EventDate = itemData.EndTrialDate;
+            alertJob.ToNotiEmailList = item.WorkingEmail;
+            alertJob.SMSToNumber = item.PhoneNumber1;
+            alertJob.LocationEvent = '';
+          } else {
+            alertJob = {};
+            alertJob.JobType = JobTypeEnum.TrialStaffEndTrialDateNotify;//Het han thu viec ( 3)
+            alertJob.Name = 'Thông báo hết hạn thử việc';
+            alertJob.TableNameRelation = table;
+            alertJob.TableKey = tableKey;
+            alertJob.TableKeyID = tableKeyId;
+            alertJob.ScheduleRunJobDate = itemData.EndTrialDate;
+            alertJob.EventDate = itemData.EndTrialDate;
+            alertJob.EventUser = itemData.FullName;
+            alertJob.FromEmail = '';
+            alertJob.ToNotiEmailList = item.WorkingEmail;
+            alertJob.CcNotiEmailList = '';
+            alertJob.BccNotiEmailList = '';
+            alertJob.SMSFromNumber = '';
+            alertJob.SMSToNumber = item.PhoneNumber1;
+            //alertJob.SMSContent = '';
+            //alertJob.JobContent = '';
+            alertJob.JobStatus = 0;
+            //alertJob.ActualRunJobDate='';
+            alertJob.TemplateID = JobTypeEnum.TrialStaffEndTrialDateNotify;
+            alertJob.LocationEvent = '';
+            alertJob.Note = 'Tạo tự động';
+
+          }
+
+          //dang ky job 
+          this._dataService.post('/api/jobscheduler/findregister', JSON.stringify(alertJob))
+            .subscribe((response: any) => {
+              //this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+            }, error => this._dataService.handleError(error));
+        }, error => this._dataService.handleError(error));
+
+    }
+
+  }//function
+
+  /**
+   * Dang ky alert sms job ve thong bao nhan chinh thuc nhan vien
+   */
+  public registerAlertTrialStaffToDevContractDateNotify(table: string, tableKey: string, tableKeyId: string, itemData: any, notifyDataList: any[]) {
+
+    let alertJob: any = {};
+    
+    for (let item of notifyDataList) {
+      tableKeyId = item.ID;//ma nhan vien
+      //tim xem data co ton tai chua 
+      console.log(notifyDataList);
+      this._dataService.get('/api/jobscheduler/detailbytablekey?jobType=&table=' + table + '&tableKey=' + tableKey + '&tableKeyId=' + tableKeyId)
+        .subscribe((response: any) => {
+
+          alertJob = response;
+
+          if (alertJob.ID) {
+            //neu ton tai du lieu 
+            alertJob.ScheduleRunJobDate = itemData.ContractDate;
+            alertJob.EventDate = itemData.ContractDate;
+            alertJob.ToNotiEmailList = item.WorkingEmail;
+            alertJob.SMSToNumber = item.PhoneNumber1;
+            alertJob.LocationEvent = '';
+          } else {
+            alertJob = {};
+            alertJob.JobType = JobTypeEnum.TrialStaffToDevContractDateNotify;//Het han thu viec ( 3)
+            alertJob.Name = 'Thông báo nhận chính thức';
+            alertJob.TableNameRelation = table;
+            alertJob.TableKey = tableKey;
+            alertJob.TableKeyID = tableKeyId;
+            alertJob.ScheduleRunJobDate = itemData.ContractDate;
+            alertJob.EventDate = itemData.ContractDate;
+            alertJob.EventUser = itemData.FullName;
+            alertJob.FromEmail = '';
+            alertJob.ToNotiEmailList = item.WorkingEmail;
+            alertJob.CcNotiEmailList = '';
+            alertJob.BccNotiEmailList = '';
+            alertJob.SMSFromNumber = '';
+            alertJob.SMSToNumber = item.PhoneNumber1;
+            //alertJob.SMSContent = '';
+            //alertJob.JobContent = '';
+            alertJob.JobStatus = 0;
+            //alertJob.ActualRunJobDate='';
+            alertJob.TemplateID = JobTypeEnum.TrialStaffToDevContractDateNotify;
+            alertJob.LocationEvent = '';
+            alertJob.Note = 'Tạo tự động';
+
+          }
+
+          //dang ky job 
+          this._dataService.post('/api/jobscheduler/findregister', JSON.stringify(alertJob))
+            .subscribe((response: any) => {
+              //this._notificationService.printSuccessMessage(MessageContstants.CREATED_OK_MSG);
+            }, error => this._dataService.handleError(error));
+        }, error => this._dataService.handleError(error));
+    }
+
+  }//function
 
 
   back() {

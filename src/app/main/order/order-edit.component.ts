@@ -55,6 +55,7 @@ export class OrderEditComponent implements OnInit, OnDestroy {
   public positions: any[];
   public allMasterDetails: any[];
   public dataStatus: any[];
+  public orderStatus: any[];
 
   public emps: any[];
   public orderUnits: any[];
@@ -181,6 +182,7 @@ export class OrderEditComponent implements OnInit, OnDestroy {
         this.getEmpCodeNameList();
 
         this.dataStatus = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.EstimateResult);
+        this.orderStatus = this.allMasterDetails.filter(x => x.MasterID == MasterKbnEnum.OrderStatus);
 
         if (this.actionParam != 'new') {
           this.loadEnityDetail();
@@ -302,6 +304,7 @@ export class OrderEditComponent implements OnInit, OnDestroy {
   private setMasterKbnId() {
 
     this.entity.EstimateResultMasterID = MasterKbnEnum.EstimateResult;
+
   }
 
 

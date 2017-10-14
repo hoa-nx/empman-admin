@@ -246,7 +246,7 @@
                                                     <div class="col-md-3 col-sm-6 col-xs-12">
                                                         Chọn KH
                                                         <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="customers"
-                                                            [(ngModel)]="selectCustomers" [disabled]="chkWorkEmpType==false||(chkWorkEmpType && selectWorkEmpTypes!=3)"></ss-multiselect-dropdown>
+                                                            [(ngModel)]="selectCustomers" [disabled]="chkWorkEmpType==false||(chkWorkEmpType && selectWorkEmpTypes[0]!=3)"></ss-multiselect-dropdown>
                                                     </div>
                                                 </div>
                                         </div>

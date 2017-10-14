@@ -4,7 +4,7 @@
             <div class="row">
                 <form #recruitmentStaffForm="ngForm" novalidate>
                     <div class="col-lg-12">
-                        <h4 class="m-t-0 header-title"><b>Danh sách ứng viên({{totalRow}} người)</b></h4>
+                        <h4 class="m-t-0 header-title"><b>Danh sách ứng viên ({{totalRow}} ứng viên)</b></h4>
 
                         <!-- Header -->
                         <div class="row">
@@ -49,7 +49,7 @@
                                         <th>Trường</th>
                                         <th>Xếp loại</th>
                                         <th>Nợ môn</th>
-                                        <th>Tiếng Nhật</th>
+                                        <th>Tiếng Nhật/Comment</th>
                                         <th>Ghi chú</th>
                                         <th style="min-width: 160px;"></th>
                                     </tr>
@@ -79,8 +79,7 @@
                                         <td><a [routerLink]="['/main/recruitment/index/',item.RecruitmentID]">{{item.RecruitmentID}}</a>
                                             <a *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER_WAITING" href="javascript:void(0)" [ngClass]="(item.ApprovedStatusInterview == approvedStatus.Approved || item.InterviewResult ==interviewResults[0].id)?'table-action-btn disableClick':'table-action-btn'"
                                                 (click)="registerInterview(item)">
-                                                <span [ngClass]="(item.IsRegister == false )?'tag label label-success':'tag label label-danger'">{{(item.IsRegister === false ) ? "Đăng ký" : "Hủy"}}
-                        </span>
+                                                <span [ngClass]="(item.IsRegister == false )?'tag label label-success':'tag label label-danger'">{{(item.IsRegister === false ) ? "Đăng ký" : "Hủy"}}</span>
                                             </a>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_UNRIGISTER" class="tag label label-warning">Không đăng ký</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER" class="tag label label-info">Chưa có lịch pv</span>
@@ -92,6 +91,9 @@
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL_WAITING" class="tag label label-pink">Chờ vào thử việc</span>
                                             <span *ngIf="item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL||item.CurrentStatus==dataStatus.REC_INTERVIEW_TRIAL_EMPID_CREATED" class="tag label label-success">Đã vào thử việc</span>
                                             <span *ngIf="item.CurrentStatus==99" class="tag label label-danger">Không xác định</span>
+                                            <span *ngIf="item.RecruitmentTypeMasterDetailID==2&&item.ProfessionalKbn=='JAVA'" class="badge badge-default">{{item.ProfessionalKbn}}</span>
+                                            <span *ngIf="item.RecruitmentTypeMasterDetailID==2&&item.ProfessionalKbn!=='JAVA'" class="badge badge-info">{{item.ProfessionalKbn}}</span>
+                                            
                                         </td>
                                         <td>{{item.CompanyCvNo}}</td>
                                         <td>{{item.Name}}</td>
@@ -113,8 +115,11 @@
                                         <td>{{item.CollectName}}</td>
                                         <td>{{item.Grade}}</td>
                                         <td>{{item.DebtSubjectCount}}</td>
-                                        <td>{{item.JapaneseLevel}}</td>
-                                        <td>{{item.Note}}</td>
+                                        <td *ngIf="item.RecruitmentTypeMasterDetailID==1">{{item.JapaneseLevel}}</td>
+                                        <td *ngIf="item.RecruitmentTypeMasterDetailID==2">{{item.Comment1}}</td>
+
+                                        <td *ngIf="item.RecruitmentTypeMasterDetailID==1">{{item.Note}}</td>
+                                        <td *ngIf="item.RecruitmentTypeMasterDetailID==2">{{item.Comment2}}</td>
                                         <td>
                                             <input type="file" multiple="true" accept=".xls,.xlsx,.doc,.docx,.pdf,.gif,.jpg,.png" name="fileUpload" #fileUpload [(ngModel)]="item.fileUpload" [id]="item.ID" [name]="item.ID" [ngModelOptions]="{standalone: true}" (change)="uploadFiles(item , $event)"
                                                 style="visibility: hidden;">
@@ -342,7 +347,7 @@
                             <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [settings]="mySettings" [options]="empRegisterLists" [(ngModel)]="empRegisterSelectedLists" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
                         </div>
                         <div class="col-md-3 col-sm-6 col-xs-12 form-group">
-                            <button *ngIf="_authenService.hasPermission('PRODUCT','create')" (click)="addEmpToInterviewRegister()" [ngClass]="(showInterviewStaffModalSave.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER_WAITING)?'btn btn-info':'btn btn-info disableClick'">
+                            <button *ngIf="_authenService.hasPermission('RECRUITMENT_INTERVIEW','create')" (click)="addEmpToInterviewRegister()" [ngClass]="(showInterviewStaffModalSave.CurrentStatus==dataStatus.REC_INTERVIEW_RIGISTER_WAITING)?'btn btn-info':'btn btn-info disableClick'">
                 <i class="md md-add"></i> Thêm
               </button>
 
@@ -369,10 +374,9 @@
                             <td>{{interviewStaff.InterviewResult}}</td>
                             <td>{{interviewStaff.Note}}</td>
                             <td>
-                                <button *ngIf="!interviewStaff.ApprovedStatus || (interviewStaff.ApprovedStatus==approvedStatus.Normal)" class="btn btn-danger" type="button" (click)="deleteItemInterviewStaff(interviewStaff.ID)">Xóa</button>
-
-                                <button *ngIf="!interviewStaff.ApprovedStatus || (interviewStaff.ApprovedStatus==approvedStatus.Normal)" class="btn btn-primary" type="button" (click)="approvedInterviewStaff(interviewStaff, approvedStatus.Approved)">Approved</button>
-                                <button *ngIf="(interviewStaff.ApprovedStatus==approvedStatus.Approved)" class="btn btn-warning" type="button" (click)="approvedInterviewStaff(interviewStaff, approvedStatus.Normal)">Hủy approved</button>
+                                <button *ngIf="isApprovedDataPermission && (!interviewStaff.ApprovedStatus || (interviewStaff.ApprovedStatus==approvedStatus.Normal))" class="btn btn-danger" type="button" (click)="deleteItemInterviewStaff(interviewStaff.ID)">Xóa</button>
+                                <button *ngIf="isApprovedDataPermission && (!interviewStaff.ApprovedStatus || (interviewStaff.ApprovedStatus==approvedStatus.Normal))" class="btn btn-primary" type="button" (click)="approvedInterviewStaff(interviewStaff, approvedStatus.Approved)">Approved</button>
+                                <button *ngIf="isApprovedDataPermission && ((interviewStaff.ApprovedStatus==approvedStatus.Approved))" class="btn btn-warning" type="button" (click)="approvedInterviewStaff(interviewStaff, approvedStatus.Normal)">Hủy approved</button>
                             </td>
                         </tr>
                     </tbody>
